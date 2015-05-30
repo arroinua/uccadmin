@@ -1,0 +1,21 @@
+{
+  "name": "uccadmin",
+  "version": "1.0.0",
+  "description": "UCC Administration App",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^0.8.3",
+    "body-parser": "^1.12.4",
+    "express": "^4.12.4",
+    "hbs": "^3.0.1",
+    "jsonwebtoken": "^5.0.1",
+    "mongoose": "^4.0.4",
+    "morgan": "^1.5.3",
+    "path": "^0.11.14"
+  }
+}
