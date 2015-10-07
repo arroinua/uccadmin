@@ -3,17 +3,17 @@ var app = express();
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var path = require('path');
-var mongoose = require('mongoose');
-var config = require('./config/server');
-var jwt = require('jsonwebtoken');
-var routes = require('./routes/index')(app);
+// var mongoose = require('mongoose');
+var config = require('./env/index');
+// var jwt = require('jsonwebtoken');
+// var routes = require('./routes/index');
 
-mongoose.connect(config.db);
+// mongoose.connect(config.db);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
-app.set('jwtSecret', config.secret);
+// app.set('jwtSecret', config.secret);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -24,9 +24,9 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
     next();
 });
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', routes);
+app.use(express.static(path.join(__dirname, 'app')));
+app.use('/api', require('./routes/api'));
+app.use('/', require('./routes/index'));
 
 //===============Error handlers================
 
@@ -46,6 +46,7 @@ if (app.get('env') === 'development') {
       message: err.message,
       error: err
     });
+    console.log(err);
   });
 }
 

@@ -1,0 +1,164 @@
+<!-- <div class="row">
+	<div class="col-xs-12">
+		<a href="#/instance/new" class="btn btn-primary">
+			<i class="fa fa-cloud-upload"></i> <span translate>LAUNCH_NEW_INSTANCE</span>
+		</a>
+		<a href="#" class="btn btn-default">
+			<i class="fa fa-life-saver"></i> <span translate>HELP</span>
+		</a>
+	</div>
+</div>	 -->
+<br>
+<div class="row">
+	<div class="col-xs-12" ng-show="instances.length === 0">
+		<h4><span translate>WELCOME_MESSAGE.P_1</span>, {{currentUser.name}}!<br> <span translate>WELCOME_MESSAGE.P_2</span>.<br> <span translate>WELCOME_MESSAGE.P_3</span> <a href="#/instance/new" translate>LAUNCH_NEW_INSTANCE</a>.</h4>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12" ng-repeat="inst in instances">
+		<div class="panel panel-default">
+			<div class="col-sm-6">
+				<h3>{{inst.result.name}}</h3>
+			</div>
+			<div class="col-sm-6">
+				<h3 class="pull-right">
+					<a ng-href="#/instance/{{inst.oid}}" class="btn btn-primary">
+						<i class="fa fa-pencil"></i> <span translate>INSTANCE.EDIT</span>
+					</a>
+					<a href="https://sip-tv.net:8890" class="btn btn-primary" target="_blank">
+						<i class="fa fa-link"></i> <span translate>INSTANCE.ACTIONS.CONNECT</span>
+					</a>
+					<!-- <button class="btn btn-default" translate>INSTANCE.ADD_CREDIT</button> -->
+					<div class="btn-group">
+					  <a href="" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					    <i class="fa fa-angle-down"></i> <span translate>INSTANCE.ACTION </span>
+					  </a>
+					  <ul class="dropdown-menu dropdown-menu-right" id="actionsList" role="menu">
+					    <li ng-show="inst._subscription.state === 'paused'">
+					    	<a href="" ng-click="activateBranch(inst.oid)">
+					    		<i class="fa fa-play"></i> <span translate>INSTANCE.ACTIONS.RUN</span>
+					    	</a>
+					    </li>
+					    <li ng-show="inst._subscription.state === 'active'">
+					    	<a href="" ng-click="pauseBranch(inst.oid)">
+					    		<i class="fa fa-pause"></i> <span translate>INSTANCE.ACTIONS.PAUSE</span>
+					    	</a>
+					    </li>
+					    <!-- <li><a href="" data-toggle="collapse" data-target="#panel-{{inst.result.name}}" aria-expanded="false" aria-controls="plansPanel">Change Plan</a></li> -->
+					    <li>
+					    	<a href="" ng-click="changePlan(inst)">
+					    		<i class="fa fa-plug"></i> <span translate>Change Plan</span>
+					    	</a>
+						</li>
+					    <li>
+					    	<a href="" ng-click="renewSubscription(inst)">
+					    		<i class="fa fa-refresh"></i> <span translate>Renew subscription</span>
+					    	</a>
+					    </li>
+					    <li role="presentation" class="divider"></li>
+					    <li>
+					    	<a href="" ng-click="terminateInstance(inst.oid)">
+					    		<i class="fa fa-power-off"></i> <span translate>INSTANCE.ACTIONS.TERMINATE</span>
+					    	</a>
+					    </li>
+					  </ul>
+					</div>	
+				</h3>
+			</div>
+			<div class="panel-body">
+				<div class="col-xs-12">
+					<div class="col-lg-2 col-sm-4 col-xs-6">
+						<h3 ng-class="inst._subscription.state === 'active' ? 'text-success' : 'text-warning'">{{inst._subscription.state}}</h3>
+						<p translate>INSTANCE.STATE</p>
+					</div>
+					<div class="col-lg-2 col-sm-4 col-xs-6">
+						<h3>{{parseDate(inst._subscription.createdAt)}}</h3>
+						<p translate>INSTANCE.CREATED</p>
+					</div>
+					<div class="col-lg-2 col-sm-4 col-xs-6">
+						<h3>{{inst._subscription.neverExpires ? 'Never' : parseDate(inst._subscription.nextBillingDate)}}</h3>
+						<p translate>INSTANCE.EXPIRES</p>
+					</div>
+					<!-- <div class="col-sm-2 col-xs-6">
+						<h3><strong ng-class="inst._subscription.balance < 0 ? 'text-danger' : 'text-success'">{{stringToFixed(inst._subscription.balance)}}</strong> {{inst.currency}}</h3>
+						<p translate>INSTANCE.BALANCE</p>
+					</div> -->
+					<div class="col-lg-2 col-sm-4 col-xs-6">
+						<h3>{{inst.result.prefix}}</h3>
+						<p translate>INSTANCE.BRANCH_PREFIX</p>
+					</div>
+					<div class="col-lg-2 col-sm-4 col-xs-6">
+						<h3>{{inst.result.maxlines}}</h3>
+						<p translate>INSTANCE.LINES</p>
+					</div>
+					<div class="col-lg-2 col-sm-4 col-xs-6">
+						<h3>{{getPoolString(inst.result.extensions)}}</h3>
+						<p translate>INSTANCE.NUMBERING_PLAN</p>
+					</div>
+				</div>
+			</div>
+			<div class="panel-footer">
+				<div class="col-sm-12">
+					<h3 translate>TRANSACTIONS (LAST_7_DAYS)</h3>
+					<p ng-show="!transactions.length" translate>NO_DATA_FOR_PERIOD</p>
+					<div ng-show="transactions.length">
+						<div class="col-sm-6">
+							<table class="table">
+								<thead>
+									<tr>
+										<th translate>DATE</th>
+										<th translate>AMOUNT</th>
+										<th translate>BALANCE</th>
+										<th translate>STATUS</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="item in transactions">
+										<td>{{parseDate(item.createdAt)}}</td>
+										<td>{{stringToFixed(item.amount)}}{{item.currency}}</td>
+										<td>{{stringToFixed(item.balance)}}</td>
+										<td>{{item.status}}</td>
+									</tr>
+								</tbody>
+							</table>
+							<a href="#/transactions" translate>SHOW_MORE</a>
+						</div>
+						<div class="col-sm-6">
+							<canvas tc-chartjs-bar chart-options="transactionsOptions" chart-data="transactionsData" height="100"></canvas>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<h3 translate>CHARGES (LAST_7_DAYS)</h3>
+					<p ng-show="!charges.length" translate>NO_DATA_FOR_PERIOD</p>
+					<div ng-show="charges.length">
+						<div class="col-sm-6">
+							<table class="table">
+								<thead>
+									<tr>
+										<th translate>DATE</th>
+										<th translate>AMOUNT</th>
+										<th translate>BALANCE</th>
+										<th translate>PREV_BALANCE</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="item in charges">
+										<td>{{parseDate(item.createdAt)}}</td>
+										<td>{{stringToFixed(item.amount)}}{{item.currency}}</td>
+										<td>{{stringToFixed(item.balance)}}</td>
+										<td>{{stringToFixed(item.prevBalance)}}</td>
+									</tr>
+								</tbody>
+							</table>
+							<a href="#/charges" translate>SHOW_MORE</a>
+						</div>
+						<div class="col-sm-6">
+							<canvas tc-chartjs-bar chart-options="chargesOptions" chart-data="chargesData" height="100"></canvas>
+						</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>

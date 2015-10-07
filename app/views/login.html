@@ -1,0 +1,23 @@
+<form role="form" class="action-form login-form" novalidate>
+	<span class="input input--hoshi">
+		<input class="input__field input__field--hoshi" type="email" name="username" ng-model="email" required input-hoshi/>
+		<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="username">
+			<span class="input__label-content input__label-content--hoshi" translate>EMAIL</span>
+		</label>
+	</span>
+	<span class="input input--hoshi">
+		<input class="input__field input__field--hoshi" type="password" name="password" ng-model="password" input-hoshi/>
+		<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="password">
+			<span class="input__label-content input__label-content--hoshi" translate>PASSWORD</span>
+		</label>
+	</span>
+	<br><br>
+	<p class="error-msg">{{message}}</p>
+	<div class="pull-left">
+		<button class="btn btn-lg btn-primary" ng-click="login()" translate>LOGIN</button>
+	</div>
+	<div class="pull-right">
+		<a href="#/request-password-reset" tabindex="0" translate>FORGOT_PASSWORD</a><br>
+		<a href="#/signup" tabindex="0" translate>SIGN_UP</a>
+	</div>
+</form>	

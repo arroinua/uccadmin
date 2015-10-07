@@ -1,0 +1,72 @@
+{
+	"EMAIL": "Email",
+	"NAME": "Name",
+	"USERNAME": "Username",
+	"PASSWORD": "Password",
+	"CONFIRM_PASSWORD": "Confirm password",
+	"LOGIN": "Login",
+	"SIGN_UP": "Sign up",
+	"SIGN_OUT": "Sign out",
+	"REGISTRATION": "Registration",
+	"ACCEPT": "Accept",
+	"PROCEED": "Proceed",
+	"SAVE": "Save",
+	"BACK": "Back",
+	"SUBMIT": "Submit",
+	"FORGOT_PASSWORD": "Forgot password?",
+	"NEW_PASSWORD": "New password",
+	"ALREADY_HAVE_ACCOUNT": "Already have account?",
+	"SIGN_UP_MESSAGE_1": "All right! We've sent you verification email, please check your inbox!",
+	"SIGN_UP_MESSAGE_2": "Request accepted. Please, check your email for further instructions",
+	"SIGN_UP_MESSAGE_3": "Email is not verified!",
+	"SIGN_UP_MESSAGE_4": {
+		"P_1": "Email is verified!",
+		"P_2": "You can now"
+	},
+	"BALANCE": "Balance",
+	"ADD_CREDIT": "Add credit",
+	"INSTANCE": {
+		"INSTANCE": "Instance",
+		"STATE": "State",
+		"BALANCE": "Balance",
+		"CREATED": "Created",
+		"EXPIRES": "Expires",
+		"EDIT": "Edit",
+		"ACTION": "Action",
+		"ACTIONS": {
+			"CONNECT": "Connect",
+			"RUN": "Run",
+			"PAUSE": "Pause",
+			"TERMINATE": "Terminate"
+		},
+		"ADD_CREDIT": "Add credit",
+		"SIM_CALLS": "Simultaneous calls",
+		"SIM_CALLS_HELPER": "Maximum number of simultaneous calls",
+		"BRANCH_PREFIX": "Branch prefix",
+		"BRANCH_PREFIX_HELPER": "Branch Prefix is what you input before the extension to register it, also it is your login for admins' web interface and a subdomain name of your branch as well. Another words, it's pretty important to choose it right, so please think twice",
+		"NUMBERING_PLAN": "Numbering plan",	
+		"NUMBERING_PLAN_HELPER": "Choose your numbering plan. Dashes and commas allowed, for instance: \"200-210\" or \"200,205-210,310-350\"",
+		"COMPANY_NAME": "Company name",
+		"COMPANY_NAME_HELPER": "Fill in your company name",
+		"ADMIN_PASSWORD": "Administrator password",
+		"ADMIN_PASSWORD_HELPER": "Password for the web admin interface",
+		"ADMIN_PASSWORD_CONFIRM": "Confirm administrator password",
+		"ADMIN_PASSWORD_CONFIRM_HELPER": "Confirm password for the web admin interface",
+		"INTERFACE_LANGUAGE": "Interface language",
+		"INTERFACE_LANGUAGE_HELPER": "Choose preferable web interface language"
+	},
+	"PROFILE": {
+		"SAVE_PROFILE": "Save profile"
+	},
+	"INSTANCES": "Instances",
+	"LAUNCH_NEW_INSTANCE": "Launch new instance",
+	"HELP": "Help",
+	"FREE_TRIAL": "Free trial",
+	"CANCEL": "Cancel",
+	"PLAN": "Plan",
+	"WELCOME_MESSAGE": {
+		"P_1": "Welcome",
+		"P_2": "You have no branches yet",
+		"P_3": "To create one, click"
+	}
+}
