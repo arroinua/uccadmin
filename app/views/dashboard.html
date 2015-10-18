@@ -39,12 +39,11 @@
 					    		<i class="fa fa-play"></i> <span translate>INSTANCE.ACTIONS.RUN</span>
 					    	</a>
 					    </li>
-					    <li ng-show="inst._subscription.state === 'active'">
+					    <!-- <li ng-show="inst._subscription.state === 'active'">
 					    	<a href="" ng-click="pauseBranch(inst.oid)">
 					    		<i class="fa fa-pause"></i> <span translate>INSTANCE.ACTIONS.PAUSE</span>
 					    	</a>
-					    </li>
-					    <!-- <li><a href="" data-toggle="collapse" data-target="#panel-{{inst.result.name}}" aria-expanded="false" aria-controls="plansPanel">Change Plan</a></li> -->
+					    </li> -->
 					    <li>
 					    	<a href="" ng-click="changePlan(inst)">
 					    		<i class="fa fa-plug"></i> <span translate>INSTANCE.ACTIONS.CHANGE_PLAN</span>
@@ -130,7 +129,7 @@
 				</div>
 				<div class="col-sm-12">
 					<h3 class="text-divider"><span translate>CHARGES</span> (<span translate>LAST_7_DAYS</span>)</h3>
-					<p ng-show="!charges.length">NO_DATA_FOR_PERIOD</p>
+					<p ng-show="!charges.length" translate>NO_DATA_FOR_PERIOD</p>
 					<div ng-show="charges.length">
 						<div class="col-sm-6">
 							<table class="table">

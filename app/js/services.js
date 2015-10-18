@@ -53,7 +53,9 @@ dashApp.factory('chartService', [function (){
         defaultOptions = {
             responsive: true,
             showScale: false,
+            scaleShowLabels: false,
             barShowStroke : false,
+            maintainAspectRatio: false,
             barStrokeWidth : 0,
             barValueSpacing : 0,
             barDatasetSpacing : 0,

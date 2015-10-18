@@ -468,7 +468,7 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 			url: 'charges',
 			params: {
 				start: (Date.now() - (7 * 24 * 60 * 60 * 1000)),
-				limit: 10
+				limit: 7
 			}
 		}).then(function(res){
 			console.log('charges: %o', res.data);
@@ -485,7 +485,8 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 		api.request({
 			url: 'transactions',
 			params: {
-				start: (Date.now() - (7 * 24 * 60 * 60 * 1000))
+				start: (Date.now() - (7 * 24 * 60 * 60 * 1000)),
+				limit: 7
 			}
 		}).then(function(res){
 			$scope.transactions = res.data.result.filter(function (item){
@@ -642,7 +643,7 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 		return diff <= 10;
 	};
 	$scope.parseDate = function(date, format){
-		return utils.parseDate(date, format || 'DD/MM/YYYY HH:MM');
+		return utils.parseDate(date, format);
 	};
 	$scope.stringToFixed = function(string){
 		return utils.stringToFixed(string, 2);
