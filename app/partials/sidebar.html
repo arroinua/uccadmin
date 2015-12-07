@@ -1,54 +1,40 @@
-<div class="page-sidebar" ng-if="visible">
-	<!-- <div class="nav-brand">
-		<a href="/dashboard">
-			<img src="/img/logo.png" alt="Logo" class="logo">	
-		</a>
-	</div> -->
+<div class="page-sidebar" id="page-sidebar" ng-if="visible">
 	<div class="profile-info text-center">
 		<a href="#/profile/{{currentUser._id}}">
 			<img src="/img/user.svg" alt="avatar" class="img-circle">
 		</a>
 		<h3 ng-bind="currentUser.name"></h3>
 		<p ng-bind="currentUser.email"></p>
-		<p>
-			<span translate>BALANCE</span>: 
-			<strong ng-show="currentUser.balance" ng-class="currentUser.balance < 0 ? 'text-danger' : 'text-success'">
-				{{stringToFixed(currentUser.balance)}}
-			</strong>
-			<i ng-hide="currentUser.balance" class="fa fa-spinner fa-spin"></i>
-			{{currentUser.currency}}
-		</p>
+		<span translate>BALANCE</span>: 
+		<strong ng-show="currentUser.balance" ng-class="currentUser.balance < 0 ? 'text-danger' : 'text-success'">
+			{{stringToFixed(currentUser.balance)}}
+		</strong>
+		<i ng-hide="currentUser.balance" class="fa fa-spinner fa-spin"></i>
+		{{currentUser.currency}}
 		<a href="#/payment" translate>ADD_CREDITS</a>
 	</div>
-	<!-- <hr class='col-xs-12'> -->
 	<ul class="sidebar-nav">
 		<li>
 			<a href="#/dashboard">
-				<i class="fa fa-dashboard"></i>
+				<!-- <i class="fa fa-dashboard"></i> -->
 				<span translate>DASHBOARD</span>
 			</a>
 		</li>
-		<!-- <li>
-			<a href="#/instance/new">
-				<i class="fa fa-cloud-upload"></i>
-				<span translate>LAUNCH_NEW_INSTANCE</span>
-			</a>
-		</li> -->
 		<li>
 			<a href="#/transactions">
-				<i class="fa fa-angle-double-right"></i>
+				<!-- <i class="fa fa-angle-double-right"></i> -->
 				<span translate>TRANSACTIONS</span>
 			</a>
 		</li>
 		<li>
 			<a href="#/charges">
-				<i class="fa fa-angle-double-left"></i>
+				<!-- <i class="fa fa-angle-double-left"></i> -->
 				<span translate>CHARGES</span>
 			</a>
 		</li>
 		<li>
 			<a href="#" ng-click="logout()">
-				<i class="fa fa-sign-out"></i>
+				<!-- <i class="fa fa-sign-out"></i> -->
 				<span translate>SIGN_OUT</span>
 			</a>
 		</li>

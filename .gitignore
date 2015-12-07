@@ -1,3 +1,4 @@
 node_modules
 config/production.js
 npm-debug.log
+*.old.*

@@ -1,50 +1,32 @@
-<div class="col-sm-12">
-	<form novalidate id="profile-settings">
-		<div class="row">
-			<div class="col-sm-4">
-				<span class="input input--hoshi">
-					<input class="input__field input__field--hoshi" type="email" name="email" ng-model="user.email" required input-hoshi/>
-					<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="email">
-						<span class="input__label-content input__label-content--hoshi" translate>EMAIL</span>
-					</label>
-				</span>
-			</div>
-			<div class="col-sm-4">
-				<span class="input input--hoshi">
-					<input class="input__field input__field--hoshi" type="text" name="username" ng-model="user.name" required input-hoshi/>
-					<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="username">
-						<span class="input__label-content input__label-content--hoshi" translate>USERNAME</span>
-					</label>
-				</span>
-			</div>
+<form novalidate id="profile-settings">
+	<div class="row">
+		<div class="five columns">
+			<label for="email" translate>EMAIL</label>
+			<input class="u-full-width" type="email" name="email" ng-model="user.email" required />
+		<!-- </div> -->
+		<!-- <div class="four columns"> -->
+			<label for="username" translate>USERNAME</label>
+			<input class="u-full-width" type="text" name="username" ng-model="user.name" required />
+		<!-- </div> -->
+	<!-- </div> -->
+	<!-- <div class="row"> -->
+		<!-- <div class="four columns"> -->
+			<label for="password" translate>PASSWORD</label>
+			<input class="u-full-width" type="password" name="password" ng-model="user.password" />
+		<!-- </div> -->
+		<!-- <div class="four columns"> -->
+			<label for="pwd-confirm" translate>CONFIRM_PASSWORD</label>
+			<input class="u-full-width" type="password" id="pwd-confirm" ng-model="confirmPass" />
 		</div>
-		<div class="row">
-			<div class="col-sm-4">
-				<span class="input input--hoshi">
-					<input class="input__field input__field--hoshi" type="password" name="password" ng-model="user.password" input-hoshi/>
-					<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="password">
-						<span class="input__label-content input__label-content--hoshi" translate>PASSWORD</span>
-					</label>
-				</span>
-			</div>
-			<div class="col-sm-4">
-				<span class="input input--hoshi">
-					<input class="input__field input__field--hoshi" type="password" id="pwd-confirm" ng-model="confirmPass" input-hoshi/>
-					<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="pwd-confirm">
-						<span class="input__label-content input__label-content--hoshi" translate>CONFIRM_PASSWORD</span>
-					</label>
-				</span>		
-			</div>
-		</div>	
-	</form>
-	<nav class="sticky-nav bottom-nav white-color-bgr semi-transparent">
-		<ul class="nav">
+	</div>	
+</form>
+<nav class="sticky-nav bottom-nav white-color-bgr semi-transparent">
+	<ul class="nav-list">
+		<li>
+			<button type="submit" class="buton button-primary" form="profile-settings" ng-click="saveProfile()" translate>PROFILE.SAVE_PROFILE</button>
 			<li>
-				<button type="submit" class="btn btn-primary" form="profile-settings" ng-click="saveProfile()" translate>PROFILE.SAVE_PROFILE</button>
-				<li>
-			</li>
-				<a href="#/dashboard" type="button" tabindex="0" class="btn btn-link" translate>CANCEL</a>
-			</li>
-		</ul>
-	</nav>
-</div>
+		</li>
+			<a href="#/dashboard" type="button" tabindex="0" translate>CANCEL</a>
+		</li>
+	</ul>
+</nav>

@@ -1,24 +1,24 @@
 /* Main nav styles */
 
-.main-nav {
-  height: 45px;
-}
+/*.main-nav {
+  background-color: #33C3F0;
+  background-color: rgba(51,195,240,0.8);
+}*/
 
-.main-nav ul {
+/*.main-nav ul {
   float: left;
-}
+}*/
 
-.nav-brand {
-  position: relative;
+/*.nav-brand {
+  float: left;
   width: 200px;
-  /*height: 45px;*/
   text-align: center;
-}
+}*/
 
-.nav-brand img {
+/*.nav-brand img {
   margin: 4px;
   height: 30px;
-}
+}*/
 
 /* Main nav styles end */
 
@@ -27,31 +27,50 @@
   position: fixed;
   width: 200px;
   height: 100%;
+  padding-top: 80px;
   left: 0;
-  z-index: 100;
+  z-index: 300;
   overflow: auto;
-  background-color: rgb(250,250,250);
-  font-size: 1.1em;
+  background-color: #fff;
+  border-right: 1px dashed #eee;
+  -webkit-transition: -webkit-transform .5s;
+  -moz-transition: -moz-transform .5s;
+  transition: transform .5s;
+}
+.page-sidebar {
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+.page-sidebar.open {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+}
+@media only screen and (min-width: 768px) {
+  .page-sidebar {
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+    transform: translateX(0);
+  }
 }
 
-/*.nav-brand {
-  position: relative;
-  max-height: 50px;
-  text-align: center;
-  padding: 8px 10px;
-  background-color: #F8D01C;
-  background-color: rgba(248,208,28,0.8);
-}*/
-
-.profile-info {
+/*.profile-info {
   margin: 80px 0 30px 0;
-}
+}*/
 
 .sidebar-nav {
   position: relative;
   width: 100%;
-  margin: 0;
-  padding: 0 0 40px;
+  margin-top: 40px;
+  /*padding: 0 0 40px;*/
+  list-style: none;
   /*padding-bottom: 60px;*/
 }
 
@@ -62,27 +81,33 @@
 .sidebar-nav > li > a {
   display: block;
   position: relative;
-  line-height: 4em;
+  /*line-height: 4em;*/
+  text-decoration: none;
   text-align: center;
 }
 
 .sidebar-nav > li > a > i {
-  position: absolute;
-  left: 50%;
-  margin-top: -10px;
-  margin-left: -23px;
-  font-size: 45px;
-  opacity: 0.3;
-  color: #F8D01C;
+  /*position: absolute;*/
+  /*left: 50%;*/
+  /*margin-top: -10px;*/
+  /*margin-left: -23px;*/
+  /*font-size: 45px;*/
+  /*opacity: 0.3;*/
+  /*color: #F8D01C;*/
 }
 /* Page sidebar styles end */
 
 /* Main container styles */
 
 .main-container {
-  position: relative;
-  margin-left: 200px;
+  /*position: relative;*/
+  margin-left: 0;
   z-index: 100;
+}
+@media only screen and (min-width: 768px) {
+  .main-container {
+    margin-left: 200px;
+  }  
 }
 
 .main-container.full-view {
@@ -90,8 +115,9 @@
 }
 
 .main-content {
-  padding-top: 60px;
-  padding-bottom: 60px;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  /*padding-bottom: 60px;*/
 }
 
 .input-desc {
@@ -101,6 +127,41 @@
 /* Main container styles end */
 
 /* Helpers styles */
+
+.menu-trigger {
+  display: block;
+  position: absolute;
+  margin-left: -28px;
+  font-size: 1.5em;
+  color: #fff;
+}
+@media only screen and (min-width: 768px) {
+ .menu-trigger {
+    display: none;
+  }
+}
+
+.top-bar {
+  color: #fff;
+}
+.top-bar ul {
+  padding-left: 20px;
+  font-size: 1.5em;
+}
+@media only screen and (min-width: 768px) {
+  .top-bar ul {
+    padding-left: 60px;
+    font-size: 1.5em;
+  }
+}
+  
+.top-bar ul li{
+  margin-right: 10px;
+}
+.top-bar a {
+  margin-top: 5px;
+  color: #fff;
+}
 
 .sticky-nav {
   position: fixed;
@@ -133,12 +194,12 @@
 }
 
 .main-color-bgr {
-  background-color: #F8D01C;
+  background-color: #33C3F0;
 }
 
 .main-color-bgr.semi-transparent {
-  background-color: #F8D01C;
-  background-color: rgba(248,208,28,0.8);
+  background-color: #33C3F0;
+  background-color: rgba(51,195,240,0.8);
 }
 
 .white-color {
@@ -164,6 +225,22 @@
   font-size: 1.2em;
   font-weight: 700;
   color: #00aaff;
+  text-transform: uppercase;
+}
+
+.text-success {
+  color: #3c763d;
+}
+
+.text-danger {
+  color: #a94442;
+}
+
+.text-warning {
+  color: #8a6d3b;
+}
+
+.capitalized {
   text-transform: uppercase;
 }
 
@@ -419,7 +496,7 @@ form.ng-submitted .input__field--hoshi.ng-invalid + .input__label--hoshi-color-1
   /*-webkit-transform: translateX(-50%) translateY(-50%);
   -ms-transform: translateX(-50%) translateY(-50%);
   transform: translateX(-50%) translateY(-50%);*/
-  width: 300px;
+  max-width: 300px;
 }
 
 /* Prising styles */

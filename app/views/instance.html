@@ -1,137 +1,78 @@
 <div class="row" ng-if="newBranch">
-	<div class="col-xs-12">
-		<h4 class="text-divider" translate>CHOOSE_PLAN</h4>
+	<h4 class="text-divider" translate>CHOOSE_PLAN</h4>
+	<div class="twelve columns">
 		<div class="cd-prising-wrapper">
-			<div class="col-sm-4" ng-repeat="plan in plans">
+			<div class="four columns" ng-repeat="plan in plans">
 				<plan-item plan="plan" model="instance._subscription.planId"></plan-item>
 			</div>
 		</div>
 	</div>
 </div>
-<!-- <div class="row">
-	<div class="col-sm-4">
-		<span class="input input--hoshi">
-			<select class="input__field input__field--hoshi" type="text" name="maxlines" tabindex="0" ng-model="instance.result.maxlines" ng-options="lines for lines in maxlines" input-hoshi />
-			</select>
-			<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="maxlines">
-				<span class="input__label-content input__label-content--hoshi" translate>Number of Lines</span>
-			</label>
-		</span>
-	</div>
-	<div class="col-sm-offset-2 col-sm-6">
-		<p class="input-desc" translate>Number of lines</p>
-	</div>
-</div> -->
 <div class="row">
-	<div class="col-xs-12">
-		<h4 class="text-divider" translate>CONFIGURE_BRANCH</h4>
-	</div>
+	<h4 class="text-divider" translate>CONFIGURE_BRANCH</h4>
 	<form novalidate name="branchSettings" id="branch-settings">
 		<div class="row">
-			<div class="col-lg-3 col-sm-4 col-xs-12">
-				<span class="input input--hoshi">
-					<input class="input__field input__field--hoshi" type="text" name="numPool" ng-model="numPool" required numpool input-hoshi/>
-					<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="numPool">
-						<span class="input__label-content input__label-content--hoshi" translate> INSTANCE.NUMBERING_PLAN
-					</label>
-				</span>
-				<p class="col-xs-12 help-block"><span translate>E_G</span>: "200-210" or "200,205-210,310-350"</p>
-				<a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.NUMBERING_PLAN_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a>
+			<div class="eight columns">
+				<label for="name" translate>INSTANCE.COMPANY_NAME</label>
+				<input class="u-full-width" type="text" name="name" ng-model="instance.result.name" required />
+				<p class="help-block"><span translate>E_G</span>: "SmileSoft"</p>
 			</div>
-			<!-- <div class="col-lg-offset-4 col-lg-6 col-sm-offset-2 col-sm-6">
-				<p class="input-desc" translate>INSTANCE.NUMBERING_PLAN_HELPER</p>
-			</div> -->
-		<!-- </div> -->
-		<!-- <div class="row"> -->
-			<div class="col-lg-3 col-sm-4 col-xs-12">
-				<span class="input input--hoshi">
-					<input class="input__field input__field--hoshi" type="text" name="prefix" ng-model="instance.result.prefix" ng-model-options="{updateOn: 'default blur', debounce: {'default': 1000, 'blur': 0}}" ng-readonly="!newBranch" validprefix required input-hoshi/>
-					<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="prefix">
-						<span class="input__label-content input__label-content--hoshi" translate>INSTANCE.BRANCH_PREFIX</span>
-					</label>
-				</span>
+			<div class="four columns">
+				<label for="prefix" translate>INSTANCE.BRANCH_PREFIX</label>
+				<input class="u-full-width" type="text" name="prefix" ng-model="instance.result.prefix" ng-model-options="{updateOn: 'default blur', debounce: {'default': 1000, 'blur': 0}}" ng-readonly="!newBranch" validprefix required />
     			<p class="col-xs-12 text-danger" ng-if="newBranch" ng-show="branchSettings.prefix.$error.validprefix" translate>PREFIX_EXISTS</p>
 				<p class="col-xs-12 help-block"><span translate>E_G</span>: "office" or "domain"</p>
-				<a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.BRANCH_PREFIX_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a>
-			</div>
-			<div class="col-lg-3 col-sm-4 col-xs-12">
-				<span class="input input--hoshi">
-					<select class="input__field input__field--hoshi" name="sid" tabindex="0" ng-model="instance.sid" ng-options="sid._id as sid.name for sid in sids" ng-disabled="!newBranch" input-hoshi />
-					</select>
-					<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="sid">
-						<span class="input__label-content input__label-content--hoshi" translate>INSTANCE.BRANCH_SID</span>
-					</label>
-				</span>
-				<a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.BRANCH_SID_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a>
+				<!-- <a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.BRANCH_PREFIX_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a> -->
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-lg-6 col-sm-8 col-xs-12">
-				<span class="input input--hoshi">
-					<input class="input__field input__field--hoshi" type="text" name="name" ng-model=
-					"instance.result.name" required input-hoshi/>
-					<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="name">
-						<span class="input__label-content input__label-content--hoshi" required translate>INSTANCE.COMPANY_NAME</span>
-					</label>
-				</span>
-				<p class="col-xs-12 help-block"><span translate>E_G</span>: "SmileSoft"</p>
+			<div class="four columns">
+				<label for="numPool" translate> INSTANCE.NUMBERING_PLAN</label>
+				<input class="u-full-width" type="text" name="numPool" ng-model="numPool" required numpool />
+				<p class="help-block"><span translate>E_G</span>: "200-210" or "200,205-210,310-350"</p>
+				<!-- <a tabindex="0" role="button" class="u-full-width" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.NUMBERING_PLAN_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a> -->
 			</div>
-			<!-- <div class="col-sm-6">
-				<p class="input-desc" translate>INSTANCE.COMPANY_NAME_HELPER</p>
-			</div>	 -->
-			<div class="col-lg-2 col-sm-4 col-xs-12">
-				<span class="input input--hoshi">
-					<select class="input__field input__field--hoshi" name="lang" tabindex="0" ng-model="instance.result.lang" ng-options="language.value as language.name for language in languages" input-hoshi />
-					</select>
-					<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="lang">
-						<span class="input__label-content input__label-content--hoshi" required translate>INSTANCE.INTERFACE_LANGUAGE</span>
-					</label>
-				</span>
-				<a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.INTERFACE_LANGUAGE_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a>
+			<div class="four columns">
+				<label for="lang" translate>INSTANCE.INTERFACE_LANGUAGE</label>
+				<select class="u-full-width" name="lang" tabindex="0" ng-model="instance.result.lang" ng-options="language.value as language.name for language in languages" /></select>
+				<!-- <a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.INTERFACE_LANGUAGE_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a> -->
 			</div>
-			<!-- <div class="col-lg-offset-4 col-lg-6 col-sm-offset-2 col-sm-6">
-				<p class="input-desc" translate>INSTANCE.INTERFACE_LANGUAGE_HELPER</p>
-			</div> -->
 		</div>
 		<div class="row">
-			<div class="col-lg-4 col-sm-6 col-xs-12">
-				<span class="input input--hoshi">
-					<input class="input__field input__field--hoshi" type="password" name="adminpass" ng-model="instance.result.adminpass" ng-required="{{newBranch}}" input-hoshi/>
-					<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="adminpass">
-						<span class="input__label-content input__label-content--hoshi" translate>INSTANCE.ADMIN_PASSWORD</span>
-					</label>
-				</span>
-				<a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.ADMIN_PASSWORD_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a>
+			<label>Server location</label>
+			<label>
+			    <input type="radio" value="germany" name="sid" ng-model="instance.sid" ng-disabled="!newBranch">
+			    <span class="label-body">Germany</span>
+			</label>
+			<label>
+			    <input type="radio" value="uk" name="sid" ng-model="instance.sid" ng-disabled="!newBranch">
+			    <span class="label-body">Ukraine</span>
+			</label>
+			<!-- <a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.BRANCH_SID_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a> -->
+		</div>
+		<div class="row">
+			<div class="six columns">
+				<label for="adminpass" translate>INSTANCE.ADMIN_PASSWORD</label>
+				<input class="u-full-width" type="password" name="adminpass" ng-model="instance.result.adminpass" ng-required="{{newBranch}}" />
+				<!-- <a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.ADMIN_PASSWORD_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a> -->
 			</div>
-			<!-- <div class="col-sm-6">
-				<p class="input-desc" translate>INSTANCE.ADMIN_PASSWORD_HELPER</p>
-			</div>	 -->
-		<!-- </div> -->
-		<!-- <div class="row"> -->
-			<div class="col-lg-4 col-sm-6 col-xs-12">
-				<span class="input input--hoshi">
-					<input class="input__field input__field--hoshi" type="password" id="adminpassConfirm" ng-model="confirmPass" input-hoshi/>
-					<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="adminpassConfirm">
-						<span class="input__label-content input__label-content--hoshi" translate>INSTANCE.ADMIN_PASSWORD_CONFIRM</span>
-					</label>
-				</span>
+			<div class="six columns">
+				<label for="adminpassConfirm" translate>INSTANCE.ADMIN_PASSWORD_CONFIRM</label>
+				<input class="u-full-width" type="password" id="adminpassConfirm" ng-model="confirmPass" />
 			</div>
-			<!-- <div class="col-sm-6">
-				<p class="input-desc" translate>INSTANCE.ADMIN_PASSWORD_CONFIRM_HELPER</p>
-			</div>	 -->
 		</div>
 	</form>
 </div>
 <nav class="sticky-nav bottom-nav white-color-bgr semi-transparent">
-	<ul class="nav">
+	<ul class="nav-list">
 		<li ng-if="!newBranch">
-			<button type="submit" class="btn btn-primary" form="branch-settings" tabindex="0" ng-click="saveInstance()" translate>SAVE</button>
+			<button type="submit" class="button button-primary" form="branch-settings" tabindex="0" ng-click="saveInstance()" translate>SAVE</button>
 		</li>
 		<li ng-if="newBranch">
-			<button type="submit" class="btn btn-default" form="branch-settings" tabindex="0" ng-click="proceed()" translate>PROCEED</button>
+			<button type="submit" class="button button-default" form="branch-settings" tabindex="0" ng-click="proceed()" translate>PROCEED</button>
 		</li>
 		<li>
-			<a href="#/dashboard" type="button" tabindex="0" class="btn btn-link" translate>CANCEL</a>
+			<a href="#/dashboard" type="button" tabindex="0" translate>CANCEL</a>
 		</li>
 	</ul>
 </nav>

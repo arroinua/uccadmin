@@ -1,35 +1,23 @@
 <form role="form" class="action-form signup-form" ng-hide="verificationSent">
-	<span class="input input--hoshi">
-		<input class="input__field input__field--hoshi" type="text" name="email" ng-model="email" required input-hoshi/>
-		<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="email">
-			<span class="input__label-content input__label-content--hoshi" translate>EMAIL</span>
-		</label>
-	</span>
-	<span class="input input--hoshi">
-		<input class="input__field input__field--hoshi" type="text" name="username" ng-model="name" required input-hoshi/>
-		<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="username">
-			<span class="input__label-content input__label-content--hoshi" translate>USERNAME</span>
-		</label>
-	</span>
-	<span class="input input--hoshi">
-		<input class="input__field input__field--hoshi" type="password" name="password" required ng-model="password" input-hoshi/>
-		<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="password">
-			<span class="input__label-content input__label-content--hoshi" translate>PASSWORD</span>
-		</label>
-	</span>
-	<span class="input input--hoshi">
-		<input class="input__field input__field--hoshi" type="password" id="pwd-confirm" input-hoshi/>
-		<label class="input__label input__label--hoshi input__label--hoshi-color-1" for="pwd-confirm">
-			<span class="input__label-content input__label-content--hoshi" translate>CONFIRM_PASSWORD</span>
-		</label>
-	</span>
-	<br>
-	<p class="error-msg">{{message}}</p>
-	<div class="pull-left">
-		<button class="btn btn-lg btn-primary" ng-click="signup()" translate>ACCEPT</button>
-	</div>
-	<div class="pull-right">
-		<a href="#/login" tabindex="0" translate>ALREADY_HAVE_ACCOUNT</a>
+	<div class="row">
+		<div class="twelve columns">
+			<label for="email" translate>EMAIL</label>
+			<input class="u-full-width" type="email" name="email" ng-model="email" required/>
+			<label for="username" translate>USERNAME</label>
+			<input class="u-full-width" type="text" name="username" ng-model="name" required/>
+			<label for="password" translate>PASSWORD</label>
+			<input class="u-full-width" type="password" name="password" required ng-model="password"/>
+			<label for="pwd-confirm" translate>CONFIRM_PASSWORD</label>
+			<input class="u-full-width" type="password" id="pwd-confirm" input-hoshi/>
+			<br><br>
+			<p class="error-msg">{{message}}</p>
+			<div class="pull-left">
+				<button class="button button-primary" ng-click="signup()" translate>ACCEPT</button>
+			</div>
+			<div class="pull-right">
+				<a href="#/login" tabindex="0" translate>ALREADY_HAVE_ACCOUNT</a>
+			</div>	
+		</div>
 	</div>
 </form>
 <form role="form" class="action-form" ng-show="verificationSent">

@@ -162,20 +162,44 @@ dashApp.directive('instRow', function(){
 });
 
 dashApp.directive('sideMenu', function(){
+
+    function link(scope, el, attr){
+        $('body').on('click', function (event){
+            if(el[0].children[0].classList.contains('open')) {
+                el[0].children[0].classList.remove('open');
+            }
+        });
+    }
+
     return {
         restrict: 'AE',
         transclude: true,
         controller: 'SidebarController',
-        templateUrl: '/partials/sidebar.html'
+        templateUrl: '/partials/sidebar.html',
+        link: link
     };
 });
 
 dashApp.directive('topMenu', function(){
+
+    function link(){
+        $('#user-lang').on('click', function(event){
+            event.preventDefault();
+            $('#lang-nav').toggleClass('active');
+        });
+
+        $('#menu-trigger').on('click', function (event){
+            event.stopPropagation();
+            $('#page-sidebar').toggleClass('open');
+        });
+    }
+
     return {
         restrict: 'AE',
         transclude: true,
         controller: 'TopmenuController',
-        templateUrl: '/partials/topmenu.html'
+        templateUrl: '/partials/topmenu.html',
+        link: link
     };
 });
 
@@ -275,5 +299,68 @@ dashApp.directive('wizard', function(){
             scope.step = wizCtrl.addPanel(scope);
         },
         templateUrl: '/partials/wizpane.html'
+    };
+})
+.directive('langNav', function(){
+
+    function link(scope, el, attr){
+        $('#lang-nav').on('click', function (event){
+            event.preventDefault();
+            if(event.target.id === this.id){
+                $(this).toggleClass('active');
+            } else if(event.target.nodeName === 'A'){
+                $(this).removeClass('active');
+            }
+        });
+    }
+
+    return {
+        restrict: 'AE',
+        transclude: true,
+        templateUrl: '/partials/langnav.html',
+        controller: function ($scope, $rootScope, $translate, api){
+            $scope.changeLanguage = function (langKey) {
+                $translate.use(langKey);
+                $rootScope.lang = langKey;
+                api.request({
+                    url: 'setCustomerLang',
+                    params: {
+                        lang: langKey
+                    }
+                }).then(function (res){
+                    console.log(res.data.result);
+                }, function (err){
+                    console.log(err);
+                });
+            };
+        },
+        link: link
+    };
+})
+.directive('dropdown', function (){
+
+    function trigger(el){
+        el.toggleClass('open');
+    }
+
+    function close(el){
+        el.removeClass('open');
+    }
+
+    function link(scope, el, attr){
+        el.on('click', function (event){
+            event.stopPropagation();
+            trigger(el);
+        });
+
+        angular.element('body').on('click', function (event){
+            if(event.currentTarget !== el && el.hasClass('open')) {
+                close(el);
+            }
+        });
+    }
+
+    return {
+        link: link
     };
 });

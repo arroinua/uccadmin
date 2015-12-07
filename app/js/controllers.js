@@ -4,6 +4,7 @@ dashApp.controller('SidebarController', ['$rootScope', '$scope', '$location', '$
 			url: "getCustomerBalance"
 		}).then(function(response){
 			// $scope.balance = response.result;
+			$rootScope.currentUser = $rootScope.currentUser || {};
 			$rootScope.currentUser.balance = response.data.result;
 		}, function(err){
 			$rootScope.error = err;
@@ -34,25 +35,27 @@ dashApp.controller('SidebarController', ['$rootScope', '$scope', '$location', '$
 			$rootScope.currentUser = null;
 		});
 	};
-	getCustomerBalance();
+	
+	onRouteChange($location.path());
+	if($scope.visible) getCustomerBalance();
 }]);
 
 dashApp.controller('TopmenuController', ['$localStorage', '$rootScope', '$scope', '$translate', 'api', function($localStorage, $rootScope, $scope, $translate, api){
-	$scope.lang = $localStorage.NG_TRANSLATE_LANG_KEY || $translate.use();
-	$scope.changeLanguage = function (langKey) {
-		$translate.use(langKey);
-		$scope.lang = langKey;
-		api.request({
-			url: 'setCustomerLang',
-			params: {
-				lang: langKey
-			}
-		}).then(function (res){
-			console.log(res.data.result);
-		}, function (err){
-			console.log(err);
-		});
-	};
+	$rootScope.lang = $localStorage.NG_TRANSLATE_LANG_KEY || $translate.use();
+	// $scope.changeLanguage = function (langKey) {
+	// 	$translate.use(langKey);
+	// 	$scope.lang = langKey;
+	// 	api.request({
+	// 		url: 'setCustomerLang',
+	// 		params: {
+	// 			lang: langKey
+	// 		}
+	// 	}).then(function (res){
+	// 		console.log(res.data.result);
+	// 	}, function (err){
+	// 		console.log(err);
+	// 	});
+	// };
 	$scope.$watch(function(){
 		return $rootScope.title;
 	}, function(val){
@@ -67,9 +70,14 @@ dashApp.controller('PlansModalController', ['$scope', '$element', 'currentPlan',
 		planId: currentPlan,
 		plans: plans
 	};
+
 	$scope.closeModal = function(){
-		$element.modal('hide');
-		close(($scope.planModal.planId !== currentPlan ? $scope.planModal.planId : null), 500);
+		close(null);
+	};
+
+	$scope.submitModal = function(){
+		angular.element($element.modal).removeClass('in');
+		close(($scope.planModal.planId !== currentPlan ? $scope.planModal.planId : null), 1000);
 	};
 
 }]);
@@ -208,6 +216,7 @@ dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', 
 		// 	};
 		// } else {
 			requestParams.params = {
+				paymentMethod: $scope.paymentMethod,
 				amount: (requiredAmount ? requiredAmount : $scope.amount),
 				order: $scope.cart
 			};
@@ -397,6 +406,8 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 	$rootScope.title = 'DASHBOARD';
 
 	$scope.instances = [];
+
+	var diff;
 
 	var getBranches = function(){
 		api.request({
@@ -622,13 +633,21 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 		ModalService.showModal({
 			templateUrl: "/partials/plans-modal.html",
 			controller: "PlansModalController",
+			appendElement: angular.element('#modals-cont'),
 			inputs: {
 				plans: $scope.plans,
 				currentPlan: inst._subscription.planId
 			}
 		}).then(function(modal) {
 			//it's a bootstrap element, use 'modal' to show it
-			modal.element.modal();
+			console.log(modal);
+			angular.element(modal.element).addClass('in');
+			angular.element(modal.element).on('click', function (event){
+				// event.preventDefault();
+				if(event.target.id === this.id)
+					this.parentNode.removeChild(this);
+			});
+
 			modal.close.then(function(result) {
 				if(result) changePlan(result, inst);
 			});
@@ -638,8 +657,12 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 	};
 
 	$scope.getDifference = utils.getDifference;
+	$scope.expiresAt = function(inst){
+		diff = utils.getDifference(inst._subscription.nextBillingDate, moment(), 'days');
+		return diff;
+	};
 	$scope.canRenew = function(inst){
-		var diff = utils.getDifference(inst._subscription.nextBillingDate, inst._subscription.createdAt, 'days');
+		diff = $scope.expiresAt(inst);
 		return diff <= 10;
 	};
 	$scope.parseDate = function(date, format){
