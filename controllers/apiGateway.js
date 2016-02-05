@@ -7,6 +7,7 @@ module.exports = {
 
 	request: function(req, res, next){
 		debug('headers: ', req.headers);
+		var headers = req.headers;
 		var params = req.body ? JSON.stringify(req.body) : '';
 
 		var options = {
@@ -15,10 +16,9 @@ module.exports = {
 			method: 'POST',
 			path: '/customer'+req.originalUrl,
 			headers: {
-				'Content-Type': 'application/json',
-				'Content-Length': params.length
+				'Content-Type': headers['content-type'],
+				'Content-Length': headers['content-length']
 			},
-			// headers: req.headers,
 			// auth: server.login+':'+server.password,
 			// ca: server.ca,
 			// rejectUnauthorized: true,
@@ -49,8 +49,7 @@ module.exports = {
 					res.end();
 				} else {
 					debug('responseStr', responseStr);
-					res.write(responseStr);
-					res.end();
+					res.end(responseStr);
 				}
 				apiResponse.emit('close');
 			});

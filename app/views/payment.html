@@ -40,28 +40,34 @@
 <br>
 <div class="row">
 	<h4 class="text-divider" translate>CHOOSE_PAYMENT_METHOD</h4>
-	<div class="twelve columns">
-		<label>
-		    <input type="radio" name="payment-method" ng-model="paymentMethod" value="1">
-		    <span class="label-body" translate>CREDIT_CARD</span>
-			<span style="text-align:center"><i class="fa fa-credit-card"></i></span>
-		</label>
-		<label>
-		    <input type="radio" name="payment-method" ng-model="paymentMethod" value="2">
-		    <span class="label-body">PayPal</span>
-			<span style="text-align:center"><i class="fa fa-paypal"></i></span>
-		</label>
-		<label>
-		    <input type="radio" name="payment-method" ng-model="paymentMethod" value="3">
-		    <span class="label-body">Bitcoin</span>
-			<span style="text-align:center"><i class="fa fa-bitcoin"></i></span>
-		</label>
-	</div>
+	<form id="pmethod-form">
+		<div class="twelve columns">
+			<label>
+			    <input type="radio" name="payment-method" ng-model="paymentMethod" ng-value="1">
+				<span style="text-align:center"><i class="fa fa-credit-card"></i></span>
+			    <span class="label-body" translate>CREDIT_CARD</span>
+			</label>
+			<label>
+			    <input type="radio" name="payment-method" ng-model="paymentMethod" ng-value="2">
+				<span style="text-align:center"><i class="fa fa-paypal"></i></span>
+			    <span class="label-body">PayPal</span>
+			</label>
+			<label>
+			    <input type="radio" name="payment-method" ng-model="paymentMethod" ng-value="3">
+				<span style="text-align:center"><i class="fa fa-bitcoin"></i></span>
+			    <span class="label-body">Bitcoin</span>
+			</label>
+			<label ng-show="cart.length">
+			    <input type="radio" name="payment-method" ng-model="paymentMethod" ng-value="0" ng-disabled="currentUser.balance < amount">
+			    <span class="label-body">Ringotel balance ({{currentUser.balance}}{{currentUser.currency}})</span>
+			</label>
+		</div>
+	</form>
 </div>
 <nav class="sticky-nav bottom-nav white-color-bgr semi-transparent" ng-hide="newBranch">
 	<ul class="nav-list">
 		<li>
-			<button type="submit" class="button button-primary" tabindex="0" form="payment-form" ng-click="proceedPayment()" translate>PROCEED</button>
+			<button type="submit" class="button button-primary" tabindex="0" form="payment-form" ng-click="proceedPayment()" ng-disabled="!isEnough" translate>PROCEED</button>
 		</li>
 		<li>
 			<a href="" type="button" tabindex="0" ng-click="cancel()" translate>CANCEL</a>

@@ -25,7 +25,7 @@ dashApp.factory('api', ['$http', 'appConfig', function($http, appConfig){
     var baseUrl = appConfig.server + '/api';
     return {
         request: function(params){
-            return $http.post(baseUrl+'/'+params.url, (params.params || null));
+            return $http.post(baseUrl+'/'+params.url, (params.params || {}));
         }
     };
 }]);
@@ -210,6 +210,7 @@ dashApp.factory('poolSizeServices', ['utils', function (utils){
             var extensions = [];
 
             string
+            .replace(/\s/g, '')
             .split(',')
             .map(function(str){
                 return str.split('-');
@@ -238,7 +239,7 @@ dashApp.factory('storage', ['$localStorage', function ($localStorage){
 
 dashApp.factory('utils', function (){
 
-    return {
+    var methods = {
         isArray: function(obj){
             return typeof obj === 'object';
         },
@@ -254,7 +255,68 @@ dashApp.factory('utils', function (){
         },
         getDifference: function(date1, date2, output){
             return moment(date1).diff(date2, (output ? output : ''));
+        },
+        checkPasswordStrength: function(string) {
+            var strong = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})"),
+                middle = new RegExp("^(((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])))(?=.{6,})");
+            if(strong.test(string)) {
+                return 2;
+            } else if(middle.test(string)) {
+                return 1;
+            } else {
+                return 0;
+            }
+        },
+        generatePassword: function(minlength, maxlength) {
+            var chars = "abcdefghijklmnopqrstuvwxyz!@$%^&*_ABCDEFGHIJKLMNOP1234567890",
+                passLength = Math.floor(Math.random() * (maxlength - minlength)) + minlength,
+                pass = "";
+            
+            for (var x = 0; x < passLength; x++) {
+                var i = Math.floor(Math.random() * chars.length);
+                pass += chars.charAt(i);
+            }
+            return pass;
         }
     };
-
+    return methods;
 });
+
+dashApp.factory('spinnerService', [function(){
+    var spinners = {};
+    return {
+        _register: function (data) {
+            if (!data.hasOwnProperty('name')) {
+                throw new Error("Spinner must specify a name when registering with the spinner service.");
+            }
+            if (spinners.hasOwnProperty(data.name)) {
+                throw new Error("A spinner with the name '" + data.name + "' has already been registered.");
+            }
+            spinners[data.name] = data;
+        },
+        show: function (name) {
+            var spinner = spinners[name];
+            if (!spinner) {
+                throw new Error("No spinner named '" + name + "' is registered.");
+            }
+            spinner.show();
+        },
+        hide: function (name) {
+            var spinner = spinners[name];
+            if (!spinner) {
+                throw new Error("No spinner named '" + name + "' is registered.");
+            }
+            spinner.hide();
+        },
+        showAll: function () {
+            for (var name in spinners) {
+                spinners[name].show();
+            }
+        },
+        hideAll: function () {
+            for (var name in spinners) {
+                spinners[name].hide();
+            }
+        }
+    };
+}]);

@@ -9,7 +9,7 @@ body {
   top: 0;
   left: 0;
   min-height: 50px;
-  line-height: 50px;
+  line-height: 55px;
   width: 100%;
   z-index: 1000;
 }
@@ -78,27 +78,27 @@ body {
 }
 /* line 26, ../sass/ngNotificationsBar.scss */
 .notifications .error {
-  color: #F64747;
-  /*background-color: #F64747;*/
-  border-bottom: 1px solid #F64747;
+  color: #fff;
+  background-color: #F64747;
+  /*border-bottom: 1px solid #F64747;*/
 }
 /* line 32, ../sass/ngNotificationsBar.scss */
 .notifications .success {
-  color: #F8D01C;
-  /*background-color: #03C9A9;*/
-  border-bottom: 1px solid #F8D01C;
+  color: #fff;
+  background-color: #69b241;
+  /*border-bottom: 1px solid #F8D01C;*/
 }
 /* line 38, ../sass/ngNotificationsBar.scss */
 .notifications .warning {
-  color: #F7CA18;
-  /*background-color: #F7CA18;*/
-  border-bottom: 1px solid #F7CA18;
+  color: #fff;
+  background-color: #F7CA18;
+  /*border-bottom: 1px solid #F7CA18;*/
 }
 /* line 44, ../sass/ngNotificationsBar.scss */
 .notifications .info {
-  color: #00aaff;
-  /*background-color: #0c6997;*/
-  border-bottom: 1px solid #00aaff;
+  color: #fff;
+  background-color: #0c6997;
+  /*border-bottom: 1px solid #00aaff;*/
 }
 /* line 50, ../sass/ngNotificationsBar.scss */
 .notifications .close-click {

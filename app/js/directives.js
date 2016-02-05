@@ -96,7 +96,65 @@ dashApp.directive('numpool', function() {
     };
 });
 
-dashApp.directive('validprefix', ['$q', '$rootScope', 'api', function($q, $rootScope, api) {
+dashApp.directive('validPrefix', ['$q', '$rootScope', 'api', function($q, $rootScope, api) {
+  return {
+    require: 'ngModel',
+    link: function(scope, el, attrs, ctrl) {
+
+        el.on('keydown', function (e){
+            if (e.altKey || e.keyCode === 18 || e.keyCode === 32 || e.keyCode > 90) {
+                e.preventDefault();
+            }
+        });
+        
+        ctrl.$validators.validprefix = function(modelValue, viewValue) {
+            if(ctrl.$isEmpty(modelValue)) {
+                return true;
+            }
+
+            var regex = /^[a-zA-Z0-9]+$/i;
+            if(!modelValue.match(regex)) return false;
+
+            return true;
+            
+        };
+    }
+  };
+}]);
+
+dashApp.directive('uniquePrefix', ['$q', '$rootScope', 'api', function($q, $rootScope, api) {
+  return {
+    require: 'ngModel',
+    link: function(scope, el, attrs, ctrl) {
+
+        if(!scope.newBranch) return;
+        ctrl.$asyncValidators.uniqueprefix = function(modelValue, viewValue) {
+            if (ctrl.$isEmpty(modelValue)) {
+              // consider empty model valid
+              return $q.when();
+            }
+
+            var def = $q.defer();
+
+            api.request({
+                url: 'isPrefixValid',
+                params: {
+                    prefix: modelValue
+                }
+            }).then(function(res){
+                if(res.data.result) def.resolve();
+                else def.reject();
+            }, function(err){
+                $rootScope.error = err;
+            });
+
+            return def.promise;
+        };
+    }
+  };
+}]);
+
+dashApp.directive('validname', ['$q', '$rootScope', 'api', function($q, $rootScope, api) {
   return {
     require: 'ngModel',
     link: function(scope, el, attrs, ctrl) {
@@ -107,7 +165,7 @@ dashApp.directive('validprefix', ['$q', '$rootScope', 'api', function($q, $rootS
             }
         });
 
-      ctrl.$asyncValidators.validprefix = function(modelValue, viewValue) {
+      ctrl.$asyncValidators.validname = function(modelValue, viewValue) {
         if (ctrl.$isEmpty(modelValue)) {
           // consider empty model valid
           return $q.when();
@@ -116,9 +174,9 @@ dashApp.directive('validprefix', ['$q', '$rootScope', 'api', function($q, $rootS
         var def = $q.defer();
 
         api.request({
-            url: 'isPrefixValid',
+            url: 'isNameValid',
             params: {
-                prefix: modelValue
+                name: modelValue
             }
         }).then(function(res){
             if(res.data.result) def.resolve();
@@ -129,6 +187,31 @@ dashApp.directive('validprefix', ['$q', '$rootScope', 'api', function($q, $rootS
 
         return def.promise;
       };
+    }
+  };
+}]);
+
+dashApp.directive('password', ['utils', function(utils) {
+  return {
+    require: 'ngModel',
+    link: function(scope, el, attrs, ctrl) {
+        ctrl.$validators.password = function(modelValue, viewValue) {
+            if(ctrl.$isEmpty(modelValue)) {
+                return true;
+            }
+
+            if(scope.instance) {
+                var prefix = scope.instance.result.prefix;
+                if(prefix && new RegExp(prefix, 'i').test(modelValue))
+                    return false;
+            }
+
+            if(!utils.checkPasswordStrength(modelValue)) {
+                return false;
+            }
+
+            return true;
+        };
     }
   };
 }]);
@@ -165,7 +248,7 @@ dashApp.directive('sideMenu', function(){
 
     function link(scope, el, attr){
         $('body').on('click', function (event){
-            if(el[0].children[0].classList.contains('open')) {
+            if(el[0].children[0] && el[0].children[0].classList.contains('open')) {
                 el[0].children[0].classList.remove('open');
             }
         });
@@ -208,7 +291,8 @@ dashApp.directive('planItem', function(){
         restrict: 'AE',
         scope: {
             model: '=',
-            plan: '='
+            plan: '=',
+            noTrial: '='
         },
         templateUrl: '/partials/plan.html'
     };
@@ -306,6 +390,7 @@ dashApp.directive('wizard', function(){
     function link(scope, el, attr){
         $('#lang-nav').on('click', function (event){
             event.preventDefault();
+            console.log(event.target.id);
             if(event.target.id === this.id){
                 $(this).toggleClass('active');
             } else if(event.target.nodeName === 'A'){
@@ -318,22 +403,23 @@ dashApp.directive('wizard', function(){
         restrict: 'AE',
         transclude: true,
         templateUrl: '/partials/langnav.html',
-        controller: function ($scope, $rootScope, $translate, api){
-            $scope.changeLanguage = function (langKey) {
-                $translate.use(langKey);
-                $rootScope.lang = langKey;
-                api.request({
-                    url: 'setCustomerLang',
-                    params: {
-                        lang: langKey
-                    }
-                }).then(function (res){
-                    console.log(res.data.result);
-                }, function (err){
-                    console.log(err);
-                });
-            };
-        },
+        controller: 'LangController',
+        // controller: function ($scope, $rootScope, $translate, api){
+        //     $scope.changeLanguage = function (langKey) {
+        //         $translate.use(langKey);
+        //         $rootScope.lang = langKey;
+        //         api.request({
+        //             url: 'setCustomerLang',
+        //             params: {
+        //                 lang: langKey
+        //             }
+        //         }).then(function (res){
+        //             console.log(res.data.result);
+        //         }, function (err){
+        //             console.log(err);
+        //         });
+        //     };
+        // },
         link: link
     };
 })
@@ -362,5 +448,75 @@ dashApp.directive('wizard', function(){
 
     return {
         link: link
+    };
+})
+.directive('spinner', function () {
+    return {
+      restrict: 'EA',
+      replace: true,
+      transclude: true,
+      scope: {
+        name: '@?',
+        group: '@?',
+        show: '=?',
+        imgSrc: '@?',
+        register: '@?',
+        onLoaded: '&?',
+        onShow: '&?',
+        onHide: '&?'
+      },
+      template: [
+        '<div ng-show="show">',
+        '  <img ng-if="imgSrc" ng-src="{{imgSrc}}" />',
+        '  <ng-transclude></ng-transclude>',
+        '</div>'
+      ].join(''),
+      controller: ['$scope', 'spinnerService', function ($scope, spinnerService) {
+
+        // register should be true by default if not specified.
+        if (!$scope.hasOwnProperty('register')) {
+          $scope.register = true;
+        } else {
+          $scope.register = $scope.register.toLowerCase() === 'false' ? false : true;
+        }
+
+        // Declare a mini-API to hand off to our service so the service
+        // doesn't have a direct reference to this directive's scope.
+        var api = {
+          name: $scope.name,
+          group: $scope.group,
+          show: function () {
+            $scope.show = true;
+          },
+          hide: function () {
+            $scope.show = false;
+          },
+          toggle: function () {
+            $scope.show = !$scope.show;
+          }
+        };
+
+        // Register this spinner with the spinner service.
+        if ($scope.register === true) {
+          spinnerService._register(api);
+        }
+
+        // If an onShow or onHide expression was provided, register a watcher
+        // that will fire the relevant expression when show's value changes.
+        if ($scope.onShow || $scope.onHide) {
+          $scope.$watch('show', function (show) {
+            if (show && $scope.onShow) {
+              $scope.onShow({ spinnerService: spinnerService, spinnerApi: api });
+            } else if (!show && $scope.onHide) {
+              $scope.onHide({ spinnerService: spinnerService, spinnerApi: api });
+            }
+          });
+        }
+
+        // This spinner is good to go. Fire the onLoaded expression.
+        if ($scope.onLoaded) {
+          $scope.onLoaded({ spinnerService: spinnerService, spinnerApi: api });
+        }
+      }]
     };
 });

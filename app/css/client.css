@@ -20,6 +20,19 @@
   height: 30px;
 }*/
 
+/* ngCloak styles */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+input, select {
+  font-size: 1em;
+  line-height: 1.6;
+  font-weight: 400;
+  font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #222;
+}
+
 /* Main nav styles end */
 
 /* Page sidebar styles */
@@ -86,7 +99,7 @@
   text-align: center;
 }
 
-.sidebar-nav > li > a > i {
+/*.sidebar-nav > li > a > i {*/
   /*position: absolute;*/
   /*left: 50%;*/
   /*margin-top: -10px;*/
@@ -94,7 +107,7 @@
   /*font-size: 45px;*/
   /*opacity: 0.3;*/
   /*color: #F8D01C;*/
-}
+/*}*/
 /* Page sidebar styles end */
 
 /* Main container styles */
@@ -163,10 +176,16 @@
   color: #fff;
 }
 
-.sticky-nav {
+.sticky-nav,
+.sticky-nav-mob {
   position: fixed;
   width: 100%;
   z-index: 200;
+}
+@media only screen and (min-width: 768px) {
+ .sticky-nav-mob {
+    position: relative;
+  }
 }
 
 .absolute-nav {
@@ -244,6 +263,20 @@
   text-transform: uppercase;
 }
 
+.help-btn {
+  font-size: 16px;
+  color: #999;
+  cursor: pointer;
+}
+
+.float-right {
+  float: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
 /* Helpers styles end */
 
 /* Custom styles */
@@ -255,6 +288,14 @@ input.form-control {
   border-bottom: 1px solid #00aaff;
 }
 
+input.big-input {
+  font-size: 3rem;
+  line-height: 0;
+  width: 200px;
+  padding: 0;
+  border: none;
+}
+
 .btn {
   border-radius: 0;
 }
@@ -262,6 +303,10 @@ input.form-control {
 .btn-primary {
   border: 1px solid #00aaff;
   background-color: #00aaff;
+}
+
+.nav-list > li {
+  margin-bottom: 0;
 }
 
 .nav {
@@ -299,6 +344,10 @@ input.form-control {
 
 .panel-footer {
   background-color: #fff;
+}
+
+.tt_wide {
+  width: 200px;
 }
 
 /* Custom styles end */
@@ -510,9 +559,13 @@ form.ng-submitted .input__field--hoshi.ng-invalid + .input__label--hoshi-color-1
 }
 
 .cd-prising-panel {
+  float: left;
   position: relative;
-  padding: 10px 0;
-  /*border: 1px solid #F8D01C;*/
+  min-width: 200px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #eee;
 }
 
 .cd-prising-panel.selected .cd-select{
@@ -520,6 +573,7 @@ form.ng-submitted .input__field--hoshi.ng-invalid + .input__label--hoshi-color-1
 }
 
 .cd-pricing-header {
+  border-bottom: 1px solid #F1F1F1;
   /*position: relative;*/
   /*z-index: 1;*/
   /*height: 80px;*/
@@ -561,8 +615,10 @@ form.ng-submitted .input__field--hoshi.ng-invalid + .input__label--hoshi-color-1
   /*position: relative;*/
 }
 .cd-pricing-features {
+  margin: auto;
   padding: 10px;
   font-size: 0.9em;
+  list-style: none;
   /*width: 600px;*/
 }
 .cd-pricing-features::after {
@@ -617,9 +673,4 @@ form.ng-submitted .input__field--hoshi.ng-invalid + .input__label--hoshi-color-1
   border-bottom: 1px dotted #ccc;
   color: #ccc;
   font-size: 1.2em;
-}
-
-/* ngCloak styles */
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-  display: none !important;
 }

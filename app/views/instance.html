@@ -1,72 +1,90 @@
-<div class="row" ng-if="newBranch">
+<!-- <div class="row" ng-if="newBranch"> -->
+<div class="row">
 	<h4 class="text-divider" translate>CHOOSE_PLAN</h4>
-	<div class="twelve columns">
+	<!-- <div class="twelve columns"> -->
 		<div class="cd-prising-wrapper">
-			<div class="four columns" ng-repeat="plan in plans">
-				<plan-item plan="plan" model="instance._subscription.planId"></plan-item>
+			<div ng-repeat="plan in plans">
+				<plan-item plan="plan" no-trial="noTrial" model="instance._subscription.planId"></plan-item>
 			</div>
 		</div>
+	<!-- </div> -->
+</div>
+<div class="row">
+	<div class="six columns">
+		<h4 class="text-divider" translate>SET_NUMBER_OF_USERS</h4>
+		<input type="number" name="maxusers" class="big-input" ng-model="instance._subscription.quantity" min="5" ng-disabled="trial" ng-model-options="{updateOn: 'default blur', debounce: {'default': 1000, 'blur': 0}}" required numpool />
+		<p class="col-xs-12 text-danger" ng-show="branchSettings.maxusers.$error.required" translate>ERRORS.REQUIRED_FIELD_MESSAGE</p>
+	</div>
+	<div class="six columns" style="text-align: right">
+		<h4 class="text-divider">{{selectedPlan.currency}} <span translate>PER_MONTH</span></h4>
+		<h4>{{instance._subscription.quantity*selectedPlan.price || 0}}</h4>
 	</div>
 </div>
 <div class="row">
-	<h4 class="text-divider" translate>CONFIGURE_BRANCH</h4>
+	<h4 class="text-divider" translate>SETTINGS</h4>
 	<form novalidate name="branchSettings" id="branch-settings">
 		<div class="row">
-			<div class="eight columns">
-				<label for="name" translate>INSTANCE.COMPANY_NAME</label>
-				<input class="u-full-width" type="text" name="name" ng-model="instance.result.name" required />
-				<p class="help-block"><span translate>E_G</span>: "SmileSoft"</p>
+			<div class="six columns">
+				<label for="name"><span translate>INSTANCE.COMPANY_NAME</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.COMPANY_NAME' | translate }}"></span></label>
+				<input class="u-full-width" type="text" name="name" ng-model="instance.result.name" ng-model-options="{updateOn: 'default blur', debounce: {'default': 1000, 'blur': 0}}" placeholder="{{ 'E_G' | translate }}: SmileSoft" validname required />
+				<p class="col-xs-12 text-danger" ng-if="newBranch" ng-show="branchSettings.name.$error.validname" translate>ERRORS.NAME_EXISTS</p>
+				<p class="col-xs-12 text-danger" ng-show="branchSettings.$submitted && branchSettings.name.$error.required" translate>ERRORS.REQUIRED_FIELD_MESSAGE</p>
 			</div>
-			<div class="four columns">
-				<label for="prefix" translate>INSTANCE.BRANCH_PREFIX</label>
-				<input class="u-full-width" type="text" name="prefix" ng-model="instance.result.prefix" ng-model-options="{updateOn: 'default blur', debounce: {'default': 1000, 'blur': 0}}" ng-readonly="!newBranch" validprefix required />
-    			<p class="col-xs-12 text-danger" ng-if="newBranch" ng-show="branchSettings.prefix.$error.validprefix" translate>PREFIX_EXISTS</p>
-				<p class="col-xs-12 help-block"><span translate>E_G</span>: "office" or "domain"</p>
-				<!-- <a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.BRANCH_PREFIX_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a> -->
-			</div>
-		</div>
-		<div class="row">
-			<div class="four columns">
-				<label for="numPool" translate> INSTANCE.NUMBERING_PLAN</label>
-				<input class="u-full-width" type="text" name="numPool" ng-model="numPool" required numpool />
-				<p class="help-block"><span translate>E_G</span>: "200-210" or "200,205-210,310-350"</p>
-				<!-- <a tabindex="0" role="button" class="u-full-width" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.NUMBERING_PLAN_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a> -->
-			</div>
-			<div class="four columns">
-				<label for="lang" translate>INSTANCE.INTERFACE_LANGUAGE</label>
-				<select class="u-full-width" name="lang" tabindex="0" ng-model="instance.result.lang" ng-options="language.value as language.name for language in languages" /></select>
-				<!-- <a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.INTERFACE_LANGUAGE_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a> -->
-			</div>
-		</div>
-		<div class="row">
-			<label>Server location</label>
-			<label>
-			    <input type="radio" value="germany" name="sid" ng-model="instance.sid" ng-disabled="!newBranch">
-			    <span class="label-body">Germany</span>
-			</label>
-			<label>
-			    <input type="radio" value="uk" name="sid" ng-model="instance.sid" ng-disabled="!newBranch">
-			    <span class="label-body">Ukraine</span>
-			</label>
-			<!-- <a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.BRANCH_SID_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a> -->
 		</div>
 		<div class="row">
 			<div class="six columns">
-				<label for="adminpass" translate>INSTANCE.ADMIN_PASSWORD</label>
-				<input class="u-full-width" type="password" name="adminpass" ng-model="instance.result.adminpass" ng-required="{{newBranch}}" />
-				<!-- <a tabindex="0" role="button" class="col-xs-12" data-toggle="popover" data-trigger="focus" data-content="{{ 'INSTANCE.ADMIN_PASSWORD_HELPER' | translate }}" popoverable><span translate>WHAT_IS_THIS</span>?</a> -->
+				<label for="prefix"><span translate>INSTANCE.BRANCH_PREFIX</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.BRANCH_PREFIX' | translate }}"></span></label>
+				<input style="width: 100px;" type="text" name="prefix" ng-model="instance.result.prefix" ng-model-options="{updateOn: 'default blur', debounce: {'default': 1000, 'blur': 0}}" ng-readonly="!newBranch" placeholder="{{ 'E_G' | translate }}: 'mainbranch' or 'team1'" valid-prefix unique-prefix required />
+				<span>.ringotel.co</span>
+    			<p class="col-xs-12 text-danger" ng-if="newBranch" ng-show="branchSettings.prefix.$error.uniqueprefix" translate>ERRORS.PREFIX_EXISTS</p>
+    			<p class="col-xs-12 text-danger" ng-if="newBranch" ng-show="branchSettings.prefix.$error.validprefix" translate>ERRORS.INVALID_PREFIX</p>
+    			<p class="col-xs-12 text-danger" ng-show="branchSettings.$submitted && branchSettings.prefix.$error.required" translate>ERRORS.REQUIRED_FIELD_MESSAGE</p>
 			</div>
 			<div class="six columns">
-				<label for="adminpassConfirm" translate>INSTANCE.ADMIN_PASSWORD_CONFIRM</label>
+				<label for="numPool"><span translate>INSTANCE.NUMBERING_PLAN</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.NUMBERING_PLAN' | translate }}"></span></label>
+				<input class="u-full-width" type="text" name="numPool" ng-model="numPool" placeholder="{{ 'E_G' | translate }}: '200-210' or '200,205-210,310-350'" required numpool />
+				<p class="col-xs-12 text-danger" ng-show="branchSettings.$submitted && branchSettings.numPool.$error.required" translate>ERRORS.REQUIRED_FIELD_MESSAGE</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="six columns">
+				<label><span translate>INSTANCE.SERVER_ID</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.SERVER_ID' | translate }}"></span></label>
+				<label ng-repeat="server in sids">
+				    <input type="radio" value="{{server._id}}" name="sid" ng-model="instance.sid" ng-disabled="!newBranch">
+				    <span class="label-body">{{server.name}}</span>
+				</label>
+			</div>
+			<div class="six columns">
+				<label for="lang"><span translate>INSTANCE.INTERFACE_LANGUAGE</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.INTERFACE_LANGUAGE' | translate }}"></span></label>
+				<select style="width: 200px;" name="lang" tabindex="0" ng-model="instance.result.lang" ng-options="language.value as language.name for language in languages"></select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="six columns">
+				<label for="adminpass"><span translate>INSTANCE.ADMIN_PASSWORD</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.ADMIN_PASSWORD' | translate }}"></span></label>
+				<input style="margin-bottom:0" class="u-full-width" type="{{passType}}" name="adminpass" ng-model="instance.result.adminpass" ng-model-options="{updateOn: 'default blur', debounce: {'default': 2000, 'blur': 0}}" ng-required="{{newBranch}}" password />
+				<span class="u-pull-left">
+					<i class="fa fa-refresh"></i> <a href="" ng-click="generatePassword(8, 14)" translate>GENERATE_PASSWORD</a>
+				</span> 
+				<br>
+				<span class="u-pull-right">
+					<i class="fa fa-eye"> <a href="" ng-click="revealPassword()" translate>REVEAL</a></i>
+				</span>
+				<br><br>
+				<p class="text-danger" ng-show="branchSettings.adminpass.$error.password" translate>ERRORS.INVALID_PASSWORD</p>
+				<p class="text-danger" ng-if="newBranch" ng-show="branchSettings.$submitted && branchSettings.adminpass.$error.required" translate>ERRORS.REQUIRED_FIELD_MESSAGE</p>
+			</div>
+			<div class="six columns">
+				<label for="adminpassConfirm" translate>CONFIRM_PASSWORD</label>
 				<input class="u-full-width" type="password" id="adminpassConfirm" ng-model="confirmPass" />
 			</div>
 		</div>
 	</form>
 </div>
-<nav class="sticky-nav bottom-nav white-color-bgr semi-transparent">
+<nav class="sticky-nav-mob bottom-nav white-color-bgr semi-transparent">
 	<ul class="nav-list">
 		<li ng-if="!newBranch">
-			<button type="submit" class="button button-primary" form="branch-settings" tabindex="0" ng-click="saveInstance()" translate>SAVE</button>
+			<button type="submit" class="button button-primary" form="branch-settings" tabindex="0" ng-click="update()" ng-disabled="branchSettings.$invalid" translate>SAVE</button>
 		</li>
 		<li ng-if="newBranch">
 			<button type="submit" class="button button-default" form="branch-settings" tabindex="0" ng-click="proceed()" translate>PROCEED</button>

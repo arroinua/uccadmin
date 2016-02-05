@@ -11,6 +11,7 @@
 		</strong>
 		<i ng-hide="currentUser.balance" class="fa fa-spinner fa-spin"></i>
 		{{currentUser.currency}}
+		<br>
 		<a href="#/payment" translate>ADD_CREDITS</a>
 	</div>
 	<ul class="sidebar-nav">
@@ -20,6 +21,12 @@
 				<span translate>DASHBOARD</span>
 			</a>
 		</li>
+		<!-- <li ng-if="branches.length">
+			<a ng-href="#/instance/{{branches[0].oid}}">
+				<i class="fa fa-dashboard"></i>
+				<span translate>INSTANCE</span>
+			</a>
+		</li> -->
 		<li>
 			<a href="#/transactions">
 				<!-- <i class="fa fa-angle-double-right"></i> -->

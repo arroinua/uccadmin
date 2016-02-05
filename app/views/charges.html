@@ -2,13 +2,13 @@
 	<div class="twelve columns">
 		<form>
 			<div class="four columns">
-				<datepicker date-set="{{startDate}}" date-max-limit="{{endDate}}" selector="start-date">
+				<datepicker date-set="{{startDate}}" date-max-limit="{{endDate}}" date-format="MM/dd/yyyy HH:mm" selector="start-date">
 					<!-- <label for="start-date" translate>FROM</label> -->
 					<input type="text" name="start-date" class="start-date u-full-width" ng-model="startDate" placeholder="Choose start date">
-				</datepicker>	
+				</datepicker>
 			</div>
 			<div class="four columns">
-				<datepicker date-set="{{endDate}}" date-min-limit="{{startDate}}" selector="end-date">
+				<datepicker date-set="{{endDate}}" date-min-limit="{{startDate}}" date-format="MM/dd/yyyy HH:mm" selector="end-date">
 					<!-- <label for="end-date" translate>TO</label> -->
 					<input type="text" name="end-date" class="end-date u-full-width" ng-model="endDate" placeholder="Choose end date">
 				</datepicker>
@@ -21,10 +21,10 @@
 </div>
 <hr class="twelve columns">
 <div class="row">
-	<div class="twelve columns" ng-show="charges.length === 0">
+	<div class="twelve columns" ng-show="!charges.length">
 		<h4 translate>NO_DATA_FOR_PERIOD</h4>
 	</div>
-	<div class="twelve columns" ng-show="charges.length !== 0">
+	<div class="twelve columns" ng-show="charges.length">
 
 		<table class="u-full-width">
 			<thead>

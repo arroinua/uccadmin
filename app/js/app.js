@@ -6,7 +6,9 @@ var dashApp = angular.module('dashApp', [
 	'angularModalService',
 	'tc.chartjs',
 	'ngNotificationsBar',
-	'720kb.datepicker'
+	'720kb.datepicker',
+	'720kb.tooltips',
+	'tmh.dynamicLocale'
 ])
 .constant('appConfig', {
 	server: window.location.protocol + '//' + window.location.host
@@ -160,5 +162,9 @@ var dashApp = angular.module('dashApp', [
 	$translateProvider.preferredLanguage('en');
 	$translateProvider.fallbackLanguage('en');
 	$translateProvider.useStorage('storage');
-	$translateProvider.useSanitizeValueStrategy('sanitize');
+	$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+	// $translateProvider.useSanitizeValueStrategy('escape');
+}])
+.config(['tmhDynamicLocaleProvider', function(tmhDynamicLocaleProvider) {
+	tmhDynamicLocaleProvider.localeLocationPattern('./js/lib/i18n/angular-locale_{{locale}}.js');
 }]);

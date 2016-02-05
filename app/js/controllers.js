@@ -1,4 +1,4 @@
-dashApp.controller('SidebarController', ['$rootScope', '$scope', '$location', '$translate', 'authService', 'utils', 'api', function($rootScope, $scope, $location, $translate, authService, utils, api){
+dashApp.controller('SidebarController', ['$rootScope', '$scope', '$location', '$translate', 'authService', 'branchesService', 'errorService', 'utils', 'api', function($rootScope, $scope, $location, $translate, authService, branchesService, errorService, utils, api){
 	var getCustomerBalance = function(){
 		api.request({
 			url: "getCustomerBalance"
@@ -21,11 +21,21 @@ dashApp.controller('SidebarController', ['$rootScope', '$scope', '$location', '$
 	};
 
 	$rootScope.currentUser = null;
-	$rootScope.$on('$routeChangeSuccess', function (){
+
+	// Watch for errors
+	$rootScope.$watch(function (){
+		return $rootScope.error;
+	}, function(val, prevVal) {
+		if(prevVal)
+			errorService.show(val);
+	});
+
+	$rootScope.$on('$locationChangeStart', function(event) {
 		onRouteChange($location.path());
 	});
 
 	$scope.visible = false;
+	
 	$scope.stringToFixed = function(string){
 		return utils.stringToFixed(string, 2);
 	};
@@ -38,6 +48,26 @@ dashApp.controller('SidebarController', ['$rootScope', '$scope', '$location', '$
 	
 	onRouteChange($location.path());
 	if($scope.visible) getCustomerBalance();
+}]);
+
+dashApp.controller('LangController', ['$localStorage', '$rootScope', '$scope', '$translate', 'api', 'tmhDynamicLocale', function($localStorage, $rootScope, $scope, $translate, api, tmhDynamicLocale){
+	tmhDynamicLocale.set($localStorage.NG_TRANSLATE_LANG_KEY || 'en');
+    $scope.changeLanguage = function (langKey) {
+        $translate.use(langKey);
+        $rootScope.lang = langKey;
+        api.request({
+            url: 'setCustomerLang',
+            params: {
+                lang: langKey
+            }
+        }).then(function (res){
+            console.log(res.data.result);
+        }, function (err){
+            console.log(err);
+        });
+
+        tmhDynamicLocale.set(langKey);
+    };
 }]);
 
 dashApp.controller('TopmenuController', ['$localStorage', '$rootScope', '$scope', '$translate', 'api', function($localStorage, $rootScope, $scope, $translate, api){
@@ -114,7 +144,7 @@ dashApp.controller('ProfileController', ['$rootScope', '$routeParams', '$scope',
 	};
 }]);
 
-dashApp.controller('TransactionsController', ['$rootScope', '$scope', 'api', 'utils', function ($rootScope, $scope, api, utils){
+dashApp.controller('TransactionsController', ['$rootScope', '$scope', 'api', 'utils', 'spinnerService', function ($rootScope, $scope, api, utils, spinnerService){
 
 	var date = new Date();
 
@@ -128,6 +158,7 @@ dashApp.controller('TransactionsController', ['$rootScope', '$scope', 'api', 'ut
 	};
 
 	$scope.findRecords = function(){
+		spinnerService.show('main-spinner');
 		api.request({
 			url: "transactions",
 			params: {
@@ -137,8 +168,10 @@ dashApp.controller('TransactionsController', ['$rootScope', '$scope', 'api', 'ut
 		}).then(function(response){
 			console.log('Transactions: ', response.data);
 			$scope.transactions = response.data.result;
+			spinnerService.hide('main-spinner');
 		}, function(err){
 			$rootScope.error = err;
+			spinnerService.hide('main-spinner');
 		});
 	};
 
@@ -146,16 +179,17 @@ dashApp.controller('TransactionsController', ['$rootScope', '$scope', 'api', 'ut
 
 }]);
 
-dashApp.controller('ChargesController', ['$rootScope', '$scope', 'api', 'utils', function ($rootScope, $scope, api, utils){
+dashApp.controller('ChargesController', ['$rootScope', '$scope', 'api', 'utils', 'spinnerService', function ($rootScope, $scope, api, utils, spinnerService){
 
 	var date = new Date();
 
 	$rootScope.title = 'CHARGES';
 	$scope.charges = [];
 	$scope.startDate = new Date( Date.parse(date) - (7 * 24 * 60 * 60 * 1000) ).toLocaleDateString();
-	$scope.endDate = new Date( Date.parse(date) + (1 * 24 * 60 * 60 * 1000) ).toLocaleDateString();
+	$scope.endDate = new Date( Date.parse(date) + (1 * 24 * 59 * 60 * 1000) ).toLocaleDateString();
 
 	$scope.findRecords = function(){
+		spinnerService.show('main-spinner');
 		api.request({
 			url: "charges",
 			params: {
@@ -165,8 +199,10 @@ dashApp.controller('ChargesController', ['$rootScope', '$scope', 'api', 'utils',
 		}).then(function(response){
 			console.log('Charges: ', response.data);
 			$scope.charges = response.data.result;
+			spinnerService.hide('main-spinner');
 		}, function(err){
 			$rootScope.error = err;
+			spinnerService.hide('main-spinner');
 		});
 	};
 
@@ -181,7 +217,7 @@ dashApp.controller('ChargesController', ['$rootScope', '$scope', 'api', 'utils',
 
 }]);
 
-dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', '$localStorage', '$location', 'api', 'cart', 'notifications', 'errorService', function ($q, $http, $rootScope, $scope, $localStorage, $location, api, cart, notifications, errorService){
+dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', '$localStorage', '$location', 'api', 'cart', 'notifications', 'errorService', 'spinnerService', function ($q, $http, $rootScope, $scope, $localStorage, $location, api, cart, notifications, errorService, spinnerService){
 	$rootScope.title = 'PAYMENT';
 
 	var requiredAmount = 0;
@@ -189,48 +225,48 @@ dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', 
 		//TODO - count min amount based on the currency
 		var amount = array.length ? 0 : 50;
 		array.forEach(function (item){
-			amount += item.amount;
+			amount += parseFloat(item.amount);
 		});
 		return amount;
 	};
 
+	$scope.isEnough = false;
 	$scope.paymentMethod = 1;
 	$scope.cart = cart.getAll();
+	$scope.amount = requiredAmount = coutAmount($scope.cart);
+
 	$scope.proceedPayment = function(){
 
-		if(!$scope.paymentMethod)
+		if($scope.paymentMethod === undefined)
 			return errorService.show('CHOOSE_PAYMENT_METHOD');
 			// return notifications.showInfo('Please, choose payment method');
-		if(!$scope.amount)
+		if($scope.amount === undefined || $scope.amount === null || $scope.amount < requiredAmount)
 			return errorService.show('AMOUNT_NOT_SET');
 			// return notifications.showInfo('Please, set amount');
 
+		spinnerService.show('main-spinner');
 		//TODO - switch between payment methods
-		
-		var requestParams = {};
-		requestParams.url = '/checkout';
-
-		// if($scope.paymentMethod === '0'){
-		// 	requestParams.params = {
-		// 		order: $scope.cart
-		// 	};
-		// } else {
-			requestParams.params = {
+		var requestParams = {
+			url: '/checkout',
+			params: {
 				paymentMethod: $scope.paymentMethod,
 				amount: (requiredAmount ? requiredAmount : $scope.amount),
 				order: $scope.cart
-			};
-		// }
+			}
+		};
 
 		api.request(requestParams).then(function(result){
 			if(result.data.redirect) {
 				window.location.href = result.data.redirect;
 			} else {
+				if(result.success) notifications.showSuccess('CHANGES_SAVED');
 				$location.path('/dashboard'); //TODO
 			}
 			cart.clear();
+			spinnerService.hide('main-spinner');
 		}, function(err){
 			$rootScope.error = err;
+			spinnerService.hide('main-spinner');
 		});
 	};
 	$scope.removeFromArray = function(array, index){
@@ -239,7 +275,6 @@ dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', 
 	$scope.cancel = function(){
 		$location.path('/dashboard');
 	};
-	$scope.amount = requiredAmount = coutAmount($scope.cart);
 
 	$scope.$watch(function(){
 		return $scope.cart.length;
@@ -248,25 +283,35 @@ dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', 
 		$scope.amount = coutAmount($scope.cart);
 		// $scope.cart = val;
 	});
+
+	$scope.$watch(function(){
+		return $scope.amount;
+	}, function(val){
+		if(val < requiredAmount) $scope.isEnough = false;
+		else $scope.isEnough = true;
+	});
 }]);
 
-dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope', '$location', 'api', 'poolSizeServices', 'branchesService', 'cart', 'notifications', 'errorService', function ($rootScope, $routeParams, $scope, $location, api, poolSizeServices, branchesService, cart, notifications, errorService){
+dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope', '$location', 'api', 'poolSizeServices', 'branchesService', 'cart', 'notifications', 'errorService', 'spinnerService', 'utils', function ($rootScope, $routeParams, $scope, $location, api, poolSizeServices, branchesService, cart, notifications, errorService, spinnerService, utils){
 	
-	var oid = $routeParams.oid;
-	var setBranch = function(opts){
+	var oid = $routeParams.oid,
+	
+	setBranch = function(opts){
 		$scope.instance = opts;
 		// $scope.instance.result = opts.result;
 		// $scope.instance._subscription.planId = opts._subscription.planId;
 		$scope.numPool = poolSizeServices.poolArrayToString(opts.result.extensions);
-	};
-	var getBranchSetts = function(){
+		if(opts._subscription.planId !== 'trial') $scope.noTrial = true;
+	},
+
+	getBranchSetts = function(){
 		console.log($scope.instance._subscription.planId);
 		if(!$scope.instance._subscription.planId || !$scope.instance.result.prefix || !$scope.numPool || !$scope.instance.result.name || (!$scope.instance.result.adminpass && $scope.newBranch)) {
-			// notifications.showInfo('Please, fill all required fields');
 			errorService.show('MISSING_FIELDS');
 			return false;
 		}
 
+		console.log('pass: ', $scope.instance.result.adminpass, $scope.confirmPass);
 		if($scope.instance.result.adminpass && ($scope.confirmPass !== $scope.instance.result.adminpass)){
 			errorService.show('PASSWORD_NOT_CONFIRMED');
 			// notifications.showInfo('Please, confirm password');
@@ -275,32 +320,58 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 
 		$scope.instance.result.extensions = poolSizeServices.poolStringToObject($scope.numPool);
 		$scope.instance.result.adminname = $scope.instance.result.prefix;
-		
+		if(oid) $scope.instance.oid = oid;
+
 		return $scope.instance;
-	};
-	var getPlans = function(){
+	},
+
+	getPlans = function(){
+		spinnerService.show('main-spinner');
 		api.request({
 			url: 'getPlans'
 		}).then(function(res){
 			$scope.plans = res.data.result;
-			$scope.instance._subscription.planId = res.data.result[0]._id;
+			if(oid === 'new') $scope.instance._subscription.planId = 'standard';
+			watchPlans();
+			spinnerService.hide('main-spinner');
 		}, function(err){
 			errorService.show(err.data.message);
+			spinnerService.hide('main-spinner');
 		});
-	};
-	var getServers = function(){
+	},
+
+	getServers = function(){
 		api.request({
 			url: 'getServers'
 		}).then(function(res){
-			console.log(res.data.result);
+			console.log('servers: ', res.data.result);
 			$scope.sids = res.data.result;
 			if(oid === 'new') $scope.instance.sid = res.data.result[0]._id;
 		}, function(err){
 			errorService.show(err.data.message);
 		});
+	},
+
+	watchPlans = function() {
+		$scope.$watch(function() {
+			return $scope.instance._subscription.planId;
+		}, function(val) {
+			$scope.plans.forEach(function(item) {
+				if(item.planId === $scope.instance._subscription.planId) {
+					$scope.selectedPlan = item;
+					if(item.planId === 'trial') {
+						$scope.instance._subscription.quantity = 5;
+					}
+				}
+			});
+		});
 	};
 
+	$scope.passType = 'password';
+	$scope.passwordStrength = 0;
+	$scope.noTrial = false;
 	$scope.plans = [];
+	$scope.selectedPlan = {};
 	$scope.sids = [];
 	$scope.isPrefixValid = true;
 	$scope.languages = [
@@ -310,13 +381,34 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 	];
 	$scope.instance = {
 		_subscription: {
-			quantity: 1,
+			quantity: 5,
 			addOns: []
 		},
 		result: {
 			lang: 'en'
 		}
 	};
+
+	$scope.$watch(function() {
+		return $scope.instance._subscription.quantity;
+	}, function(val) {
+		if(!val) $scope.instance._subscription.quantity = 5;
+		if(val !== 5 && $scope.selectedPlan.planId === 'trial') $scope.instance._subscription.quantity = 5;
+	});
+
+	$scope.generatePassword = function(min, max) {
+		var newPass = '';
+		while(!utils.checkPasswordStrength(newPass)) {
+			newPass = utils.generatePassword(min, max);
+		}
+		$scope.instance.result.adminpass = newPass;
+		$scope.confirmPass = newPass;
+	};
+
+	$scope.revealPassword = function() {
+		$scope.passType = $scope.passType === 'text' ? 'password' : 'text';
+	};
+
 	$scope.proceed = function(){
 
 		var branchSetts = getBranchSetts();
@@ -325,51 +417,98 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 			return;
 		}
 
-		api.request({
-			url: 'createSubscription',
-			params: branchSetts
-		}).then(function(result){
-			notifications.showSuccess('All changes saved!');
-			$location.path('/dashboard');
-		}, function(err){
-			console.log(err);
-			if(err.data.message === 'NOT_ENOUGH_CREDITS') {
-				branchesService.getSubscriptionAmount(branchSetts._subscription, function (err, response){
-					if(err){
-						$rootScope.error = err;
-					} else {
-						cart.add({
-							action: "createSubscription",
-							description: "Create subscription",
-							amount: response.result,
-							data: branchSetts
-						});
-						$location.path('/payment');
-					}
-				});
-			} else {
-				$rootScope.error = err;
-			}
+		cart.add({
+			action: "createSubscription",
+			description: "Create subscription",
+			amount: $scope.selectedPlan.price * branchSetts._subscription.quantity,
+			data: branchSetts
 		});
-	};
-	$scope.saveInstance = function(){
+		$location.path('/payment');
 
-		var branchSetts = getBranchSetts();
+		// api.request({
+		// 	url: 'createSubscription',
+		// 	params: branchSetts
+		// }).then(function(result){
+		// 	notifications.showSuccess('All changes saved!');
+		// 	$location.path('/dashboard');
+		// }, function(err){
+		// 	console.log(err);
+		// 	if(err.data.message === 'NOT_ENOUGH_CREDITS') {
+		// 		cart.add({
+		// 			action: "createSubscription",
+		// 			description: "Create subscription",
+		// 			amount: $scope.selectedPlan.price * branchSetts._subscription.quantity,
+		// 			data: branchSetts
+		// 		});
+		// 		$location.path('/payment');
+		// 	} else {
+		// 		$rootScope.error = err;
+		// 	}
+		// });
+	};
+	$scope.update = function(){
+
+		var branchSetts = getBranchSetts(),
+			balance,
+			planPrice,
+			planAmount,
+			billingCyrcles;
+
 
 		if(!branchSetts) {
 			return;
 		}
+		console.log('update branchSetts: ', branchSetts);
+
+		// Prohibit downgrade if plan's storelimit 
+		// is less than branch is already utilized
+		if($scope.selectedPlan.storelimit < branchSetts.result.storesize) {
+			return alert('DOWNGRADE_ERROR_STORAGE');
+		}
+		// Prohibit downgrade if the new nuber of maxusers 
+		// is less than the number of created users in branch
+		if(branchSetts._subscription.quantity < branchSetts.result.users) {
+			return alert('DOWNGRADE_ERROR_USERS');
+		}
+
+		balance = parseFloat($rootScope.currentUser.balance);
+		planPrice = parseFloat($scope.selectedPlan.price);
+		planAmount = planPrice * branchSetts._subscription.quantity;
+		billingCyrcles = branchSetts._subscription.billingCyrcles;
+
+		if((billingCyrcles === 0) || (planAmount / billingCyrcles).toFixed(2) > balance) {
+
+			if(balance < planAmount) {
+				cart.add({
+					action: "updateSubscription",
+					description: "Update subscription",
+					amount: planAmount,
+					data: branchSetts
+				});
+				$location.path('/payment');
+				return;
+			}
+		}
 
 		api.request({
-			url: 'updateBranch/'+oid,
+			url: 'updateSubscription',
 			params: branchSetts
 		}).then(function(result){
 			notifications.showSuccess('All changes saved!');
-			console.log('ins result: ', result);
 		}, function(err){
-			$rootScope.error = err;
+			console.log(err);
+			if(err.data.message === 'NOT_ENOUGH_CREDITS') {
+				cart.add({
+					action: "updateSubscription",
+					description: "Update subscription",
+					amount: planAmount,
+					data: branchSetts
+				});
+				$location.path('/payment');
+			} else {
+				$rootScope.error = err;
+			}
 		});
-
 	};
 
 	if(oid !== 'new'){
@@ -393,15 +532,15 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 
 	} else {
 		$scope.newBranch = true;
-		$scope.numPool = '200-204';
+		$scope.numPool = '200-299';
 		// $scope.btnText = 'Buy Now';
 		$rootScope.title = 'NEW_INSTANCE';
-		getPlans();
 	}
+	getPlans();
 	getServers();
 }]);
 
-dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api', 'poolSizeServices', 'branchesService', 'utils', 'cart', 'chartService', 'ModalService', 'notifications', function($rootScope, $scope, $location, api, poolSizeServices, branchesService, utils, cart, chartService, ModalService, notifications){
+dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api', 'poolSizeServices', 'branchesService', 'utils', 'cart', 'chartService', 'ModalService', 'notifications', 'spinnerService', 'errorService', function($rootScope, $scope, $location, api, poolSizeServices, branchesService, utils, cart, chartService, ModalService, notifications, spinnerService, errorService){
 	
 	$rootScope.title = 'DASHBOARD';
 
@@ -410,6 +549,7 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 	var diff;
 
 	var getBranches = function(){
+		spinnerService.show('main-spinner');
 		api.request({
 			url: "getBranches"
 		}).then(function(result){
@@ -417,9 +557,11 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 			$scope.instances = result.data.result;
 
 			console.log('getBranches result: ', $scope.instances);
+			spinnerService.hide('main-spinner');
 			// $scope.getInstState();
 		}, function(err){
 			$rootScope.error = err;
+			spinnerService.hide('main-spinner');
 		});
 	};
 
@@ -437,42 +579,37 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 		});
 	};
 
-	var changePlan = function(newPlan, inst){
-		inst._subscription.planId = newPlan;
+	// var changePlan = function(newPlan, inst){
+	// 	inst._subscription.planId = newPlan;
 
-		api.request({
-			url: 'changePlan',
-			params: {
-				oid: inst.oid,
-				planId: newPlan
-			}
-		}).then(function(result){
-			getBranches();
-			notifications.showSuccess('All changes saved!');
-		}, function(err){
-			if(err.data.message === 'NOT_ENOUGH_CREDITS') {
-				branchesService.getSubscriptionAmount(inst._subscription, function (err, response){
-					if(err){
-						$rootScope.error = err;
-					} else {
-						cart.add({
-							action: "changePlan",
-							description: "Change Plan",
-							amount: response.result,
-							data: {
-								oid: inst.oid,
-								planId: newPlan
-							}
-						});
+	// 	api.request({
+	// 		url: 'changePlan',
+	// 		params: {
+	// 			oid: inst.oid,
+	// 			planId: newPlan
+	// 		}
+	// 	}).then(function(result){
+	// 		getBranches();
+	// 		notifications.showSuccess('All changes saved!');
+	// 	}, function(err){
+	// 		if(err.data.message === 'NOT_ENOUGH_CREDITS') {
+	// 			cart.add({
+	// 				action: "changePlan",
+	// 				description: "Change Plan",
+	// 				amount: inst._subscription.amount,
+	// 				data: {
+	// 					oid: inst.oid,
+	// 					planId: newPlan
+	// 				}
+	// 			});
 
-						$location.path('/payment');
-					}
-				});
-			} else {
-				$rootScope.error = err;
-			}
-		});
-	};
+	// 			$location.path('/payment');
+				
+	// 		} else {
+	// 			$rootScope.error = err;
+	// 		}
+	// 	});
+	// };
 
 	var getCharges = function(){
 		api.request({
@@ -564,28 +701,28 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 		});
 	};
 	
-	$scope.activateBranch = function(oid){
-		if(!oid) return;
+	// $scope.activateBranch = function(oid){
+	// 	if(!oid) return;
 
-		setState('activateBranch', oid, function (err, response){
-			if(err) {
-				$rootScope.error = err;
-				return;
-			}
-			getBranches();
-		});
-	};
-	$scope.pauseBranch = function(oid){
-		if(!oid) return;
+	// 	setState('activateBranch', oid, function (err, response){
+	// 		if(err) {
+	// 			$rootScope.error = err;
+	// 			return;
+	// 		}
+	// 		getBranches();
+	// 	});
+	// };
+	// $scope.pauseBranch = function(oid){
+	// 	if(!oid) return;
 
-		setState('pauseBranch', oid, function (err, response){
-			if(err) {
-				$rootScope.error = err;
-				return;
-			}
-			getBranches();
-		});
-	};
+	// 	setState('pauseBranch', oid, function (err, response){
+	// 		if(err) {
+	// 			$rootScope.error = err;
+	// 			return;
+	// 		}
+	// 		getBranches();
+	// 	});
+	// };
 	$scope.terminateInstance = function(oid){
 		if(!oid) return;
 		if(confirm("Do you realy want to terminate instance permanently?")){
@@ -599,66 +736,70 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 		}
 	};
 	$scope.renewSubscription = function(inst){
-		api.request({
-			url: 'renewSubscription',
-			params: {
+		console.log('renewSubscription inst: ', inst);
+		cart.add({
+			action: "renewSubscription",
+			description: "Renew subscription",
+			amount: inst._subscription.amount,
+			data: {
 				oid: inst.oid
 			}
-		}).then(function(res){
-			notifications.showSuccess('All changes saved!');
-		}, function (err){
-			if(err.data.message === 'NOT_ENOUGH_CREDITS') {
-				branchesService.getSubscriptionAmount(inst._subscription, function (err, response){
-					if(err){
-						$rootScope.error = err.data.message;
-					} else {
-						cart.add({
-							action: "renewSubscription",
-							description: "Renew subscription",
-							amount: response.result,
-							data: {
-								oid: inst.oid
-							}
-						});
-
-						$location.path('/payment');
-					}
-				});
-			} else {
-				$rootScope.error = err.data.message;
-			}
 		});
-	};
-	$scope.changePlan = function(inst){
-		ModalService.showModal({
-			templateUrl: "/partials/plans-modal.html",
-			controller: "PlansModalController",
-			appendElement: angular.element('#modals-cont'),
-			inputs: {
-				plans: $scope.plans,
-				currentPlan: inst._subscription.planId
-			}
-		}).then(function(modal) {
-			//it's a bootstrap element, use 'modal' to show it
-			console.log(modal);
-			angular.element(modal.element).addClass('in');
-			angular.element(modal.element).on('click', function (event){
-				// event.preventDefault();
-				if(event.target.id === this.id)
-					this.parentNode.removeChild(this);
-			});
+		$location.path('/payment');
+		// api.request({
+		// 	url: 'renewSubscription',
+		// 	params: {
+		// 		oid: inst.oid
+		// 	}
+		// }).then(function(res){
+		// 	notifications.showSuccess('All changes saved!');
+		// }, function (err){
+		// 	if(err.data.message === 'NOT_ENOUGH_CREDITS') {
+		// 		cart.add({
+		// 			action: "renewSubscription",
+		// 			description: "Renew subscription",
+		// 			amount: inst._subscription.amount,
+		// 			data: {
+		// 				oid: inst.oid
+		// 			}
+		// 		});
 
-			modal.close.then(function(result) {
-				if(result) changePlan(result, inst);
-			});
-		}).catch(function (err){
-			console.log(err);
-		});
+		// 		$location.path('/payment');
+		// 	} else {
+		// 		$rootScope.error = err.data.message;
+		// 	}
+		// });
 	};
+	// $scope.changePlan = function(inst){
+	// 	ModalService.showModal({
+	// 		templateUrl: "/partials/plans-modal.html",
+	// 		controller: "PlansModalController",
+	// 		appendElement: angular.element('#modals-cont'),
+	// 		inputs: {
+	// 			plans: $scope.plans,
+	// 			currentPlan: inst._subscription.planId
+	// 		}
+	// 	}).then(function(modal) {
+	// 		//it's a bootstrap element, use 'modal' to show it
+	// 		console.log(modal);
+	// 		angular.element(modal.element).addClass('in');
+	// 		angular.element(modal.element).on('click', function (event){
+	// 			// event.preventDefault();
+	// 			if(event.target.id === this.id)
+	// 				this.parentNode.removeChild(this);
+	// 		});
+
+	// 		modal.close.then(function(result) {
+	// 			if(result) changePlan(result, inst);
+	// 		});
+	// 	}).catch(function (err){
+	// 		console.log(err);
+	// 	});
+	// };
 
 	$scope.getDifference = utils.getDifference;
-	$scope.expiresAt = function(inst){
-		diff = utils.getDifference(inst._subscription.nextBillingDate, moment(), 'days');
+	$scope.expiresAt = function(lastBillingDate){
+		diff = utils.getDifference(lastBillingDate, moment(), 'days');
 		return diff;
 	};
 	$scope.canRenew = function(inst){
@@ -683,7 +824,7 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 	getPlans();
 }]);
 
-dashApp.controller('AuthController', ['$rootScope', '$scope', '$location', '$localStorage', '$translate', 'authService', 'errorService', function($rootScope, $scope, $location, $localStorage, $translate, authService, errorService){
+dashApp.controller('AuthController', ['$rootScope', '$scope', '$location', '$localStorage', '$translate', 'authService', 'errorService', 'spinnerService', function($rootScope, $scope, $location, $localStorage, $translate, authService, errorService, spinnerService){
 	if($location.path() === '/login')
 		$rootScope.title = 'LOGIN';
 	else if($location.path() === '/signup')
@@ -701,14 +842,19 @@ dashApp.controller('AuthController', ['$rootScope', '$scope', '$location', '$loc
 			password: $scope.password,
 			lang: $localStorage.NG_TRANSLATE_LANG_KEY || 'en'
 		};
+		spinnerService.show('main-spinner');
 		authService.signup(fdata).then(function (res){
 			$scope.verificationSent = true;
+			spinnerService.hide('main-spinner');
 		}, function (err){
+			if(err.message === 'MULTIPLE_SIGNUP') {
+				$location.path('/resignup');
+			}
 			errorService.show(err.data.message);
+			spinnerService.hide('main-spinner');
 			// $rootScope.error = err;
 		});
 	};
-
 	$scope.login = function(){
 		var fdata = {
 			email: $scope.email,
@@ -719,11 +865,15 @@ dashApp.controller('AuthController', ['$rootScope', '$scope', '$location', '$loc
 			return errorService.show('MISSING_FIELDS');
 		}
 
+		spinnerService.show('main-spinner');
+
 		authService.login(fdata).then(function (res){
 			$localStorage.token = res.data.token;
 			$location.path('/dashboard');
+			spinnerService.hide('main-spinner');
 		}, function (err){
 			errorService.show(err.data.message);
+			spinnerService.hide('main-spinner');
 			// $rootScope.error = err;
 		});
 	};
@@ -733,10 +883,13 @@ dashApp.controller('AuthController', ['$rootScope', '$scope', '$location', '$loc
 			email: $scope.email
 		};
 
+		spinnerService.show('main-spinner');
 		authService.requestPasswordReset(fdata).then(function (res){
 			$scope.requestSent = true;
+			spinnerService.hide('main-spinner');
 		}, function (err){
 			errorService.show(err.data.message);
+			spinnerService.hide('main-spinner');
 			// $rootScope.error = err;
 		});
 	};
@@ -747,11 +900,14 @@ dashApp.controller('AuthController', ['$rootScope', '$scope', '$location', '$loc
 			password: $scope.password
 		};
 
+		spinnerService.show('main-spinner');
 		authService.resetPassword(fdata).then(function (res){
 			$localStorage.token = res.token;
 			$location.path('/dashboard');
+			spinnerService.hide('main-spinner');
 		}, function (err){
 			errorService.show(err.data.message);
+			spinnerService.hide('main-spinner');
 			// $rootScope.error = err;
 		});
 	};
