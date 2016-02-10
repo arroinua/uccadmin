@@ -74,7 +74,6 @@ module.exports = {
 			// rejectUnauthorized: true,
 			agent: new http.Agent({keepAlive: true})
 		};
-		console.log('options: ', options);
 		if(req.headers['x-access-token']){
 			options.headers['x-access-token'] = req.headers['x-access-token'];
 		}

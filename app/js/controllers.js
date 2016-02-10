@@ -123,11 +123,11 @@ dashApp.controller('ProfileController', ['$rootScope', '$routeParams', '$scope',
 	$scope.saveProfile = function(){
 		
 		if(!$scope.user.email || !$scope.user.name){
-			return errorService.show('MISSING_FIELDS');
+			return errorService.show('ERRORS.MISSING_FIELDS');
 			// return notifications.showInfo('Please, fill all required fields');
 		}
 		if($scope.confirmPass !== $scope.user.password){
-			return errorService.show('PASSWORD_NOT_CONFIRMED');
+			return errorService.show('ERRORS.PASSWORD_NOT_CONFIRMED');
 			// return notifications.showInfo('Please, confirm password');
 		}
 
@@ -135,7 +135,7 @@ dashApp.controller('ProfileController', ['$rootScope', '$routeParams', '$scope',
 			url: "update/"+$routeParams.id,
 			params: $scope.user
 		}).then(function(response){
-			notifications.showSuccess('All changes saved');
+			notifications.showSuccess('ALL_CHANGES_SAVED');
 			angular.extend($rootScope.currentUser, response.data.result);
 			console.log('currentUser: ', $rootScope.currentUser, response.data.result);
 		}, function(err){
@@ -238,10 +238,10 @@ dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', 
 	$scope.proceedPayment = function(){
 
 		if($scope.paymentMethod === undefined)
-			return errorService.show('CHOOSE_PAYMENT_METHOD');
+			return errorService.show('ERRORS.CHOOSE_PAYMENT_METHOD');
 			// return notifications.showInfo('Please, choose payment method');
 		if($scope.amount === undefined || $scope.amount === null || $scope.amount < requiredAmount)
-			return errorService.show('AMOUNT_NOT_SET');
+			return errorService.show('ERRORS.AMOUNT_NOT_SET');
 			// return notifications.showInfo('Please, set amount');
 
 		spinnerService.show('main-spinner');
@@ -307,13 +307,13 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 	getBranchSetts = function(){
 		console.log($scope.instance._subscription.planId);
 		if(!$scope.instance._subscription.planId || !$scope.instance.result.prefix || !$scope.numPool || !$scope.instance.result.name || (!$scope.instance.result.adminpass && $scope.newBranch)) {
-			errorService.show('MISSING_FIELDS');
+			errorService.show('ERRORS.MISSING_FIELDS');
 			return false;
 		}
 
 		console.log('pass: ', $scope.instance.result.adminpass, $scope.confirmPass);
 		if($scope.instance.result.adminpass && ($scope.confirmPass !== $scope.instance.result.adminpass)){
-			errorService.show('PASSWORD_NOT_CONFIRMED');
+			errorService.show('ERRORS.PASSWORD_NOT_CONFIRMED');
 			// notifications.showInfo('Please, confirm password');
 			return false;
 		}
@@ -463,12 +463,12 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 		// Prohibit downgrade if plan's storelimit 
 		// is less than branch is already utilized
 		if($scope.selectedPlan.storelimit < branchSetts.result.storesize) {
-			return alert('DOWNGRADE_ERROR_STORAGE');
+			return alert('ERRORS.DOWNGRADE_ERROR_STORAGE');
 		}
 		// Prohibit downgrade if the new nuber of maxusers 
 		// is less than the number of created users in branch
 		if(branchSetts._subscription.quantity < branchSetts.result.users) {
-			return alert('DOWNGRADE_ERROR_USERS');
+			return alert('ERRORS.DOWNGRADE_ERROR_USERS');
 		}
 
 		balance = parseFloat($rootScope.currentUser.balance);
@@ -497,7 +497,7 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 			notifications.showSuccess('All changes saved!');
 		}, function(err){
 			console.log(err);
-			if(err.data.message === 'NOT_ENOUGH_CREDITS') {
+			if(err.data.message === 'ERRORS.NOT_ENOUGH_CREDITS') {
 				cart.add({
 					action: "updateSubscription",
 					description: "Update subscription",
@@ -862,7 +862,7 @@ dashApp.controller('AuthController', ['$rootScope', '$scope', '$location', '$loc
 		};
 
 		if(!$scope.email) {
-			return errorService.show('MISSING_FIELDS');
+			return errorService.show('ERRORS.MISSING_FIELDS');
 		}
 
 		spinnerService.show('main-spinner');
