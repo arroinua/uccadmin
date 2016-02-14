@@ -1,22 +1,18 @@
 <form role="form" class="action-form signup-form" ng-hide="verificationSent">
 	<div class="row">
 		<div class="twelve columns">
+			<label for="username" translate>NAME</label>
+			<input class="u-full-width" type="text" name="username" ng-model="name" required/>
 			<label for="email" translate>EMAIL</label>
 			<input class="u-full-width" type="email" name="email" ng-model="email" required/>
-			<label for="username" translate>USERNAME</label>
-			<input class="u-full-width" type="text" name="username" ng-model="name" required/>
 			<label for="password" translate>PASSWORD</label>
 			<input class="u-full-width" type="password" name="password" required ng-model="password"/>
 			<label for="pwd-confirm" translate>CONFIRM_PASSWORD</label>
 			<input class="u-full-width" type="password" id="pwd-confirm" input-hoshi/>
-			<!-- <div class="pull-right"> -->
-				<a href="#/login" tabindex="0" translate>ALREADY_HAVE_ACCOUNT</a>
-			<!-- </div>	 -->
+			<a href="#/login" tabindex="0" translate>ALREADY_HAVE_ACCOUNT</a>
 			<br>
 			<p class="error-msg">{{message}}</p>
-			<!-- <div class="pull-left"> -->
-				<button class="button button-primary" ng-click="signup()" translate>ACCEPT</button>
-			<!-- </div> -->
+			<button class="button button-primary" ng-click="signup()" translate>ACCEPT</button>
 		</div>
 	</div>
 </form>

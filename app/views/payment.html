@@ -1,11 +1,12 @@
 <div class="row" ng-show="cart.length">
 	<h4 class="text-divider" translate>ORDER</h4>
-	<div class="eight columns">
+	<div class="twelve columns">
 		<table class="u-full-width">
 			<thead>
 				<tr>
 					<th translate>DESCRIPTION</th>
 					<th translate>AMOUNT</th>
+					<th style="width: 5px"></th>
 					<th style="width: 5px"></th>
 				</tr>
 			</thead>
@@ -15,7 +16,15 @@
 					<td>{{item.description}}</td>
 					<td>{{item.amount}}{{item.currency}}</td>
 					<td>
-						<a href="" ng-click="removeFromArray(cart, $index)">
+						<a ng-if="item.data.oid === 'new'" ng-href="#/instance/new?cart_item={{item.data.result.prefix}}">
+							<i class="fa fa-edit"></i>
+						</a>
+						<a ng-if="item.data.oid !== 'new'" ng-href="#/instance/{{item.data.oid}}">
+							<i class="fa fa-edit"></i>
+						</a>
+					</td>
+					<td>
+						<a href="" ng-click="removeFromArray(cart, $index)" class="text-danger">
 							<i class="fa fa-remove text-danger"></i>
 						</a>
 					</td>

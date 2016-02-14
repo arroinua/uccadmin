@@ -100,8 +100,20 @@ dashApp.factory('cart', ['$rootScope', function ($rootScope){
 
     return {
         add: function(params){
-            items = []; //comment this line to collect items in the cart, rather than substitute
+            // items = []; //comment this line to collect items in the cart, rather than substitute
             items.push(newItem(params));
+        },
+        update: function(prefix, params) {
+            var item = items.forEach(function(item, index, array) {
+                if(item.data.result.prefix === prefix) array[index] = params;
+            });
+        },
+        get: function(prefix) {
+            var found;
+            items.forEach(function(item) {
+                if(item.data.result.prefix === prefix) found = item;
+            });
+            return found;
         },
         getAll: function(){
             return items;

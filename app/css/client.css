@@ -327,6 +327,21 @@ input.big-input {
   background-color: transparent;
 }
 
+.button-link {
+  height: auto;
+  padding: 0 5px;
+  color: #1EAEDB;
+  font-size: inherit;
+  letter-spacing: normal;
+  font-weight: normal;
+  text-transform: none;
+  border: none;
+}
+
+.button-link > i {
+  color: #333;
+}
+
 .nav>li>.btn-default:focus,
 .nav>li>.btn-default:hover,
 .btn-default:focus,

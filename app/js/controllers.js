@@ -123,11 +123,11 @@ dashApp.controller('ProfileController', ['$rootScope', '$routeParams', '$scope',
 	$scope.saveProfile = function(){
 		
 		if(!$scope.user.email || !$scope.user.name){
-			return errorService.show('ERRORS.MISSING_FIELDS');
+			return errorService.show('MISSING_FIELDS');
 			// return notifications.showInfo('Please, fill all required fields');
 		}
 		if($scope.confirmPass !== $scope.user.password){
-			return errorService.show('ERRORS.PASSWORD_NOT_CONFIRMED');
+			return errorService.show('PASSWORD_NOT_CONFIRMED');
 			// return notifications.showInfo('Please, confirm password');
 		}
 
@@ -231,17 +231,17 @@ dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', 
 	};
 
 	$scope.isEnough = false;
-	$scope.paymentMethod = 1;
 	$scope.cart = cart.getAll();
 	$scope.amount = requiredAmount = coutAmount($scope.cart);
+	$scope.paymentMethod = $scope.amount > 0 ? 1 : 0;
 
 	$scope.proceedPayment = function(){
 
 		if($scope.paymentMethod === undefined)
-			return errorService.show('ERRORS.CHOOSE_PAYMENT_METHOD');
+			return errorService.show('CHOOSE_PAYMENT_METHOD');
 			// return notifications.showInfo('Please, choose payment method');
 		if($scope.amount === undefined || $scope.amount === null || $scope.amount < requiredAmount)
-			return errorService.show('ERRORS.AMOUNT_NOT_SET');
+			return errorService.show('AMOUNT_NOT_SET');
 			// return notifications.showInfo('Please, set amount');
 
 		spinnerService.show('main-spinner');
@@ -292,14 +292,17 @@ dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', 
 	});
 }]);
 
-dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope', '$location', 'api', 'poolSizeServices', 'branchesService', 'cart', 'notifications', 'errorService', 'spinnerService', 'utils', function ($rootScope, $routeParams, $scope, $location, api, poolSizeServices, branchesService, cart, notifications, errorService, spinnerService, utils){
+dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope', '$location', '$translate', 'api', 'poolSizeServices', 'branchesService', 'cart', 'notifications', 'errorService', 'spinnerService', 'utils', function ($rootScope, $routeParams, $scope, $location, $translate, api, poolSizeServices, branchesService, cart, notifications, errorService, spinnerService, utils){
 	
 	var oid = $routeParams.oid,
+
+	cartItem = $routeParams.cart_item,
 	
 	setBranch = function(opts){
 		$scope.instance = opts;
 		// $scope.instance.result = opts.result;
 		// $scope.instance._subscription.planId = opts._subscription.planId;
+		$scope.initName = opts.result.name;
 		$scope.numPool = poolSizeServices.poolArrayToString(opts.result.extensions);
 		if(opts._subscription.planId !== 'trial') $scope.noTrial = true;
 	},
@@ -307,13 +310,13 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 	getBranchSetts = function(){
 		console.log($scope.instance._subscription.planId);
 		if(!$scope.instance._subscription.planId || !$scope.instance.result.prefix || !$scope.numPool || !$scope.instance.result.name || (!$scope.instance.result.adminpass && $scope.newBranch)) {
-			errorService.show('ERRORS.MISSING_FIELDS');
+			errorService.show('MISSING_FIELDS');
 			return false;
 		}
 
 		console.log('pass: ', $scope.instance.result.adminpass, $scope.confirmPass);
 		if($scope.instance.result.adminpass && ($scope.confirmPass !== $scope.instance.result.adminpass)){
-			errorService.show('ERRORS.PASSWORD_NOT_CONFIRMED');
+			errorService.show('PASSWORD_NOT_CONFIRMED');
 			// notifications.showInfo('Please, confirm password');
 			return false;
 		}
@@ -331,7 +334,7 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 			url: 'getPlans'
 		}).then(function(res){
 			$scope.plans = res.data.result;
-			if(oid === 'new') $scope.instance._subscription.planId = 'standard';
+			// if(oid === 'new') $scope.instance._subscription.planId = 'standard';
 			watchPlans();
 			spinnerService.hide('main-spinner');
 		}, function(err){
@@ -381,6 +384,7 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 	];
 	$scope.instance = {
 		_subscription: {
+			planId: 'standard',
 			quantity: 5,
 			addOns: []
 		},
@@ -417,34 +421,29 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 			return;
 		}
 
-		cart.add({
-			action: "createSubscription",
-			description: "Create subscription",
-			amount: $scope.selectedPlan.price * branchSetts._subscription.quantity,
-			data: branchSetts
+		$translate('DESCRIPTIONS.NEW_SUBSCRIPTION', {
+			planId: branchSetts._subscription.planId,
+			users: branchSetts._subscription.quantity,
+			company: branchSetts.result.name
+		})
+		.then(function (description) {
+			if(cartItem) {
+				cart.update(branchSetts.result.prefix, {
+					action: "createSubscription",
+					description: description,
+					amount: $scope.selectedPlan.price * branchSetts._subscription.quantity,
+					data: branchSetts
+				});
+			} else {
+				cart.add({
+					action: "createSubscription",
+					description: description,
+					amount: $scope.selectedPlan.price * branchSetts._subscription.quantity,
+					data: branchSetts
+				});
+			}
+			$location.path('/payment');
 		});
-		$location.path('/payment');
-
-		// api.request({
-		// 	url: 'createSubscription',
-		// 	params: branchSetts
-		// }).then(function(result){
-		// 	notifications.showSuccess('All changes saved!');
-		// 	$location.path('/dashboard');
-		// }, function(err){
-		// 	console.log(err);
-		// 	if(err.data.message === 'NOT_ENOUGH_CREDITS') {
-		// 		cart.add({
-		// 			action: "createSubscription",
-		// 			description: "Create subscription",
-		// 			amount: $scope.selectedPlan.price * branchSetts._subscription.quantity,
-		// 			data: branchSetts
-		// 		});
-		// 		$location.path('/payment');
-		// 	} else {
-		// 		$rootScope.error = err;
-		// 	}
-		// });
 	};
 	$scope.update = function(){
 
@@ -459,6 +458,7 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 			return;
 		}
 		console.log('update branchSetts: ', branchSetts);
+		console.log(branchSetts._subscription.planId, $scope.selectedPlan);
 
 		// Prohibit downgrade if plan's storelimit 
 		// is less than branch is already utilized
@@ -479,13 +479,20 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 		if((billingCyrcles === 0) || (planAmount / billingCyrcles).toFixed(2) > balance) {
 
 			if(balance < planAmount) {
-				cart.add({
-					action: "updateSubscription",
-					description: "Update subscription",
-					amount: planAmount,
-					data: branchSetts
+				$translate('DESCRIPTIONS.UPDATE_SUBSCRIPTION', {
+					planId: branchSetts._subscription.planId,
+					users: branchSetts._subscription.quantity,
+					company: branchSetts.result.name
+				})
+				.then(function (description) {
+					cart.add({
+						action: "updateSubscription",
+						description: description,
+						amount: planAmount,
+						data: branchSetts
+					});
+					$location.path('/payment');
 				});
-				$location.path('/payment');
 				return;
 			}
 		}
@@ -498,13 +505,20 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 		}, function(err){
 			console.log(err);
 			if(err.data.message === 'ERRORS.NOT_ENOUGH_CREDITS') {
-				cart.add({
-					action: "updateSubscription",
-					description: "Update subscription",
-					amount: planAmount,
-					data: branchSetts
+				$translate('DESCRIPTIONS.UPDATE_SUBSCRIPTION', {
+					planId: branchSetts._subscription.planId,
+					users: branchSetts._subscription.quantity,
+					company: branchSetts.result.name
+				})
+				.then(function (description) {
+					cart.add({
+						action: "updateSubscription",
+						description: description,
+						amount: planAmount,
+						data: branchSetts
+					});
+					$location.path('/payment');
 				});
-				$location.path('/payment');
 			} else {
 				$rootScope.error = err;
 			}
@@ -535,6 +549,10 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 		$scope.numPool = '200-299';
 		// $scope.btnText = 'Buy Now';
 		$rootScope.title = 'NEW_INSTANCE';
+		if(cartItem && cart.get(cartItem)) {
+			console.log('cart item: ', cart.get(cartItem));
+			$scope.instance = cart.get(cartItem).data;
+		}
 	}
 	getPlans();
 	getServers();
@@ -578,38 +596,6 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 			callback(err);
 		});
 	};
-
-	// var changePlan = function(newPlan, inst){
-	// 	inst._subscription.planId = newPlan;
-
-	// 	api.request({
-	// 		url: 'changePlan',
-	// 		params: {
-	// 			oid: inst.oid,
-	// 			planId: newPlan
-	// 		}
-	// 	}).then(function(result){
-	// 		getBranches();
-	// 		notifications.showSuccess('All changes saved!');
-	// 	}, function(err){
-	// 		if(err.data.message === 'NOT_ENOUGH_CREDITS') {
-	// 			cart.add({
-	// 				action: "changePlan",
-	// 				description: "Change Plan",
-	// 				amount: inst._subscription.amount,
-	// 				data: {
-	// 					oid: inst.oid,
-	// 					planId: newPlan
-	// 				}
-	// 			});
-
-	// 			$location.path('/payment');
-				
-	// 		} else {
-	// 			$rootScope.error = err;
-	// 		}
-	// 	});
-	// };
 
 	var getCharges = function(){
 		api.request({
@@ -737,65 +723,23 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 	};
 	$scope.renewSubscription = function(inst){
 		console.log('renewSubscription inst: ', inst);
-		cart.add({
-			action: "renewSubscription",
-			description: "Renew subscription",
-			amount: inst._subscription.amount,
-			data: {
-				oid: inst.oid
-			}
+		$translate('DESCRIPTIONS.RENEW_SUBSCRIPTION', {
+			planId: branchSetts._subscription.planId,
+			users: branchSetts._subscription.quantity,
+			company: branchSetts.result.name
+		})
+		.then(function (description) {
+			cart.add({
+				action: "renewSubscription",
+				description: description,
+				amount: inst._subscription.amount,
+				data: {
+					oid: inst.oid
+				}
+			});
+			$location.path('/payment');
 		});
-		$location.path('/payment');
-		// api.request({
-		// 	url: 'renewSubscription',
-		// 	params: {
-		// 		oid: inst.oid
-		// 	}
-		// }).then(function(res){
-		// 	notifications.showSuccess('All changes saved!');
-		// }, function (err){
-		// 	if(err.data.message === 'NOT_ENOUGH_CREDITS') {
-		// 		cart.add({
-		// 			action: "renewSubscription",
-		// 			description: "Renew subscription",
-		// 			amount: inst._subscription.amount,
-		// 			data: {
-		// 				oid: inst.oid
-		// 			}
-		// 		});
-
-		// 		$location.path('/payment');
-		// 	} else {
-		// 		$rootScope.error = err.data.message;
-		// 	}
-		// });
 	};
-	// $scope.changePlan = function(inst){
-	// 	ModalService.showModal({
-	// 		templateUrl: "/partials/plans-modal.html",
-	// 		controller: "PlansModalController",
-	// 		appendElement: angular.element('#modals-cont'),
-	// 		inputs: {
-	// 			plans: $scope.plans,
-	// 			currentPlan: inst._subscription.planId
-	// 		}
-	// 	}).then(function(modal) {
-	// 		//it's a bootstrap element, use 'modal' to show it
-	// 		console.log(modal);
-	// 		angular.element(modal.element).addClass('in');
-	// 		angular.element(modal.element).on('click', function (event){
-	// 			// event.preventDefault();
-	// 			if(event.target.id === this.id)
-	// 				this.parentNode.removeChild(this);
-	// 		});
-
-	// 		modal.close.then(function(result) {
-	// 			if(result) changePlan(result, inst);
-	// 		});
-	// 	}).catch(function (err){
-	// 		console.log(err);
-	// 	});
-	// };
 
 	$scope.getDifference = utils.getDifference;
 	$scope.expiresAt = function(lastBillingDate){
@@ -862,7 +806,7 @@ dashApp.controller('AuthController', ['$rootScope', '$scope', '$location', '$loc
 		};
 
 		if(!$scope.email) {
-			return errorService.show('ERRORS.MISSING_FIELDS');
+			return errorService.show('MISSING_FIELDS');
 		}
 
 		spinnerService.show('main-spinner');

@@ -171,6 +171,8 @@ dashApp.directive('validname', ['$q', '$rootScope', 'api', function($q, $rootSco
           return $q.when();
         }
 
+        if(scope.initName === modelValue) return;
+
         var def = $q.defer();
 
         api.request({

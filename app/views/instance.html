@@ -1,13 +1,10 @@
-<!-- <div class="row" ng-if="newBranch"> -->
 <div class="row">
 	<h4 class="text-divider" translate>CHOOSE_PLAN</h4>
-	<!-- <div class="twelve columns"> -->
-		<div class="cd-prising-wrapper">
-			<div ng-repeat="plan in plans">
-				<plan-item plan="plan" no-trial="noTrial" model="instance._subscription.planId"></plan-item>
-			</div>
+	<div class="cd-prising-wrapper">
+		<div ng-repeat="plan in plans">
+			<plan-item plan="plan" no-trial="noTrial" model="instance._subscription.planId"></plan-item>
 		</div>
-	<!-- </div> -->
+	</div>
 </div>
 <div class="row">
 	<div class="six columns">
@@ -27,17 +24,25 @@
 			<div class="six columns">
 				<label for="name"><span translate>INSTANCE.COMPANY_NAME</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.COMPANY_NAME' | translate }}"></span></label>
 				<input class="u-full-width" type="text" name="name" ng-model="instance.result.name" ng-model-options="{updateOn: 'default blur', debounce: {'default': 1000, 'blur': 0}}" placeholder="{{ 'E_G' | translate }}: SmileSoft" validname required />
-				<p class="col-xs-12 text-danger" ng-if="newBranch" ng-show="branchSettings.name.$error.validname" translate>ERRORS.NAME_EXISTS</p>
+				<p class="col-xs-12 text-danger" ng-show="branchSettings.name.$error.validname" translate>ERRORS.NAME_EXISTS</p>
 				<p class="col-xs-12 text-danger" ng-show="branchSettings.$submitted && branchSettings.name.$error.required" translate>ERRORS.REQUIRED_FIELD_MESSAGE</p>
+			</div>
+			<div class="six columns">
+				<label><span translate>INSTANCE.SERVER_ID</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.SERVER_ID' | translate }}"></span></label>
+				<select style="width: 200px;" name="sid" tabindex="0" ng-model="instance.sid" ng-options="server._id as server.name for server in sids" ng-disabled="!newBranch"></select>
+				<!-- <label ng-repeat="server in sids">
+				    <input type="radio" value="{{server._id}}" name="sid" ng-model="instance.sid" ng-disabled="!newBranch">
+				    <span class="label-body">{{server.name}}</span>
+				</label> -->
 			</div>
 		</div>
 		<div class="row">
 			<div class="six columns">
-				<label for="prefix"><span translate>INSTANCE.BRANCH_PREFIX</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.BRANCH_PREFIX' | translate }}"></span></label>
-				<input style="width: 100px;" type="text" name="prefix" ng-model="instance.result.prefix" ng-model-options="{updateOn: 'default blur', debounce: {'default': 1000, 'blur': 0}}" ng-readonly="!newBranch" placeholder="{{ 'E_G' | translate }}: 'mainbranch' or 'team1'" valid-prefix unique-prefix required />
+				<label for="prefix"><span translate>INSTANCE.DOMAIN</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.DOMAIN' | translate }}"></span></label>
+				<input style="width: 100px;" type="text" name="prefix" ng-model="instance.result.prefix" ng-model-options="{updateOn: 'default blur', debounce: {'default': 1000, 'blur': 0}}" ng-readonly="!newBranch" placeholder="{{ 'INSTANCE.DOMAIN' | translate }}" valid-prefix unique-prefix required />
 				<span>.ringotel.co</span>
-    			<p class="col-xs-12 text-danger" ng-if="newBranch" ng-show="branchSettings.prefix.$error.uniqueprefix" translate>ERRORS.PREFIX_EXISTS</p>
-    			<p class="col-xs-12 text-danger" ng-if="newBranch" ng-show="branchSettings.prefix.$error.validprefix" translate>ERRORS.INVALID_PREFIX</p>
+    			<p class="col-xs-12 text-danger" ng-if="newBranch" ng-show="branchSettings.prefix.$error.uniqueprefix" translate>ERRORS.DOMAIN_EXISTS</p>
+    			<p class="col-xs-12 text-danger" ng-if="newBranch" ng-show="branchSettings.prefix.$error.validprefix" translate>ERRORS.INVALID_DOMAIN</p>
     			<p class="col-xs-12 text-danger" ng-show="branchSettings.$submitted && branchSettings.prefix.$error.required" translate>ERRORS.REQUIRED_FIELD_MESSAGE</p>
 			</div>
 			<div class="six columns">
@@ -48,11 +53,8 @@
 		</div>
 		<div class="row">
 			<div class="six columns">
-				<label><span translate>INSTANCE.SERVER_ID</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.SERVER_ID' | translate }}"></span></label>
-				<label ng-repeat="server in sids">
-				    <input type="radio" value="{{server._id}}" name="sid" ng-model="instance.sid" ng-disabled="!newBranch">
-				    <span class="label-body">{{server.name}}</span>
-				</label>
+				<label for="adminlogin"><span translate>INSTANCE.ADMIN_LOGIN</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.ADMIN_LOGIN' | translate }}"></span></label>
+				<p ng-bind="instance.result.prefix"></p>
 			</div>
 			<div class="six columns">
 				<label for="lang"><span translate>INSTANCE.INTERFACE_LANGUAGE</span> <span class="fa fa-question-circle help-btn" tooltips tooltip-show-trigger="click" tooltip-speed="fast" tooltip-class="tt_wide" tooltip-template="{{ 'TT.INTERFACE_LANGUAGE' | translate }}"></span></label>

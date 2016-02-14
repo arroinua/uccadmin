@@ -6,146 +6,149 @@
 <div class="row">
 	<div class="twelve columns" ng-repeat="inst in instances">
 		<div class="row">
-			<!-- <div class="four columns"> -->
-				<h3>{{inst.result.name}}</h3>
-			<!-- </div> -->
-		</div>
-		<div class="row">
-			<div class="twelve-columns">
-				<a ng-href="#/instance/{{inst.oid}}" class="button button-primary">
-					<i class="fa fa-pencil"></i> <span translate>INSTANCE.EDIT</span>
-				</a>
-				<a ng-href="https://{{inst.prefix}}.ringotel.co" class="button button-primary" target="_blank">
-					<i class="fa fa-link"></i> <span translate>INSTANCE.ACTIONS.CONNECT</span>
-				</a>
-				<!-- <button class="btn btn-default" translate>INSTANCE.ADD_CREDIT</button> -->
-				<div class="button-group" dropdown>
-					<a href="" type="button" class="button dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-					    <i class="fa fa-angle-down"></i> <span translate>INSTANCE.ACTION </span>
+			<div class="four columns">
+				<h4>{{inst.result.name}}</h4>
+			</div>
+			<div class="eight-columns">
+				<div class="u-pull-right">
+					<a ng-href="#/instance/{{inst.oid}}" class="button button-link">
+						<i class="fa fa-pencil"></i> <span translate>INSTANCE.EDIT</span>
 					</a>
-					<ul class="dropdown-menu dropdown-menu-right" id="actionsList" role="menu">
-					    <li ng-show="inst._subscription.state === 'paused'">
-					    	<a href="" ng-click="activateBranch(inst.oid)">
-					    		<i class="fa fa-play"></i> <span translate>INSTANCE.ACTIONS.RUN</span>
-					    	</a>
-					    </li>
-					    <!-- <li ng-show="inst._subscription.state === 'active'">
-					    	<a href="" ng-click="pauseBranch(inst.oid)">
-					    		<i class="fa fa-pause"></i> <span translate>INSTANCE.ACTIONS.PAUSE</span>
-					    	</a>
-					    </li> -->
-					    <li>
-					    	<!-- <a href="" ng-click="changePlan(inst)"> -->
-					    	<a ng-href="#/instance/{{inst.oid}}">
-					    		<i class="fa fa-plug"></i> <span translate>INSTANCE.ACTIONS.CHANGE_PLAN</span>
-					    	</a>
-						</li>
-					    <!-- <li ng-if="canRenew(inst)"> -->
-					    <li>
-					    	<a href="" ng-click="renewSubscription(inst)" ng-if="inst._subscription.planId !== 'trial'">
-					    		<i class="fa fa-refresh"></i> <span translate>INSTANCE.ACTIONS.RENEW_SUBSCRIPTION</span>
-					    	</a>
-					    </li>
-					    <li role="presentation" class="divider"></li>
-					    <li>
-					    	<a href="" ng-click="terminateInstance(inst.oid)">
-					    		<i class="fa fa-power-off"></i> <span translate>INSTANCE.ACTIONS.TERMINATE</span>
-					    	</a>
-					    </li>
-					</ul>
-				</div>	
+					<a ng-href="https://{{inst.prefix}}.ringotel.co" class="button button-link" target="_blank">
+						<i class="fa fa-link"></i> <span translate>INSTANCE.ACTIONS.CONNECT</span>
+					</a>
+					<!-- <button class="btn btn-default" translate>INSTANCE.ADD_CREDIT</button> -->
+					<div class="button-group" dropdown>
+						<a href="" type="button" class="button button-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						    <i class="fa fa-angle-down"></i> <span translate>INSTANCE.ACTION </span>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-right" id="actionsList" role="menu">
+						    <!-- <li ng-show="inst._subscription.state === 'paused'">
+						    	<a href="" ng-click="activateBranch(inst.oid)">
+						    		<i class="fa fa-play"></i> <span translate>INSTANCE.ACTIONS.RUN</span>
+						    	</a>
+						    </li> -->
+						    <!-- <li ng-show="inst._subscription.state === 'active'">
+						    	<a href="" ng-click="pauseBranch(inst.oid)">
+						    		<i class="fa fa-pause"></i> <span translate>INSTANCE.ACTIONS.PAUSE</span>
+						    	</a>
+						    </li> -->
+						    <li>
+						    	<!-- <a href="" ng-click="changePlan(inst)"> -->
+						    	<a ng-href="#/instance/{{inst.oid}}">
+						    		<i class="fa fa-plug"></i> <span translate>INSTANCE.ACTIONS.CHANGE_PLAN</span>
+						    	</a>
+							</li>
+						    <!-- <li ng-if="canRenew(inst)"> -->
+						    <li>
+						    	<a href="" ng-click="renewSubscription(inst)" ng-if="inst._subscription.planId !== 'trial'">
+						    		<i class="fa fa-refresh"></i> <span translate>INSTANCE.ACTIONS.RENEW_SUBSCRIPTION</span>
+						    	</a>
+						    </li>
+						    <li role="presentation" class="divider"></li>
+						    <li>
+						    	<a href="" ng-click="terminateInstance(inst.oid)">
+						    		<i class="fa fa-power-off"></i> <span translate>INSTANCE.ACTIONS.TERMINATE</span>
+						    	</a>
+						    </li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 		<br>
 		<div class="row">
-			<div class="four columns">
-				<h3 ng-class="inst._subscription.state === 'active' ? 'text-success' : 'text-warning'">{{inst._subscription.state}}</h3>
+			<div class="two columns">
+				<h5 ng-class="inst._subscription.state === 'active' ? 'text-success' : 'text-warning'">{{inst._subscription.state}}</h5>
 				<p translate>INSTANCE.STATE</p>
 			</div>
-			<div class="four columns">
-				<h3>{{parseDate(inst._subscription.createdAt, 'DD/MM/YY')}}</h3>
+			<div class="two columns">
+				<h5>{{parseDate(inst._subscription.createdAt, 'DD/MM/YY')}}</h5>
 				<p translate>INSTANCE.CREATED</p>
 			</div>
-			<div class="four columns">
+			<div class="two columns">
 				<!-- <h3 ng-class="expiresAt(inst._subscription.lastBillingDate) <= 5 ? 'text-danger' : ''" translate>{{inst._subscription.neverExpires ? 'NEVER' : expiresAt(inst._subscription.lastBillingDate)}}</h3> -->
-				<h3 ng-class="expiresAt(inst._subscription.lastBillingDate) <= 5 ? 'text-danger' : ''" translate>{{inst._subscription.neverExpires ? 'NEVER' : parseDate(inst._subscription.lastBillingDate,  'DD/MM/YY')}}</h3>
+				<h5 ng-class="expiresAt(inst._subscription.lastBillingDate) <= 5 ? 'text-danger' : ''" translate>{{inst._subscription.neverExpires ? 'NEVER' : parseDate(inst._subscription.lastBillingDate,  'DD/MM/YY')}}</h5>
 				<p translate>INSTANCE.EXPIRES</p>
 			</div>
-		</div>
-		<div class="row">
-			<div class="four columns">
-				<h3>{{inst.result.prefix}}</h3>
-				<p translate>INSTANCE.BRANCH_PREFIX</p>
+		<!-- </div> -->
+		<!-- <div class="row"> -->
+			<div class="two columns">
+				<h5>{{inst.result.prefix}}</h5>
+				<p translate>INSTANCE.DOMAIN</p>
 			</div>
-			<div class="four columns">
-				<h3>{{inst.result.users}}/{{inst.result.maxusers}}</h3>
+			<div class="two columns">
+				<h5>{{inst.result.users}}/{{inst.result.maxusers}}</h5>
 				<p translate>INSTANCE.MAX_USERS</p>
 			</div>
-			<div class="four columns">
-				<h3>{{getPoolString(inst.result.extensions)}}</h3>
+			<div class="two columns">
+				<h5>{{getPoolString(inst.result.extensions)}}</h5>
 				<p translate>INSTANCE.NUMBERING_PLAN</p>
 			</div>
 		</div>
-		<div class="row">
-			<div class="six columns">
-				<h3 class="text-divider"><span translate>TRANSACTIONS</span> (<span translate>LAST_7_DAYS</span>)</h3>
-				<p ng-show="!transactions.length" translate>NO_DATA_FOR_PERIOD</p>
-				<div ng-show="transactions.length">
-					<!-- <div class="six columns"> -->
-						<table class="table">
-							<thead>
-								<tr>
-									<th translate>DATE</th>
-									<th translate>AMOUNT</th>
-									<th translate>BALANCE</th>
-									<th translate>STATUS</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="item in transactions">
-									<td>{{parseDate(item.createdAt)}}</td>
-									<td>{{stringToFixed(item.amount)}}{{item.currency}}</td>
-									<td>{{stringToFixed(item.balance)}}</td>
-									<td>{{item.status}}</td>
-								</tr>
-							</tbody>
-						</table>
-						<a href="#/transactions" translate>SHOW_MORE</a>
-					<!-- </div> -->
-					<!-- <div class="six columns">
-						<canvas tc-chartjs-bar chart-options="transactionsOptions" chart-data="transactionsData" height="100"></canvas>
-					</div> -->
-				</div>
+		<hr class="twelve columns">
+	</div>
+</div>
+<div class="row" ng-show="instances.length !== 0">
+	<div class="row">
+		<div class="six columns">
+			<h3 class="text-divider"><span translate>TRANSACTIONS</span> (<span translate>LAST_7_DAYS</span>)</h3>
+			<p ng-show="!transactions.length" translate>NO_DATA_FOR_PERIOD</p>
+			<div ng-show="transactions.length">
+				<!-- <div class="six columns"> -->
+					<table class="table">
+						<thead>
+							<tr>
+								<th translate>DATE</th>
+								<th translate>AMOUNT</th>
+								<th translate>BALANCE</th>
+								<th translate>STATUS</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="item in transactions">
+								<td>{{parseDate(item.createdAt)}}</td>
+								<td>{{stringToFixed(item.amount)}}{{item.currency}}</td>
+								<td>{{stringToFixed(item.balance)}}</td>
+								<td>{{item.status}}</td>
+							</tr>
+						</tbody>
+					</table>
+					<a href="#/transactions" translate>SHOW_MORE</a>
+				<!-- </div> -->
+				<!-- <div class="six columns">
+					<canvas tc-chartjs-bar chart-options="transactionsOptions" chart-data="transactionsData" height="100"></canvas>
+				</div> -->
 			</div>
-			<div class="six columns">
-				<h3 class="text-divider"><span translate>CHARGES</span> (<span translate>LAST_7_DAYS</span>)</h3>
-				<p ng-show="!charges.length" translate>NO_DATA_FOR_PERIOD</p>
-				<div ng-show="charges.length">
-					<!-- <div class="six columns"> -->
-						<table class="table">
-							<thead>
-								<tr>
-									<th translate>DATE</th>
-									<th translate>AMOUNT</th>
-									<th translate>BALANCE</th>
-									<th translate>PREV_BALANCE</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="item in charges">
-									<td>{{parseDate(item.createdAt)}}</td>
-									<td>{{stringToFixed(item.amount)}}{{item.currency}}</td>
-									<td>{{stringToFixed(item.balance)}}</td>
-									<td>{{stringToFixed(item.prevBalance)}}</td>
-								</tr>
-							</tbody>
-						</table>
-						<a href="#/charges" translate>SHOW_MORE</a>
-					<!-- </div> -->
-					<!-- <div class="six columns">
-						<canvas tc-chartjs-bar chart-options="chargesOptions" chart-data="chargesData" height="100"></canvas>
-					</div> -->
-				</div>
+		</div>
+		<div class="six columns">
+			<h3 class="text-divider"><span translate>CHARGES</span> (<span translate>LAST_7_DAYS</span>)</h3>
+			<p ng-show="!charges.length" translate>NO_DATA_FOR_PERIOD</p>
+			<div ng-show="charges.length">
+				<!-- <div class="six columns"> -->
+					<table class="table">
+						<thead>
+							<tr>
+								<th translate>DATE</th>
+								<th translate>AMOUNT</th>
+								<th translate>BALANCE</th>
+								<th translate>PREV_BALANCE</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="item in charges">
+								<td>{{parseDate(item.createdAt)}}</td>
+								<td>{{stringToFixed(item.amount)}}{{item.currency}}</td>
+								<td>{{stringToFixed(item.balance)}}</td>
+								<td>{{stringToFixed(item.prevBalance)}}</td>
+							</tr>
+						</tbody>
+					</table>
+					<a href="#/charges" translate>SHOW_MORE</a>
+				<!-- </div> -->
+				<!-- <div class="six columns">
+					<canvas tc-chartjs-bar chart-options="chargesOptions" chart-data="chargesData" height="100"></canvas>
+				</div> -->
 			</div>
 		</div>
 	</div>
