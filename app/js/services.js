@@ -47,6 +47,23 @@ dashApp.factory('errorService', ['$translate', 'notifications', function($transl
     };
 }]);
 
+dashApp.factory('notifyService', ['$translate', 'notifications', function($translate, notifications){
+    function show(notify){
+        $translate('NOTIFY.'+notify)
+        .then(function (translation){
+            if('NOTIFY.'+notify === translation) {
+                return;
+            } else {
+                notifications.showSuccess(translation);
+            }
+        });
+    }
+
+    return {
+        show: show
+    };
+}]);
+
 dashApp.factory('chartService', [function (){
 
     var data = {},

@@ -90,7 +90,7 @@ var dashApp = angular.module('dashApp', [
 				loggedin: checkLoggedin
 			}
 		}).
-		when('/profile/:id', {
+		when('/profile', {
 			templateUrl: 'views/profile.html',
 			controller: 'ProfileController',
 			resolve: {

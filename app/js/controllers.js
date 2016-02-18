@@ -117,25 +117,31 @@ dashApp.controller('VerifyController', ['$rootScope', '$scope', '$location', fun
 	$scope.verified = $location.search().verified === 'true' ? true : false;
 }]);
 
-dashApp.controller('ProfileController', ['$rootScope', '$routeParams', '$scope', 'api', 'notifications', 'errorService', function($rootScope, $routeParams, $scope, api, notifications, errorService){
+dashApp.controller('ProfileController', ['$rootScope', '$scope', 'api', 'notifyService', 'errorService', function($rootScope, $scope, api, notifyService, errorService){
+	
+	var params = {};
+
 	$rootScope.title = 'PROFILE.PROFILE';
 	$scope.user = $rootScope.currentUser;
+	console.log('user: ', $scope.user);
 	$scope.saveProfile = function(){
 		
 		if(!$scope.user.email || !$scope.user.name){
 			return errorService.show('MISSING_FIELDS');
-			// return notifications.showInfo('Please, fill all required fields');
 		}
 		if($scope.confirmPass !== $scope.user.password){
 			return errorService.show('PASSWORD_NOT_CONFIRMED');
-			// return notifications.showInfo('Please, confirm password');
 		}
 
+		if($scope.user.name) params.name = $scope.user.name;
+		if($scope.user.email) params.email = $scope.user.email;
+		if($scope.user.password) params.password = $scope.user.password;
+
 		api.request({
-			url: "update/"+$routeParams.id,
-			params: $scope.user
+			url: "update/"+$scope.user._id,
+			params: params
 		}).then(function(response){
-			notifications.showSuccess('ALL_CHANGES_SAVED');
+			notifyService.show('ALL_CHANGES_SAVED');
 			angular.extend($rootScope.currentUser, response.data.result);
 			console.log('currentUser: ', $rootScope.currentUser, response.data.result);
 		}, function(err){
@@ -217,7 +223,7 @@ dashApp.controller('ChargesController', ['$rootScope', '$scope', 'api', 'utils',
 
 }]);
 
-dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', '$localStorage', '$location', 'api', 'cart', 'notifications', 'errorService', 'spinnerService', function ($q, $http, $rootScope, $scope, $localStorage, $location, api, cart, notifications, errorService, spinnerService){
+dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', '$localStorage', '$location', 'api', 'cart', 'notifyService', 'errorService', 'spinnerService', function ($q, $http, $rootScope, $scope, $localStorage, $location, api, cart, notifyService, errorService, spinnerService){
 	$rootScope.title = 'PAYMENT';
 
 	var requiredAmount = 0;
@@ -239,10 +245,8 @@ dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', 
 
 		if($scope.paymentMethod === undefined)
 			return errorService.show('CHOOSE_PAYMENT_METHOD');
-			// return notifications.showInfo('Please, choose payment method');
 		if($scope.amount === undefined || $scope.amount === null || $scope.amount < requiredAmount)
 			return errorService.show('AMOUNT_NOT_SET');
-			// return notifications.showInfo('Please, set amount');
 
 		spinnerService.show('main-spinner');
 		//TODO - switch between payment methods
@@ -259,7 +263,7 @@ dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', 
 			if(result.data.redirect) {
 				window.location.href = result.data.redirect;
 			} else {
-				if(result.success) notifications.showSuccess('CHANGES_SAVED');
+				if(result.success) notifyService.show('ALL_CHANGES_SAVED');
 				$location.path('/dashboard'); //TODO
 			}
 			cart.clear();
@@ -292,7 +296,7 @@ dashApp.controller('PaymentController', ['$q', '$http', '$rootScope', '$scope', 
 	});
 }]);
 
-dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope', '$location', '$translate', 'api', 'poolSizeServices', 'branchesService', 'cart', 'notifications', 'errorService', 'spinnerService', 'utils', function ($rootScope, $routeParams, $scope, $location, $translate, api, poolSizeServices, branchesService, cart, notifications, errorService, spinnerService, utils){
+dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope', '$location', '$translate', 'api', 'poolSizeServices', 'branchesService', 'cart', 'notifyService', 'errorService', 'spinnerService', 'utils', function ($rootScope, $routeParams, $scope, $location, $translate, api, poolSizeServices, branchesService, cart, notifyService, errorService, spinnerService, utils){
 	
 	var oid = $routeParams.oid,
 
@@ -317,7 +321,6 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 		console.log('pass: ', $scope.instance.result.adminpass, $scope.confirmPass);
 		if($scope.instance.result.adminpass && ($scope.confirmPass !== $scope.instance.result.adminpass)){
 			errorService.show('PASSWORD_NOT_CONFIRMED');
-			// notifications.showInfo('Please, confirm password');
 			return false;
 		}
 
@@ -501,7 +504,7 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 			url: 'updateSubscription',
 			params: branchSetts
 		}).then(function(result){
-			notifications.showSuccess('All changes saved!');
+			notifyService.show('ALL_CHANGES_SAVED');
 		}, function(err){
 			console.log(err);
 			if(err.data.message === 'ERRORS.NOT_ENOUGH_CREDITS') {
@@ -558,7 +561,7 @@ dashApp.controller('InstanceController', ['$rootScope', '$routeParams', '$scope'
 	getServers();
 }]);
 
-dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api', 'poolSizeServices', 'branchesService', 'utils', 'cart', 'chartService', 'ModalService', 'notifications', 'spinnerService', 'errorService', function($rootScope, $scope, $location, api, poolSizeServices, branchesService, utils, cart, chartService, ModalService, notifications, spinnerService, errorService){
+dashApp.controller('DashController', ['$rootScope', '$scope', '$location', '$translate', 'api', 'poolSizeServices', 'branchesService', 'utils', 'cart', 'chartService', 'ModalService', 'notifyService', 'spinnerService', 'errorService', function($rootScope, $scope, $location, $translate, api, poolSizeServices, branchesService, utils, cart, chartService, ModalService, notifyService, spinnerService, errorService){
 	
 	$rootScope.title = 'DASHBOARD';
 
@@ -724,9 +727,9 @@ dashApp.controller('DashController', ['$rootScope', '$scope', '$location', 'api'
 	$scope.renewSubscription = function(inst){
 		console.log('renewSubscription inst: ', inst);
 		$translate('DESCRIPTIONS.RENEW_SUBSCRIPTION', {
-			planId: branchSetts._subscription.planId,
-			users: branchSetts._subscription.quantity,
-			company: branchSetts.result.name
+			planId: inst._subscription.planId,
+			users: inst._subscription.quantity,
+			company: inst.result.name
 		})
 		.then(function (description) {
 			cart.add({

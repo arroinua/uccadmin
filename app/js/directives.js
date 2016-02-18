@@ -159,11 +159,11 @@ dashApp.directive('validname', ['$q', '$rootScope', 'api', function($q, $rootSco
     require: 'ngModel',
     link: function(scope, el, attrs, ctrl) {
 
-        el.on('keydown', function (e){
-            if (e.altKey || e.keyCode === 18 || e.keyCode === 32 || e.keyCode > 90) {
-                e.preventDefault();
-            }
-        });
+        // el.on('keydown', function (e){
+        //     if (e.altKey || e.keyCode === 18 || e.keyCode === 32 || e.keyCode > 90) {
+        //         e.preventDefault();
+        //     }
+        // });
 
       ctrl.$asyncValidators.validname = function(modelValue, viewValue) {
         if (ctrl.$isEmpty(modelValue)) {

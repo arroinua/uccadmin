@@ -33,6 +33,7 @@
 		"P_1": "The message was already sent to this email address.",
 		"P_2": "If you didn't receive any, click"
 	},
+	"LOADING_MESSAGE": "Loading...",
 	"DASHBOARD" : "Dashboard",
 	"BALANCE": "Balance",
 	"PREV_BALANCE": "Prev balance",
@@ -95,6 +96,7 @@
 	},
 	"INSTANCES": "Instances",
 	"LAUNCH_NEW_INSTANCE": "Launch Ringotel Cloud",
+	"ADD_NEW_INSTANCE": "Add Ringotel Cloud",
 	"FREE_TRIAL": "Free trial",
 	"WELCOME_MESSAGE": {
 		"P_1": "Welcome",
@@ -132,6 +134,9 @@
 	"NEVER": "Never",
 	"SHOW_MORE": "Show more",
 	"SHOW_ALL_FEATURES" : "Show all features",
+	"NOTIFY": {
+		"ALL_CHANGES_SAVED": "All changes saved"
+	},
 	"ERRORS": {
 		"ERROR_OCCURRED": "Error occured",
 		"USER_NOT_FOUND": "User not found",
@@ -147,7 +152,8 @@
 		"INVALID_PASSWORD" : "Invalid password.<br> The value must meet the following minimum complexity requirements: <br> • Password must not contain the entire prefix value. Check is not case sensitive <br> • Password must contain uppercase characters of European languages (A through Z) <br> • Password must contain lowercase characters of European languages (a through z) <br> • Password must contain base 10 digits (0 through 9) or nonalphanumeric characters: !@$%^&*_",
 		"NAME_EXISTS": "Name already exists",
 		"PREFIX_EXISTS": "Prefix already exists",
-		"DOMAIN_EXISTS": "Domain already exists"
+		"DOMAIN_EXISTS": "Domain already exists",
+		"PASSWORD_NOT_CONFIRMED": "Please, confirm password"
 	},
 	"ERRORS_ACTIONS": {
 		"ERROR_OCCURRED": "",

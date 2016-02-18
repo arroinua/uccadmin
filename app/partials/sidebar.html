@@ -1,6 +1,6 @@
 <div class="page-sidebar" id="page-sidebar" ng-if="visible">
 	<div class="profile-info text-center">
-		<a href="#/profile/{{currentUser._id}}">
+		<a href="#/profile">
 			<img src="/img/user.svg" alt="avatar" class="img-circle">
 		</a>
 		<h3 ng-bind="currentUser.name"></h3>
@@ -24,7 +24,7 @@
 		<li>
 			<a ng-href="#/instance/new">
 				<!-- <i class="fa fa-dashboard"></i> -->
-				<span translate>LAUNCH_NEW_INSTANCE</span>
+				<span translate>ADD_NEW_INSTANCE</span>
 			</a>
 		</li>
 		<li>
