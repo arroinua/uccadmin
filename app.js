@@ -3,17 +3,15 @@ var app = express();
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var path = require('path');
-// var mongoose = require('mongoose');
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
 var config = require('./env/index');
-// var jwt = require('jsonwebtoken');
-// var routes = require('./routes/index');
-
-// mongoose.connect(config.db);
+var options;
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
-// app.set('jwtSecret', config.secret);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -62,11 +60,24 @@ app.use(function(err, req, res, next) {
 
 //===============Start Server================
 
-var server = app.listen(config.port, function () {
+http.createServer(app).listen(config.port);
+console.log('App is listening at http port %s', config.port);
 
-  var host = server.address().address;
-  var port = server.address().port;
+if(config.ssl) {
+  options = {
+    key: fs.readFileSync(config.ssl.key),
+    cert: fs.readFileSync(config.ssl.cert)
+  };
 
-  console.log('App listening at http://%s:%s', host, port);
+  https.createServer(options, app).listen(config.port+1);
+  console.log('App is listening at https port %s', config.port+1);
+}
 
-});
+// var server = app.listen(config.port, function () {
+
+//   var host = server.address().address;
+//   var port = server.address().port;
+
+//   console.log('App listening at http://%s:%s', host, port);
+
+// });

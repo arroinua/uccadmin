@@ -1,5 +1,5 @@
 module.exports = {
-    port: process.env.PORT || 3002,
+    port: process.env.PORT || 3001,
     gateway: process.env.GATEWAY || 'localhost:3003',
-    trialPeriodDays: 30
+    ssl: false // alternatively - ssl: { key: 'path to ssl private key', cert: 'path to ssl certificate' }
 };
