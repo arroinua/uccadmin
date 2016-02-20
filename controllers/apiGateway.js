@@ -2,6 +2,7 @@ var http = require('http');
 var gateway = require('../env/index').gateway;
 var url = gateway.split(':');
 var debug = require('debug')('admin');
+var ssl = require('../env/index').ssl;
 
 module.exports = {
 
@@ -20,10 +21,12 @@ module.exports = {
 				'Content-Length': headers['content-length']
 			},
 			// auth: server.login+':'+server.password,
-			// ca: server.ca,
+			// ca: ca,
 			// rejectUnauthorized: true,
 			agent: new http.Agent({keepAlive: true})
 		};
+
+		if(ssl) options.ca = ssl.ca;
 		
 		if(req.headers['x-access-token']){
 			options.headers['x-access-token'] = req.headers['x-access-token'];
@@ -70,10 +73,13 @@ module.exports = {
 			path: '/customer'+req.originalUrl,
 			headers: {},
 			// auth: server.login+':'+server.password,
-			// ca: server.ca,
+			// ca: ca,
 			// rejectUnauthorized: true,
 			agent: new http.Agent({keepAlive: true})
 		};
+
+		if(ssl) options.ca = ssl.ca;
+		
 		if(req.headers['x-access-token']){
 			options.headers['x-access-token'] = req.headers['x-access-token'];
 		}
