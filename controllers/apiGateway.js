@@ -1,7 +1,9 @@
 var http = require('http');
+var https = require('https');
 var gateway = require('../env/index').gateway;
 var url = gateway.split(':');
 var debug = require('debug')('admin');
+var fs = require('fs');
 var ssl = require('../env/index').ssl;
 
 module.exports = {
@@ -23,17 +25,17 @@ module.exports = {
 			// auth: server.login+':'+server.password,
 			// ca: ca,
 			// rejectUnauthorized: true,
-			agent: new http.Agent({keepAlive: true})
+			agent: new https.Agent({keepAlive: true})
 		};
 
-		if(ssl) options.ca = ssl.ca;
-		
+		if(ssl) options.cert = fs.readFileSync(config.ssl.cert);
+
 		if(req.headers['x-access-token']){
 			options.headers['x-access-token'] = req.headers['x-access-token'];
 		}
 		
 		// debug('post options: ', options);
-		var apiRequest = http.request(options, function (apiResponse){
+		var apiRequest = https.request(options, function (apiResponse){
 
 			apiResponse.setEncoding('utf8');
 
@@ -75,16 +77,16 @@ module.exports = {
 			// auth: server.login+':'+server.password,
 			// ca: ca,
 			// rejectUnauthorized: true,
-			agent: new http.Agent({keepAlive: true})
+			agent: new https.Agent({keepAlive: true})
 		};
 
-		if(ssl) options.ca = ssl.ca;
-		
+		if(ssl) options.cert = fs.readFileSync(config.ssl.cert);
+
 		if(req.headers['x-access-token']){
 			options.headers['x-access-token'] = req.headers['x-access-token'];
 		}
 		// debug('get options', options);
-		http.get(options, function (apiResponse){
+		https.get(options, function (apiResponse){
 			
 			var responseStr = '';
 
