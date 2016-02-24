@@ -67,8 +67,8 @@
 				<p translate>INSTANCE.CREATED</p>
 			</div>
 			<div class="two columns">
-				<!-- <h3 ng-class="expiresAt(inst._subscription.lastBillingDate) <= 5 ? 'text-danger' : ''" translate>{{inst._subscription.neverExpires ? 'NEVER' : expiresAt(inst._subscription.lastBillingDate)}}</h3> -->
-				<h5 ng-class="expiresAt(inst._subscription.lastBillingDate) <= 5 ? 'text-danger' : ''" translate>{{inst._subscription.neverExpires ? 'NEVER' : parseDate(inst._subscription.lastBillingDate,  'DD/MM/YY')}}</h5>
+				<h5 ng-class="expiresAt(inst._subscription.lastBillingDate) <= 10 ? 'text-danger' : ''" translate>{{inst._subscription.neverExpires ? 'NEVER' : expiresAt(inst._subscription.lastBillingDate)}}</h5>
+				<!-- <h5 ng-class="expiresAt(inst._subscription.lastBillingDate) <= 10 ? 'text-danger' : ''" translate>{{inst._subscription.neverExpires ? 'NEVER' : parseDate(inst._subscription.lastBillingDate,  'DD/MM/YY')}}</h5> -->
 				<p translate>INSTANCE.EXPIRES</p>
 			</div>
 		<!-- </div> -->
