@@ -1,0 +1,14 @@
+.notifications {
+
+    .notification, .error, .success, .warning, .info {
+        min-height: 60px;
+        margin: auto;
+    }
+
+    @media (min-width: $grid-float-breakpoint) {
+        .notification, .error, .success, .warning, .info {
+            max-width: 350px;
+        }
+    }
+
+}

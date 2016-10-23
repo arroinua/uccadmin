@@ -1,0 +1,21 @@
+//
+// Date Picker Custom Styles
+// --------------------------------------------------
+
+.uib-datepicker-popup {
+
+	.uib-button-bar {
+		display: none;
+	}
+
+	.uib-datepicker {
+
+		table {
+			button {
+				border-radius: 0;
+				border: none;
+				padding: 5px 10px;
+			}
+		}
+	}
+}

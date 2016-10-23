@@ -1,0 +1,52 @@
+//
+// Helpers
+// --------------------------------------------------
+
+.text-default {
+	color: #333;
+}
+
+.backdrop {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+
+	&.backdrop-dark {
+		background: linear-gradient(to top, $brand-primary, transparent);
+	}
+}
+
+.divider {
+	position: relative;
+	margin: 25px 0;
+	background-color: #e9e9e9;
+	height: 1px;
+	width: 100%;
+
+	.label {
+	    position: absolute;
+	    top: 50%;
+	    left: 50%;
+	    min-width: 30px;
+	    height: 20px;
+	    margin-left: -15px;
+	    margin-top: -10px;
+	    line-height: 14px;
+
+		-webkit-border-radius: 100px;
+	    -moz-border-radius: 100px;
+	    border-radius: 100px;
+	    -moz-background-clip: border-box;
+	    -webkit-background-clip: border-box;
+	    background-clip: border-box;
+	    background-color: #f9f9f9;
+	    border: 1px solid #e9e9e9;
+	    color: rgba(0,0,0,.3);
+	    font-weight: 600;
+	    text-align: center;
+	    text-transform: uppercase;
+		vertical-align: middle;
+	}
+}

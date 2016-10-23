@@ -1,0 +1,16 @@
+//
+// Forms
+// --------------------------------------------------
+
+.form-control {
+	height: auto;
+	padding: 8px 16px;
+	line-height: 1.5;
+	border-color: #dfe4ed;
+	box-shadow: none;
+	color: #55595c;
+
+	&.form-select {
+		height: 39px;
+	}
+}

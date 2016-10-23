@@ -1,0 +1,229 @@
+{
+	"AND": "and",
+	"OR": "or",
+	"VIEWS": {
+		"LOGIN": {
+			"LOGIN": "Log In",
+			"SIGN_IN": "Sign In",
+			"REGISTER": "Register",
+			"EMAIL": "Email address",
+			"PASSWORD": "Password",
+			"FORGOT_PASSWORD": "Forgot password?",
+			"ACKNOWLEDGE": "By signing in, you acknowledge that you have read and agree to Ringotel’s",
+			"TERMS_OF_SERVICE": "Terms of service",
+			"PRIVACY_POLICY": "Privacy policy"
+		},
+		"SIGN_UP": {
+			"SIGN_UP": "Sign Up",
+			"REGISTER": "Register",
+			"NAME": "Name",
+			"EMAIL": "Email address",
+			"PASSWORD": "Password",
+			"CONFIRM_PASSWORD": "Confirm password",
+			"ALREADY_HAVE_ACCOUNT": "Already have account?",
+			"ACKNOWLEDGE": "By signing up, you acknowledge that you have read and agree to Ringotel’s",
+			"TERMS_OF_SERVICE": "Terms of service",
+			"PRIVACY_POLICY": "Privacy policy",
+			"SIGN_UP_MESSAGE_1": "Thank you! We've sent you verification email, please check your inbox.",
+			"BACK": "Back"
+		},
+		"REQUEST_PASSWORD": {
+			"REQUEST_PASSWORD": "Reset password",
+			"EMAIL": "Email address",
+			"SUBMIT": "Submit",
+			"BACK": "Back",
+			"SIGN_UP_MESSAGE_2": "Request accepted. Please, check your email for further instructions"
+		},
+		"RESET_PASSWORD": {
+			"RESET_PASSWORD": "Reset password",
+			"NEW_PASSWORD": "New password",
+			"SUBMIT": "Submit",
+			"CANCEL": "Cancel"
+		},
+		"VERIFY": {
+			"SIGN_UP_MESSAGE_3": "Email is not verified!",
+			"SIGN_UP_MESSAGE_4": {
+				"P_1": "Email is verified!",
+				"P_2": "You can now"
+			},
+			"LOGIN": "Log In",
+			"BACK": "Back"
+		},
+		"DASHBOARD": {
+			"CREATE_CLOUD": "Create Ringotel Cloud Subscription",
+			"CREATE_CLOUD_MSG_1": "You can craete any number of subscriptions",
+			"CREATE": "Create"
+		},
+		"INSTANCE": {
+			"CLOUD_NAME": "Cloud name",
+			"CHOOSE_PLAN": "Choose plan",
+			"CHOOSE_SERVER": "Choose server",
+			"NUMBER_OF_USERS": "Number of users",
+			"EXTRA_LINES": "Extra lines",
+			"EXTRA_STORAGE": "Extra storage",
+			"MORE_LINES": "Need more lines?",
+			"MORE_STORAGE": "Need more storage?",
+			"CLOUD_SETTINGS": "Cloud settings",
+			"DOMAIN": "Domain",
+			"ADMIN_LOGIN": "Admin login",
+			"ADMIN_PASSWORD": "Admin password",
+			"CONFIRM_PASSWORD": "Confirm password",
+			"NUMBERING_PLAN": "Numbering plan",
+			"INTERFACE_LANGUAGE": "Interface language"
+		},
+		"BILLING": {
+			"FIND": "Find",
+			"CURRENT_BALANCE": "Current balance",
+			"LAST_PAYMENT": "Last payment",
+			"STARTING_BALANCE": "Starting balance",
+			"AS_OF": "As of",
+			"NO_DATA": "No data",
+			"TOTAL": "Total payments",
+			"DATE": "Date",
+			"DESCRIPTION": "Description",
+			"PAYMENT": "Payment"
+		},
+		"PROFILE": {
+			"SAVE_PROFILE": "Save profile",
+			"NAME": "Name",
+			"EMAIL": "Email",
+			"PASSWORD": "Password",
+			"CONFIRM_PASSWORD": "Confirm password"
+		},
+		"PAYMENT": {
+			"CHOOSE_PAYMENT_METHOD": "Choose payment method",
+			"ORDER": {
+				"ORDER": "Order",
+				"DESCRIPTION": "Description",
+				"AMOUNT": "Amount"
+			},
+			"AMOUNT": "Amount",
+			"PROCEED": "Proceed"
+		}
+	},
+	"PARTIALS": {
+		"DASH_INSTANCE": {
+			"SELECTED_PLAN": "Plan",
+			"MAX_USERS": "Users",
+			"EDIT": "Edit",
+			"OPTIONS": "Options",
+			"CONNECT": "Connect",
+			"CHANGE_PLAN": "Change plan",
+			"RENEW": "Renew subscription",
+			"REMOVE": "Terminate subscription",
+			"EXPIRED": "Subscription expired",
+			"NEVER_EXPIRES": "Never expires",
+			"EXPIRES_IN_DAYS": "Expires in {{days}} days",
+			"TRIAL_EXPIRES_IN_DAYS": "Trial expires in {{days}} days"
+		},
+		"INSTANCE_SUMMARY": {
+			"CLOUD_NAME": "Cloud name",
+			"SELECTED_PLAN": "Selected plan",
+			"NUMBER_OF_USERS": "Number of users",
+			"NUMBER_OF_LINES": "Number of lines",
+			"NUMBERING_PLAN": "Numbering plan",
+			"TOTAL_STORAGE": "Total storage",
+			"PER_MONTH": "Per month",
+			"SAVE": "Save",
+			"PROCEED": "Proceed",
+			"CANCEL": "Cancel"
+		},
+		"PLAN": {
+			"UNLIMITED": "Unlimited",
+			"MAX_USERS": "Max users",
+			"STORAGE_PER_USER" : "Storage per user",
+			"ALL_FEATURES": "All premium features",
+			"MEETINGS": "Manageable conferences",
+			"VISUAL_CTI": "IVR Applications Designer",
+			"CHANNELS": "Channels",
+			"SHOW_ALL_FEATURES": "Show all features",
+			"SELECT": "Select"
+		},
+		"SERVER": {
+			"SELECT": "Select"
+		},
+		"SIDE_MENU": {
+			"PROFILE": "Profile",
+			"ADD_CREDITS": "Add credits",
+			"SIGN_OUT": "Sign Out",
+			"DASHBOARD": "Dashboard",
+			"ADD_NEW_INSTANCE": "Add Ringotel Cloud",
+			"BILLING": "Billing"
+		},
+		"PAY_METHOD": {
+			"SELECT": "Select"
+		},
+		"COMPARE_PLANS": {
+			"HEADER": "Plans & Features"
+		}
+	},
+	"PLANS": {
+		"TRIAL": "30 days free",
+		"STANDARD" : "Standard",
+		"PREMIUM" : "Premium",
+		"FREE" : "Free"
+	},
+	"DESCRIPTIONS": {
+		"NEW_SUBSCRIPTION": "1-month subscription for '{{planId}}' plan. Users: {{users}}. Company name: {{company}}",
+		"RENEW_SUBSCRIPTION": "1-month subscription renewal for '{{planId}}' plan. Users: {{users}}. Company name: {{company}}",
+		"UPDATE_SUBSCRIPTION": "Update 1-month subscription for '{{planId}}' plan. Users: {{users}}. Company name: {{company}}"
+	},
+	"NOTIFY": {
+		"ALL_CHANGES_SAVED": "All changes saved"
+	},
+	"ERRORS": {
+		"ERROR_OCCURRED": "Error occured",
+		"USER_NOT_FOUND": "User not found",
+		"INVALID_LOGIN_PASSWORD": "Invalid login/password",
+		"NOT_AUTHORIZED": "Not authorized",
+		"INVALID_ACCOUNT": "Invalid account",
+		"MISSING_FIELDS": "Fill in all required fields",
+		"CUSTOMER_EXISTS": "Customer already exists",
+		"NOT_ENOUGH_CREDITS": "Not enough credits",
+		"INVALID_PREFIX": "Invalid prefix",
+		"INVALID_DOMAIN": "Invalid domain.<br> Domain could contain only alphanumeric case-insensitive characters (a-z, A-Z, 0-9). The hyphen is permitted if it is surrounded by other valid characters.",
+		"REQUIRED_FIELD_MESSAGE": "This field is required",
+		"INVALID_PASSWORD" : "Invalid password.<br> The value must meet the following minimum complexity requirements: <br> • The minimum password length is 8 characters <br> • Password must not contain the entire prefix value. Check is not case sensitive <br> • Password must contain uppercase characters of European languages (A through Z) <br> • Password must contain lowercase characters of European languages (a through z) <br> • Password must contain base 10 digits (0 through 9) or nonalphanumeric characters: !@$%^&*_",
+		"NAME_EXISTS": "Name already exists",
+		"PREFIX_EXISTS": "Prefix already exists",
+		"DOMAIN_EXISTS": "Domain already exists",
+		"PASSWORD_NOT_CONFIRMED": "Please, confirm password",
+		"DOWNGRADE_ERROR_STORAGE": "Changes couldn't be saved. The currently used storage is greater than the new value. Please, free up space before making changes.",
+		"DOWNGRADE_ERROR_USERS": "Changes couldn't be saved. The number of created users is greater than the new value. Please, remove users before making changes."
+	},
+	"ERRORS_ACTIONS": {
+		"ERROR_OCCURRED": "",
+		"INVALID_LOGIN_PASSWORD": "",
+		"NOT_ENOUGH_CREDITS": "",
+		"INVALID_PREFIX": ""
+	},
+	"TT" : {
+		"SIM_CALLS": "Max number of simultaneous calls",
+		"SERVER_ID": "The server, where Ringotel Cloud would be located. You couldn't change this later.",
+		"DOMAIN": "Subdomain for Ringotel Cloud. You couldn't change this later. Sholud be unique.",
+		"BRANCH_PREFIX": "The most important option. This would be both an administrator login for web interface and a subdomain for Ringotel Cloud. You couldn't change this later. Sholud be unique.",
+		"NUMBERING_PLAN": "Numbering range of extensions. Dashes an commas are allowed, for ex. \"200-210\" or \"200,205-210,310-350\"",
+		"COMPANY_NAME": "Ringotel Cloud name or company name. Should be unique.",
+		"ADMIN_LOGIN": "Administrator login for web interface",
+		"ADMIN_PASSWORD": "Administrator password for web interface",
+		"INTERFACE_LANGUAGE": "Preferred language for web interface"
+	},
+	"FEATURES": {
+		"PBX_FEATURES": "All PBX features",
+		"CORPORATE_MESSENGER": "Corporate messenger",
+		"FILE_TRANSFER": "File transfer and storage",
+		"AUTO_ATTENDANT": "Auto Attendant",
+		"VOICEMAIL": "Voicemail",
+		"HUNTING_GROUPS": "Hunting groups",
+		"PICKUP_GROUPS": "Pickup groups",
+		"ORG_GROUPS": "Organizational groups",
+		"VOICE_REC": "Voice recording",
+		"GROUP_AUDIO_CALLS": "Group audio calls",
+		"GROUP_VIDEO_CALLS": "Group video calls",
+		"MANAGED_CONFERENCES": "Managed conferences",
+		"PUSH_TO_TALK": "Push-to-talk channels",
+		"HOTLINE_GROUPS": "Hotline (ACD) groups",
+		"IVR": "IVR Applications",
+		"ACTIVE_DIRECTORY": "Active Directory integration"
+	}
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>My Ringotel | Secured communication center in the cloud</title>
+	<meta name="robots" content="noindex">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<link rel='stylesheet' href='assets/fonts/css/font-awesome.min.css' />
+	<link rel="stylesheet" href="assets/css/lib/ngNotificationsBar.css">
+	<link rel="stylesheet" href="assets/css/main.css">
+	
+	<script type="text/javascript" src="lib/angular.min.js"></script>
+</head>
+<body ng-app="app" ng-controller="LayoutController as layoutVm" ng-class="{ 'topbar': layoutVm.topbar, 'sidemenu': layoutVm.sidemenu, 'langmenu': layoutVm.langmenu, 'full-view': layoutVm.fullView }">
+
+	<top-bar></top-bar>
+	<side-menu></side-menu>
+	<lang-nav></lang-nav>
+	<div class="content-wrapper" ng-controller="ContentController as contentVm">
+		<spinner name="main-spinner" class="spinner main-spinner">
+			<!-- <div class="absolute-center"> -->
+				<span class="spin-el first-el"></span>
+				<span class="spin-el second-el"></span>
+				<span class="spin-el third-el"></span>
+			<!-- </div> -->
+		</spinner>
+		<notifications-bar class="notifications" closeIcon="fa fa-times-circle"></notifications-bar>
+		<div class="container-fluid page-content" ng-view="" ng-cloak></div>
+		<footer ng-show="layoutVm.footer"></footer>
+	</div>
+
+	<!-- /js/lib -->
+	<script type="text/javascript" src="lib/angular-route.min.js"></script>
+	<script src="lib/ngStorage.min.js"></script>
+	<script src="lib/angular-local-storage.min.js"></script>
+	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-local-storage/0.2.2/angular-local-storage.min.js
+	"></script>-->
+	<script src="lib/ngNotificationsBar.min.js"></script>
+	<script src="lib/angular-animate.min.js"></script>
+	<script src="lib/angular-sanitize.min.js"></script>
+	<script src="lib/angular-messages.min.js"></script>
+	<script src="lib/angular-translate.min.js"></script>
+	<script src="lib/angular-translate-loader-static-files.min.js"></script>
+	<script src="lib/moment.min.js"></script>
+	<script src="lib/tmhDynamicLocale.min.js"></script>
+	<script src="lib/ui-bootstrap-tpls.js"></script>
+
+	<!-- /js -->
+	<script src="all.js"></script>
+
+</body>
+</html>

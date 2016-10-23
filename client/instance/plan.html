@@ -1,0 +1,28 @@
+<div class="panel" ng-class="model === plan.planId ? 'panel-primary' : 'panel-default'">
+	<div class="panel-heading">
+		<h3 class="panel-title text-center"><span translate>{{ 'PLANS.'+(plan.planId).toUpperCase() | translate}}</span></h3>
+	</div>
+	<div class="panel-body text-center">
+		<ul class="list-unstyled">
+			<li ng-if="plan.planId !== 'trial' && plan.planId !== 'free'">
+				<span translate>PARTIALS.PLAN.MAX_USERS</span>
+				<b translate> PARTIALS.PLAN.UNLIMITED</b>
+			</li>
+			<li ng-if="plan.planId === 'trial' || plan.planId === 'free'">
+				<span translate>PARTIALS.PLAN.MAX_USERS</span>
+				<b> 4</b>
+			</li>
+			<!-- <li><b>{{plan.customData.storelimit}}GB</b> <span translate>PLAN.INITIAL_STORAGE</span></li> -->
+			<li><b>{{plan.customData.storageperuser}}GB</b> <span translate>PARTIALS.PLAN.STORAGE_PER_USER</span></li>
+			<li ng-if="plan.planId === 'trial'"><b translate>PARTIALS.PLAN.ALL_FEATURES</b></li>
+			<li ng-if="plan.planId === 'premium'"><b>+</b></li>
+			<li ng-if="plan.planId === 'premium'"><span translate>PARTIALS.PLAN.MEETINGS</span></li>
+			<li ng-if="plan.planId === 'premium'"><span translate>PARTIALS.PLAN.VISUAL_CTI</span></li>
+			<li ng-if="plan.planId === 'premium'"><span translate>PARTIALS.PLAN.CHANNELS</span></li>
+			<li><a href="" ng-click="showPlans()" translate>PARTIALS.PLAN.SHOW_ALL_FEATURES</a></li>
+		</ul>
+	</div>
+	<div class="panel-footer">
+		<a href="" class="btn btn-default btn-block" ng-click="selectPlan()" translate>PARTIALS.PLAN.SELECT</a>
+	</div>
+</div>

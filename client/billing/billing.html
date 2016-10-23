@@ -1,0 +1,91 @@
+<div class="row">
+	<div class="col-sm-3">
+		<date-picker date-format="billVm.dateFormat" model="billVm.startDate" date-options="billVm.startDateOptions"></date-picker>
+	</div>
+	<div class="col-sm-3">
+		<date-picker date-format="billVm.dateFormat" model="billVm.endDate" date-options="billVm.endDateOptions"></date-picker>
+	</div>
+	<div class="col-sm-3">
+		<button class="btn btn-primary" ng-click="billVm.findRecords()" translate>VIEWS.BILLING.FIND</button>
+	</div>
+</div>
+<hr>
+<div class="row">
+	<div class="col-sm-4">
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title" translate>VIEWS.BILLING.CURRENT_BALANCE</h3>
+			</div>
+			<div class="panel-body">
+				<h4>
+					<span>{{billVm.currentBalance | number:2}} {{billVm.customer.currency}}</span>
+				</h4>
+				<span translate>VIEWS.BILLING.LAST_PAYMENT</span>: <span>{{ billVm.parseDate(billVm.lastBillingDate) }}</span>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title" translate>VIEWS.BILLING.STARTING_BALANCE</h3>
+			</div>
+			<div class="panel-body">
+				<h4>
+					<span ng-if="billVm.startBalance">{{billVm.startBalance | number:2 }} {{billVm.customer.currency}}</span>
+					<span ng-if="!billVm.startBalance" translate>VIEWS.BILLING.NO_DATA</span>
+				</h4>
+				<span translate>VIEWS.BILLING.AS_OF</span>: <span>{{ billVm.parseDate(billVm.startDate) }}</span>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title" translate>VIEWS.BILLING.TOTAL</h3>
+			</div>
+			<div class="panel-body">
+				<h4>
+					<span ng-if="billVm.totalCharges">{{billVm.totalCharges | number:2}} {{billVm.customer.currency}}</span>
+					<span ng-if="!billVm.totalCharges" translate>VIEWS.BILLING.NO_DATA</span>
+				</h4>
+				<span>{{ billVm.parseDate(billVm.startDate) }} - {{ billVm.parseDate(billVm.endDate) }}</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="panel panel-default">
+			<!-- <div class="panel-heading">
+				<h3 class="panel-title">Transactions {{billVm.parseDate( billVm.startDate )}} - {{billVm.parseDate( billVm.endDate )}}</h3>
+			</div> -->
+
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th translate>VIEWS.BILLING.DATE</th>
+							<th translate>VIEWS.BILLING.DESCRIPTION</th>
+							<th translate>VIEWS.BILLING.PAYMENT</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-if="!billVm.charges.length && !billVm.transactions.length">
+							<td colspan="3" translate>VIEWS.BILLING.NO_DATA</td>
+						</tr>
+						<tr ng-repeat="rec in billVm.charges">
+							<td>{{ billVm.parseDate(rec.from) }} - {{ billVm.parseDate(rec.to) }}</td>
+							<td>{{ rec.description }}</td>
+							<td>{{ billVm.sumUp(rec.amount) | number:2 }}</td>
+						</tr>
+						<tr ng-repeat="rec in billVm.transactions">
+							<td>{{ billVm.parseDate(rec.updatedAt) }}</td>
+							<td class="text-success">{{ rec.description }}</td>
+							<td>{{ rec.amount | number:2 }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

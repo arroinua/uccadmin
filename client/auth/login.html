@@ -1,0 +1,37 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="form-container">
+			<div class="logo-cont">
+				<img src="assets/img/Ringotel 6.svg">
+			</div>
+			<form role="form" class="login-form">
+				<legend translate>VIEWS.LOGIN.LOGIN</legend>
+				<div class="form-group">
+					<!-- <label for="username" translate>EMAIL</label> -->
+					<input type="email" class="form-control" name="username" ng-model="authVm.email" placeholder="{{ 'VIEWS.LOGIN.EMAIL' | translate }}" required />
+				</div>
+				<div class="form-group">
+					<!-- <label for="password" translate>PASSWORD</label> -->
+					<input type="password" class="form-control" name="password" ng-model="authVm.password" placeholder="{{ 'VIEWS.LOGIN.PASSWORD' | translate }}" />
+				</div>
+				<div class="form-group">
+					<a href="#/request-password-reset" tabindex="0" translate>VIEWS.LOGIN.FORGOT_PASSWORD</a>
+					<!-- <a href="#/signup" tabindex="0" class="pull-right" translate>SIGN_UP</a> -->
+					<br><br>
+					<p class="help-block">
+						<span translate>VIEWS.LOGIN.ACKNOWLEDGE</span>
+						<a href="" translate>VIEWS.LOGIN.TERMS_OF_SERVICE</a> 
+						<span translate>AND</span> 
+						<a href="" translate>VIEWS.LOGIN.PRIVACY_POLICY</a>.</p>
+					<p class="error-msg">{{message}}</p>
+					<button type="submit" class="btn btn-primary btn-block" ng-click="authVm.login()" translate>VIEWS.LOGIN.SIGN_IN</button>
+					<div class="divider">
+						<span class="label" translate>OR</span>
+					</div>
+					<a href="#/signup" class="btn btn-default btn-block" translate>VIEWS.LOGIN.REGISTER</a>
+					<br>
+				</div>
+			</form>
+		</div>	
+	</div>
+</div>

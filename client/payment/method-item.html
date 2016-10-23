@@ -1,0 +1,14 @@
+<div class="panel" ng-class="model === method.id ? 'panel-primary' : 'panel-default'">
+	<div class="panel-heading">
+		<h3 class="panel-title text-center"><span ng-if="method.icon" class="{{method.icon}}"></span> <span translate>{{method.name}}</span></h3>
+	</div>
+	<!-- <div class="panel-body text-center">
+		<span class="fa fa-2x fa-{{method.id}}"></span>
+	</div> -->
+	<div class="panel-footer" ng-if="method.comingSoon">
+		<h5 class="text-center">Coming soon...</h5>
+	</div>
+	<div class="panel-footer" ng-if="!method.comingSoon">
+		<button class="btn btn-default btn-block" ng-disabled="unselectable" ng-click="select()" translate>PARTIALS.PAY_METHOD.SELECT</button>
+	</div>
+</div>

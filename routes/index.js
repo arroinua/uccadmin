@@ -3,7 +3,7 @@ var router = express.Router();
 var path = require('path');
 
 router.get('/', function(req, res, next){
-	res.sendFile(path.resolve('app/index.html'));
+	res.sendFile(path.resolve('client/index.html'));
 });
 // router.get('/checkout', function(req, res, next){
 // 	res.sendFile(path.resolve('app/checkout.html'));

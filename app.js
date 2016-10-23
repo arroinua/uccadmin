@@ -1,29 +1,62 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var FileStreamRotator = require('file-stream-rotator');
 var morgan = require('morgan');
 var path = require('path');
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
 var config = require('./env/index');
-var options;
+var logDir = __dirname + '/log';
+var proxy = require('http-proxy-middleware');
+var proxyOptions = {
+  target: (config.ssl ? 'https://' : 'http://') + config.gateway + '/customer', // target host 
+  logLevel: 'debug',
+  onError: function(err, req, res){
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: {}
+    });
+  }
+};
+var options = {};
+
+// create the proxy 
+var apiProxy = proxy('/api', proxyOptions);
+// create a rotating write stream 
+var accessLogStream = FileStreamRotator.getStream({
+  date_format: 'YYYYMMDD',
+  filename: logDir + '/access-%DATE%.log',
+  frequency: 'daily',
+  verbose: false
+});
+
+// ensure log directory exists 
+fs.existsSync(logDir) || fs.mkdirSync(logDir);
+
+// setup the logger 
+app.use(morgan('combined', {stream: accessLogStream}));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(morgan("dev"));
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
     next();
 });
-app.use(express.static(path.join(__dirname, 'app')));
-app.use('/api', require('./routes/api'));
+app.use(express.static(path.join(__dirname, 'client')));
+
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+
+// use Proxy
+app.use(apiProxy);
+// app.use('/api', require('./routes/api'));
 app.use('/', require('./routes/index'));
 
 //===============Error handlers================
@@ -72,12 +105,3 @@ if(config.ssl) {
   https.createServer(options, app).listen(config.port+1);
   console.log('App is listening at https port %s', config.port+1);
 }
-
-// var server = app.listen(config.port, function () {
-
-//   var host = server.address().address;
-//   var port = server.address().port;
-
-//   console.log('App listening at http://%s:%s', host, port);
-
-// });

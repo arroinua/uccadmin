@@ -1,0 +1,57 @@
+<div class="row">
+	<h4 class="col-xs-12" translate>VIEWS.PAYMENT.CHOOSE_PAYMENT_METHOD</h4>
+	<div class="col-sm-3 col-xs-12" ng-repeat="method in payVm.paymentMethods">
+		<method-item model="payVm.paymentMethod" method="method" unselectable="(!payVm.amount && method.id !== 0) || (!payVm.cart.length && method.id === 0) || (!payVm.isEnough && method.id === 0)" select="payVm.selectMethod(method.id)"></method-item>
+	</div>
+</div>
+<div class="row">
+	<div class="col-sm-7" ng-show="payVm.cart.length">
+		<h4 translate>VIEWS.PAYMENT.ORDER.ORDER</h4>
+		<div class="panel">
+			<div class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th translate>VIEWS.PAYMENT.ORDER.DESCRIPTION</th>
+							<th translate>VIEWS.PAYMENT.ORDER.AMOUNT</th>
+							<th style="width: 5px"></th>
+							<th style="width: 5px"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in payVm.cart track by $index">
+							<!-- <td>{{$index+1}}</td> -->
+							<td>{{ item.description }}</td>
+							<td>{{ item.amount | number: 2 }} {{ item.currency }}</td>
+							<td>
+								<a ng-if="item.data.oid === 'new'" ng-href="#/instance/new?cart_item={{item.data.result.prefix}}">
+									<i class="fa fa-edit"></i>
+								</a>
+								<a ng-if="item.data.oid !== 'new'" ng-href="#/instance/{{item.data.oid}}">
+									<i class="fa fa-edit"></i>
+								</a>
+							</td>
+							<td>
+								<a href="" ng-click="payVm.removeFromArray(payVm.cart, $index)" class="text-danger">
+									<i class="fa fa-remove text-danger"></i>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-5">
+		<h4 translate>VIEWS.PAYMENT.AMOUNT</h4>
+		<form id="payment-form">
+			<div class="input-group">
+				<span class="input-group-addon" id="payment-amount">{{payVm.customer.currency}}</span>
+				<input type="number" class="form-control" min="{{::payVm.amount}}" ng-model="payVm.amount" placeholder="Amount" aria-describedby="payment-amount" required>
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="button" ng-click="payVm.proceedPayment()" ng-disabled="payVm.paymentMethod === 0 && !payVm.isEnough" translate>VIEWS.PAYMENT.PROCEED</button>
+				</span>
+			</div>
+		</form>
+	</div>
+</div>

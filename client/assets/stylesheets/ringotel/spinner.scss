@@ -1,0 +1,63 @@
+.spinner {
+	background-color: #f3f8f9;
+	z-index: 110;
+	opacity: 1;
+
+	&.ng-hide {
+		@include fadeOut(
+			$duration: 1s
+		);
+	}
+
+	.absolute-center {
+		position: absolute;
+		top: 50%;
+		margin-top: -12.5px;
+		width: 100%;
+		height: 25px;
+		text-align: center;
+	}
+
+	.spin-el {
+		display: inline-block;
+		width: 25px;
+		height: 25px;
+		border-radius: 50%;
+		-webkit-box-shadow: 0 0 3px rgba(0,0,0,0.05);
+		box-shadow: 0 0 3px rgba(0,0,0,0.05);
+		background-color: #fff;
+
+		&.first-el {
+			@include bounceIn(
+				$delay: .1s,
+				$count: infinite
+			);
+		}
+		&.second-el {
+			@include bounceIn(
+				$delay: .2s,
+				$count: infinite
+			);
+		}
+		&.third-el {
+			@include bounceIn(
+				$delay: .3s,
+				$count: infinite
+			);
+		}
+	}
+}
+
+.main-spinner {
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	padding-top: 80px;
+	padding-left: 10px;
+}
+
+.block-spinner {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}

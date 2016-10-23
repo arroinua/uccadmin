@@ -1,0 +1,95 @@
+//
+// Page Sidebar
+// --------------------------------------------------
+
+.page-sidebar {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	outline: none;
+	background-color: #fff;
+	z-index: 100;
+
+	&.lang-menu {
+		z-index: 110;
+	}
+
+	&.side-menu,
+	&.lang-menu {
+		display: none;
+	}
+
+	&.inst-summary,
+	&.lang-menu {
+		padding-top: 60px;
+		right: 0;
+		width: 200px;
+		overflow-y: auto;
+	}
+
+	&.side-menu {
+		top: 60px;
+		left: 0;
+		width: 240px;
+		-webkit-box-shadow: 1px 0 1px rgba(0,0,0,0.05);
+		box-shadow: 1px 0 1px rgba(0,0,0,0.05);
+		@include fadeOutLeft(
+			$duration: .5s
+		);
+	}
+
+	&.inst-summary {
+		label {
+			margin: 0;
+			padding-top: 15px;
+			font-weight: normal;
+			color: #333;
+		}
+	}
+
+	&.lang-menu + .backdrop {
+		// display: none;
+		opacity: 0;
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background-color: rgba(0,0,0,0.8);
+		z-index: -100;
+		@include transition(opacity .3s ease-in-out);
+	}
+
+	.profile-info {
+		position: relative;
+		width: 100%;
+		border-bottom: 1px solid #f3f8f9;
+		// background-color: rgb(245,245,245);
+
+		a {
+			color: #333;
+			text-decoration: none;
+
+		}
+
+		.dropdown-toggle {
+			position: relative;
+			display: inline-block;
+			width: 100%;
+			margin: 15px 0;
+
+			.user-img,
+			.user-info {
+				display: inline-block;
+				vertical-align: middle;
+				margin-left: 15px;
+
+				// small {
+				// 	display: block;
+				// }
+			}
+			
+		}
+	}
+}
+

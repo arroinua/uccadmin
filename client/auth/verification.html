@@ -1,0 +1,32 @@
+<div class="row">
+	<div class="col-xs-12">
+		<div class="form-container">
+			<div class="logo-cont">
+				<img src="assets/img/Ringotel 6.svg">
+			</div>
+			<div class="text-center" ng-hide="authVm.verified">
+				<h4>
+					<span class="fa-stack fa-lg">
+					  <i class="fa fa-circle fa-stack-2x text-danger"></i>
+					  <i class="fa fa-remove fa-stack-1x fa-inverse"></i>
+					</span>
+				</h4>
+				<h4 translate>VIEWS.VERIFY.SIGN_UP_MESSAGE_3</h4>
+				<hr>
+				<a href="#/login" class="btn btn-default btn-block" translate>VIEWS.VERIFY.BACK</a>
+			</div>
+			<div class="text-center" ng-show="authVm.verified">
+				<h4>
+					<span class="fa-stack fa-lg">
+					  <i class="fa fa-circle fa-stack-2x text-success"></i>
+					  <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+					</span>
+				</h4>
+				<h4 translate>VIEWS.VERIFY.SIGN_UP_MESSAGE_4.P_1</h4>
+				<h4 translate>VIEWS.VERIFY.SIGN_UP_MESSAGE_4.P_2</h4>
+				<hr>
+				<a href="#/login" class="btn btn-primary btn-block" translate>VIEWS.VERIFY.LOGIN</a>
+			</div>
+		</div>
+	</div>
+</div>

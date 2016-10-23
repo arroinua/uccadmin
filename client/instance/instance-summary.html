@@ -1,0 +1,42 @@
+<div class="page-sidebar inst-summary">
+	<div class="col-xs-12">
+		<label>
+			<span translate>PARTIALS.INSTANCE_SUMMARY.CLOUD_NAME</span>
+		</label>
+		<h4 ng-bind="instance.result.name || '------'"></h4>
+
+		<label>
+			<span translate>PARTIALS.INSTANCE_SUMMARY.SELECTED_PLAN</span>
+		</label>
+		<h4 ng-bind="plan"></h4>
+
+		<label>
+			<span translate>PARTIALS.INSTANCE_SUMMARY.NUMBER_OF_USERS</span>
+		</label>
+		<h4 ng-bind="instance._subscription.quantity"></h4>
+
+		<label>
+			<span translate>PARTIALS.INSTANCE_SUMMARY.NUMBER_OF_LINES</span>
+		</label>
+		<h4 ng-bind="maxlines"></h4>
+
+		<label>
+			<span translate>PARTIALS.INSTANCE_SUMMARY.NUMBERING_PLAN</span>
+		</label>
+		<h4 ng-bind="numPool"></h4>
+
+		<label>
+			<span translate>PARTIALS.INSTANCE_SUMMARY.TOTAL_STORAGE</span>
+		</label>
+		<h4 ng-bind="storage"></h4>
+
+		<label>
+			{{currency}} <span translate>PARTIALS.INSTANCE_SUMMARY.PER_MONTH</span>
+		</label>
+		<h4 ng-bind="amount"></h4>
+		<hr>
+		<button type="submit" class="btn btn-primary btn-block" form="branchSettings" ng-click="update()" ng-disabled="branchSettings.$invalid" ng-if="!newBranch" translate>PARTIALS.INSTANCE_SUMMARY.SAVE</button>
+		<button type="submit" class="btn btn-primary btn-block" form="branchSettings" ng-click="proceed()" ng-disabled="branchSettings.$invalid" ng-if="newBranch" translate>PARTIALS.INSTANCE_SUMMARY.PROCEED</button>
+		<a href="#/dashboard" type="button" class="btn btn-default btn-block" tabindex="0" translate>PARTIALS.INSTANCE_SUMMARY.CANCEL</a>
+	</div>
+</div>

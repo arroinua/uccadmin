@@ -1,0 +1,189 @@
+<div class="inst-wrapper">
+
+	<form novalidate name="branchSettings" id="branchSettings" class="ng-cloak">
+
+		<div class="row">
+			<div class="col-xs-12">
+				<h4 translate>VIEWS.INSTANCE.CLOUD_NAME</h4>
+				<div class="form-group">
+					<input class="form-control" type="text" name="name" ng-model="instVm.instance.result.name" placeholder="{{ 'E_G' | translate }}: SmileSoft" ng-model-options="{updateOn: 'default blur', debounce: {'default': 1000, 'blur': 0}}" maxlength="100" ng-readonly="!instVm.newBranch" valid-name required />
+					<div ng-if="instVm.newBranch" ng-messages="branchSettings.name.$error" ng-messages-multiple>
+						<div class="alert alert-danger" ng-message="validName" translate>ERRORS.NAME_EXISTS</div>
+					</div>
+					<div class="alert alert-warning" ng-show="branchSettings.$submitted && branchSettings.name.$error.required" translate>ERRORS.REQUIRED_FIELD_MESSAGE</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-xs-12">
+				<h4 translate>VIEWS.INSTANCE.CHOOSE_PLAN</h4>
+				<div class="select-box-wrapper">
+					<spinner name="plans-spinner" class="spinner block-spinner">
+						<!-- <div class="absolute-center"> -->
+							<span class="spin-el first-el"></span>
+							<span class="spin-el second-el"></span>
+							<span class="spin-el third-el"></span>
+						<!-- </div> -->
+					</spinner>
+					<ul class="select-box-list">
+						<li class="select-box" ng-repeat="plan in instVm.availablePlans">
+							<plan-item 
+								plan="plan" 
+								ng-hide="instVm.newBranch && (plan.planId === 'trial' && !instVm.trial)" 
+								select-plan="instVm.selectPlan(plan)" 
+								show-plans="instVm.showPlans()" 
+								model="instVm.instance._subscription.planId"
+							></plan-item>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-xs-12">
+				<h4 translate>VIEWS.INSTANCE.CHOOSE_SERVER</h4>
+				<div class="select-box-wrapper">
+					<spinner name="servers-spinner" class="spinner block-spinner">
+						<!-- <div class="absolute-center"> -->
+							<span class="spin-el first-el"></span>
+							<span class="spin-el second-el"></span>
+							<span class="spin-el third-el"></span>
+						<!-- </div> -->
+					</spinner>
+					<ul class="select-box-list">
+						<li class="select-box" ng-repeat="server in instVm.sids">
+							<server-item server="server" model="instVm.instance.sid" select-server="instVm.selectServer(server._id)" new-branch="instVm.newBranch"></server-item>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-sm-4">
+				<h4>
+					<span translate>VIEWS.INSTANCE.NUMBER_OF_USERS</span>
+				</h4>
+				<div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" ng-click="instVm.minusUser()"><i class="fa fa-minus"></i></button>
+					</span>
+					<input type="number" class="form-control" ng-model="instVm.instance._subscription.quantity" ng-min="instVm.minUsers" placeholder="Add Users">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" ng-click="instVm.plusUser()"><i class="fa fa-plus"></i></button>
+					</span>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<h4>
+					<span translate>VIEWS.INSTANCE.EXTRA_LINES</span>
+				</h4>
+				<select name="additional-lines" class="form-control form-select" ng-model="instVm.addOns.lines.quantity" ng-disabled="instVm.trial">
+					<option ng-repeat="value in instVm.lines" ng-value="value">{{value}}</option>
+				</select>
+				<a href="" translate>VIEWS.INSTANCE.MORE_LINES</a>
+			</div>
+			<div class="col-sm-4">
+				<h4>
+					<span translate>VIEWS.INSTANCE.EXTRA_STORAGE</span>
+				</h4>
+				<select type="number" name="additional-storage" class="form-control form-select" ng-model="instVm.addOns.storage.quantity" ng-disabled="instVm.trial">
+					<option ng-repeat="value in instVm.storages" ng-value="value">{{value}}</option>
+				</select>
+				<a href="" translate>VIEWS.INSTANCE.MORE_STORAGE</a>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<h4 class="col-xs-12" translate>VIEWS.INSTANCE.CLOUD_SETTINGS</h4>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="prefix">
+						<span translate>VIEWS.INSTANCE.DOMAIN</span>
+						<span class="fa fa-question-circle" uib-popover="{{ 'TT.DOMAIN' | translate }}" popover-title="{{ 'VIEWS.INSTANCE.DOMAIN' | translate }}"></span>
+					</label>
+					<div class="input-group">
+						<input class="form-control" type="text" name="prefix" ng-model="instVm.instance.result.prefix" ng-readonly="!instVm.newBranch" ng-model-options="{updateOn: 'default blur', debounce: {'default': 1000, 'blur': 0}}" placeholder="{{ 'VIEWS.INSTANCE.DOMAIN' | translate }}" maxlength="63" valid-prefix unique-prefix required />
+						<span class="input-group-addon">.ringotel.co</span>
+					</div>
+					<div ng-if="instVm.newBranch" ng-messages="branchSettings.prefix.$error" ng-messages-multiple>
+						<div class="alert alert-danger" ng-message="validPrefix" translate>ERRORS.INVALID_DOMAIN</div>
+						<div class="alert alert-danger" ng-message="uniquePrefix" translate>ERRORS.DOMAIN_EXISTS</div>
+					</div>
+					<div class="alert alert-warning" ng-show="branchSettings.$submitted && branchSettings.prefix.$error.required" translate>ERRORS.REQUIRED_FIELD_MESSAGE</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="adminlogin">
+						<span translate>VIEWS.INSTANCE.ADMIN_LOGIN</span>
+						<span class="fa fa-question-circle" uib-popover="{{ 'TT.ADMIN_LOGIN' | translate }}" popover-title="{{ 'VIEWS.INSTANCE.ADMIN_LOGIN' | translate }}"></span>
+					</label>
+					<input class="form-control" type="text" name="adminlogin" ng-model="instVm.instance.result.prefix" placeholder="{{ 'VIEWS.INSTANCE.ADMIN_LOGIN' | translate }}" readonly />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="numPool">
+						<span translate>VIEWS.INSTANCE.NUMBERING_PLAN</span>
+						<span class="fa fa-question-circle" uib-popover="{{ 'TT.NUMBERING_PLAN' | translate }}" popover-title="{{ 'VIEWS.INSTANCE.NUMBERING_PLAN' | translate }}"></span>
+					</label>
+					<input class="form-control" type="text" name="numPool" ng-model="instVm.numPool" placeholder="{{ 'E_G' | translate }}: '200-210' or '200,205-210,310-350'" required numpool />
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="lang">
+						<span translate>VIEWS.INSTANCE.INTERFACE_LANGUAGE</span>
+						<span class="fa fa-question-circle" uib-popover="{{ 'TT.INTERFACE_LANGUAGE' | translate }}" popover-title="{{ 'VIEWS.INSTANCE.INTERFACE_LANGUAGE' | translate }}"></span>
+					</label>
+					<select class="form-control form-select" name="lang" ng-model="instVm.instance.result.lang" ng-options="language.value as language.name for language in instVm.languages"></select>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="adminpass">
+						<span translate>VIEWS.INSTANCE.ADMIN_PASSWORD</span>
+						<span class="fa fa-question-circle" uib-popover="{{ 'TT.ADMIN_PASSWORD' | translate }}" popover-title="{{ 'VIEWS.INSTANCE.ADMIN_PASSWORD' | translate }}"></span>
+					</label>
+					<div class="input-group">
+						<input style="margin-bottom:0" class="form-control" type="{{instVm.passType}}" name="adminpass" ng-model="instVm.instance.result.adminpass" ng-model-options="{updateOn: 'default blur', debounce: {'default': 2000, 'blur': 0}}" maxlength="40" password required />
+						<div class="input-group-btn">
+							<button class="btn btn-default" ng-click="instVm.generatePassword(10, 16)"><i class="fa fa-refresh"></i></button>
+							<button class="btn btn-default" ng-click="instVm.revealPassword()"><i class="fa fa-eye"></i></button>
+						</div>
+					</div>
+					<div ng-if="instVm.newBranch" class="alert alert-warning" ng-show="branchSettings.$submitted && branchSettings.adminpass.$error.required" translate>ERRORS.REQUIRED_FIELD_MESSAGE</div>
+					<div class="alert alert-danger" ng-show="branchSettings.adminpass.$error.password" translate>ERRORS.INVALID_PASSWORD</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="adminpassConfirm" translate>VIEWS.INSTANCE.CONFIRM_PASSWORD</label>
+					<input class="form-control" type="{{instVm.passType}}" id="adminpassConfirm" ng-model="instVm.confirmPass" />
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="ng-cloak">
+		<instance-summary
+			currency="instVm.selectedPlan.currency"
+			amount="instVm.totalAmount | number:2"
+			plan="instVm.selectedPlan.planId"
+			instance="instVm.instance"
+			num-pool="instVm.numPool"
+			maxlines="instVm.totalLines"
+			storage="instVm.totalStorage"
+			new-branch="instVm.newBranch"
+			update="instVm.update()"
+			proceed="instVm.proceed('createSubscription')">
+		</instance-summary>	
+	</div>
+</div>

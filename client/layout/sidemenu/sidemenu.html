@@ -1,0 +1,48 @@
+<div class="page-sidebar side-menu">
+	<div class="profile-info" uib-dropdown>
+		<a href="" uib-dropdown-toggle>
+			<div class="user-img">
+				<img class="avatar img-circle" src="assets/img/user.svg">
+			</div>
+			<div class="user-info">
+				{{sidemenuVm.customer.name}}
+				<br>
+				<small>{{sidemenuVm.customer.email}}</small>
+				<br>
+				<small ng-show="sidemenuVm.customerBalance">
+					<span ng-class="sidemenuVm.customerBalance < 0 ? 'text-danger' : 'text-success'">{{sidemenuVm.customerBalance}}</span>
+					<span>{{sidemenuVm.customer.currency}}</span>
+				</small>
+			</div>
+			<span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu" uib-dropdown-menu>
+			<li><a href="#/profile" translate>PARTIALS.SIDE_MENU.PROFILE</a></li>
+			<li><a href="#/payment" translate>PARTIALS.SIDE_MENU.ADD_CREDITS</a></li>
+			<li role="separator" class="divider"></li>
+			<li><a href="" ng-click="sidemenuVm.logout()" translate>PARTIALS.SIDE_MENU.SIGN_OUT</a></li>
+		</ul>
+	</div>
+	<nav class="sidebar-menu">
+		<ul class="nav-menu">
+			<li>
+				<a href="#/dashboard">
+					<i class="fa fa-dashboard"></i>
+					<span translate>PARTIALS.SIDE_MENU.DASHBOARD</span>
+				</a>
+			</li>
+			<li>
+				<a ng-href="#/instance/new">
+					<i class="fa fa-plus-square-o"></i>
+					<span translate>PARTIALS.SIDE_MENU.ADD_NEW_INSTANCE</span>
+				</a>
+			</li>
+			<li>
+				<a href="#/billing">
+					<i class="fa fa-money"></i>
+					<span translate>PARTIALS.SIDE_MENU.BILLING</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+</div>
