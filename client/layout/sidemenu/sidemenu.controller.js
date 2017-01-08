@@ -32,12 +32,14 @@
 		function getCustomerBalance() {
 			apiService.request({
 				url: "getCustomerBalance"
-			}).then(function(response){
-				vm.customer.balance = response.data.result;
-				vm.customerBalance = stringToFixed(response.data.result);
-				customerService.setCustomerBalance(response.data.result);
+			}).then(function(res){
+				if(!res.data.success) return errorService.show(res.data.message);
+				
+				vm.customer.balance = res.data.result;
+				vm.customerBalance = stringToFixed(res.data.result);
+				customerService.setCustomerBalance(res.data.result);
 			}, function(err){
-				errorService.show = err;
+				errorService.show(err);
 			});
 		}
 

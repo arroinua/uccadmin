@@ -50,14 +50,16 @@
 			"BACK": "Back"
 		},
 		"DASHBOARD": {
-			"CREATE_CLOUD": "Create Ringotel Cloud Subscription",
+			"CREATE_CLOUD": "Create Ringotel Cloud",
 			"CREATE_CLOUD_MSG_1": "You can craete any number of subscriptions",
 			"CREATE": "Create"
 		},
 		"INSTANCE": {
 			"CLOUD_NAME": "Cloud name",
 			"CHOOSE_PLAN": "Choose plan",
+			"SELECT_PLAN": "Select plan",
 			"CHOOSE_SERVER": "Choose server",
+			"SELECT_SERVER": "Select server",
 			"NUMBER_OF_USERS": "Number of users",
 			"EXTRA_LINES": "Extra lines",
 			"EXTRA_STORAGE": "Extra storage",

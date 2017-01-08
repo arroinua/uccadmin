@@ -55,9 +55,11 @@
 					start: Date.parse(vm.startDate),
 					end: Date.parse(vm.endDate)
 				}
-			}).then(function(response){
-				console.log('Transactions: ', response.data);
-				vm.transactions = response.data.result;
+			}).then(function(res){
+				if(!res.data.success) return errorService.show(res.data.message);
+				console.log('Transactions: ', res.data.result);
+
+				vm.transactions = res.data.result;
 
 				return api.request({
 					url: "charges",
@@ -66,9 +68,11 @@
 						end: Date.parse(vm.endDate)
 					}
 				});
-			}).then(function(response) {
-				console.log('Charges: ', response.data);
-				vm.charges = response.data.result;
+			}).then(function(res) {
+				if(!res.data.success) return errorService.show(res.data.message);
+				console.log('Charges: ', res.data.result);
+				
+				vm.charges = res.data.result;
 				vm.startBalance = vm.charges.length ? vm.charges[vm.charges.length-1].startBalance : null;
 				vm.lastBillingDate = vm.charges.length ? vm.charges[0].to : null;
 				vm.totalCharges = vm.charges.length ? (vm.startBalance - vm.customer.balance) : null;
@@ -85,10 +89,15 @@
 		function getCustomerBalance() {
 			api.request({
 				url: "getCustomerBalance"
-			}).then(function(response){
-				vm.customer.balance = response.data.result;
-				vm.currentBalance = stringToFixed(response.data.result);
-				customerService.setCustomerBalance(response.data.result);
+			}).then(function(res){
+				if(!res.data.success) {
+					spinner.hide('main-spinner');
+					return errorService.show(res.data.message);
+				}
+
+				vm.customer.balance = res.data.result;
+				vm.currentBalance = stringToFixed(res.data.result);
+				customerService.setCustomerBalance(res.data.result);
 			}, function(err){
 				spinner.hide('main-spinner');
 				errorService.show(err);
@@ -106,21 +115,6 @@
 			});
 			return amount;
 		}
-
-		// function getCharges() {
-		// 	api.request({
-		// 		url: "charges",
-		// 		params: {
-		// 			start: Date.parse(vm.startDate),
-		// 			end: Date.parse(vm.endDate)
-		// 		}
-		// 	}).then(function(response){
-		// 		console.log('Charges: ', response.data);
-		// 		vm.charges = response.data.result;
-		// 	}, function(err){
-		// 		errorService.show(err);
-		// 	});
-		// }
 
 	}
 

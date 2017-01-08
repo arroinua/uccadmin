@@ -20,7 +20,9 @@
 				<h4>
 					<span>{{billVm.currentBalance | number:2}} {{billVm.customer.currency}}</span>
 				</h4>
-				<span translate>VIEWS.BILLING.LAST_PAYMENT</span>: <span>{{ billVm.parseDate(billVm.lastBillingDate) }}</span>
+				<span translate>VIEWS.BILLING.LAST_PAYMENT</span>: 
+				<span ng-show="billVm.lastBillingDate">{{ billVm.parseDate(billVm.lastBillingDate) }}</span>
+				<span ng-hide="billVm.lastBillingDate" translate>VIEWS.BILLING.NO_DATA</span>
 			</div>
 		</div>
 	</div>

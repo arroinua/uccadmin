@@ -35,10 +35,12 @@
 			api.request({
 				url: "update/"+vm.profile._id,
 				params: params
-			}).then(function(response){
+			}).then(function(res){
+				if(!res.data.success) return errorService.show(res.data.message);
+
 				notifyService.show('ALL_CHANGES_SAVED');
-				customerService.setCustomer(response.data.result);
-				console.log('currentUser: ', response.data.result);
+				customerService.setCustomer(res.data.result);
+				console.log('currentUser: ', res.data.result);
 			}, function(err){
 				errorService.show(err);
 			});

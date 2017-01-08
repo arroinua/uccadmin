@@ -27,11 +27,12 @@
 						lang: langKey
 					}
 				}).then(function (res){
-					console.log(res.data.result);
+					if(!res.data.success) return errorService.show(res.data.message);
+					
 					$rootScope.$emit('lang.change', { lang: langKey });
 					$scope.layoutVm.triggerLangMenu();
 				}, function (err){
-					console.log(err);
+					errorService.show(err);
 				});
 			}
 

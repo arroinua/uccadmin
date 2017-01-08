@@ -50,14 +50,16 @@
 			"BACK": "Назад"
 		},
 		"DASHBOARD": {
-			"CREATE_CLOUD": "Створити підписку на Ringotel Cloud",
+			"CREATE_CLOUD": "Створити Ringotel Cloud",
 			"CREATE_CLOUD_MSG_1": "Ви можете створити будь-яку кількість підписок",
 			"CREATE": "Створити"
 		},
 		"INSTANCE": {
 			"CLOUD_NAME": "Ім'я хмари",
 			"CHOOSE_PLAN": "Оберіть план",
+			"SELECT_PLAN": "Оберіть план",
 			"CHOOSE_SERVER": "Оберіть сервер",
+			"SELECT_SERVER": "Оберіть сервер",
 			"NUMBER_OF_USERS": "Кіл-ть користувачів",
 			"EXTRA_LINES": "Дод. лінії",
 			"EXTRA_STORAGE": "Дод. сховище",

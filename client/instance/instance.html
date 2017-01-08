@@ -17,7 +17,7 @@
 		<br>
 		<div class="row">
 			<div class="col-xs-12">
-				<h4 translate>VIEWS.INSTANCE.CHOOSE_PLAN</h4>
+				<h4 translate>VIEWS.INSTANCE.SELECT_PLAN</h4>
 				<div class="select-box-wrapper">
 					<spinner name="plans-spinner" class="spinner block-spinner">
 						<!-- <div class="absolute-center"> -->
@@ -43,7 +43,7 @@
 		<br>
 		<div class="row">
 			<div class="col-xs-12">
-				<h4 translate>VIEWS.INSTANCE.CHOOSE_SERVER</h4>
+				<h4 translate>VIEWS.INSTANCE.SELECT_SERVER</h4>
 				<div class="select-box-wrapper">
 					<spinner name="servers-spinner" class="spinner block-spinner">
 						<!-- <div class="absolute-center"> -->
@@ -80,7 +80,7 @@
 				<h4>
 					<span translate>VIEWS.INSTANCE.EXTRA_LINES</span>
 				</h4>
-				<select name="additional-lines" class="form-control form-select" ng-model="instVm.addOns.lines.quantity" ng-disabled="instVm.trial">
+				<select name="additional-lines" class="form-control form-select" ng-model="instVm.addOns.lines.quantity" ng-disabled="instVm.noAddons">
 					<option ng-repeat="value in instVm.lines" ng-value="value">{{value}}</option>
 				</select>
 				<a href="" translate>VIEWS.INSTANCE.MORE_LINES</a>
@@ -89,7 +89,7 @@
 				<h4>
 					<span translate>VIEWS.INSTANCE.EXTRA_STORAGE</span>
 				</h4>
-				<select type="number" name="additional-storage" class="form-control form-select" ng-model="instVm.addOns.storage.quantity" ng-disabled="instVm.trial">
+				<select type="number" name="additional-storage" class="form-control form-select" ng-model="instVm.addOns.storage.quantity" ng-disabled="instVm.noAddons">
 					<option ng-repeat="value in instVm.storages" ng-value="value">{{value}}</option>
 				</select>
 				<a href="" translate>VIEWS.INSTANCE.MORE_STORAGE</a>

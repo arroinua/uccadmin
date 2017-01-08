@@ -16,12 +16,15 @@
 			update: update,
 			get: get,
 			set: set,
+			remove: remove,
 			getAll: getAll,
 			clear: clear
 		};
 
 		function newItem(params) {
 			return {
+				edit: params.edit !== undefined ? params.edit : true,
+				remove: params.remove !== undefined ? params.remove : true,
 				action: params.action,
 				description: params.description,
 				amount: params.amount,
@@ -35,9 +38,13 @@
 			items.push(newItem(params));
 		}
 
-		function set(params) {
-			items.splice(0, items.length);
-			items.push(newItem(params));
+		function set(params, index) {
+			index ? remove(index) : clear();
+			index ? items[index] = newItem(params) : items.push(newItem(params));
+		}
+
+		function remove(index) {
+			items.splice(index, 1);
 		}
 
 		function update(prefix, params) {
@@ -59,7 +66,7 @@
 		}
 		
 		function clear() {
-			items = [];
+			items.splice(0, items.length);
 		}
 
 	}

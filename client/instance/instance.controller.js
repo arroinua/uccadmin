@@ -24,6 +24,7 @@
 		vm.newBranch = true;
 		// vm.noTrial = false;
 		vm.trial = true;
+		vm.noAddons = false;
 		vm.plans = [];
 		vm.availablePlans = [];
 		vm.selectedPlan = {};
@@ -58,7 +59,8 @@
 			},
 			result: {
 				lang: 'en',
-				maxlines: 8
+				maxlines: 8,
+				maxusers: minUsers
 			}
 		};
 
@@ -96,6 +98,7 @@
 				vm.instance._subscription.quantity = minUsers;
 			}
 
+			totalLines();
 			totalStorage();
 			totalAmount();
 		});
@@ -103,6 +106,7 @@
 		$scope.$watch(function() {
 			return vm.addOns.lines.quantity;
 		}, function(val) {
+			vm.addOns.lines.quantity = vm.addOns.lines.quantity.toString();
 			// vm.instance._subscription.addOns.lines.quantity = parseInt(val, 10);
 			totalLines();
 			totalAmount();
@@ -111,6 +115,7 @@
 		$scope.$watch(function() {
 			return vm.addOns.storage.quantity;
 		}, function(val) {
+			vm.addOns.storage.quantity = vm.addOns.storage.quantity.toString();
 			// vm.instance._subscription.addOns.storage.quantity = parseInt(val, 10);
 			totalStorage();
 			totalAmount();
@@ -128,8 +133,9 @@
 						vm.instance.maxlines = minLines;
 						vm.addOns.lines.quantity = '0';
 						vm.addOns.storage.quantity = '0';
+						vm.noAddons = true;
 					} else {
-						// vm.trial = false;
+						vm.noAddons = false;
 					}
 
 					totalAmount();
@@ -163,6 +169,8 @@
 			api.request({
 				url: 'getPlans'
 			}).then(function(res){
+				if(!res.data.success) return errorService.show(res.data.message);
+
 				vm.plans = res.data.result;
 				vm.plans.forEach(function(item){
 					item.addOns = utils.arrayToObject(item.addOns, 'name');
@@ -191,13 +199,16 @@
 			api.request({
 				url: 'getServers'
 			}).then(function(res){
+				if(!res.data.success) return errorService.show(res.data.message);
+
+				console.log('getServers: ', res.data.result);
 				vm.sids = res.data.result;
 				branchesService.setServers(vm.sids);
 
 				if(oid === 'new') vm.instance.sid = vm.sids[0]._id;
 				spinner.hide('servers-spinner');
 			}, function(err){
-				errorService.show(err.data.message);
+				errorService.show(err);
 			});
 		}
 
@@ -210,6 +221,8 @@
 						vm.availablePlans = vm.plans.filter(isPlanAvailable);
 					} else {
 						api.request({ url: 'getBranch/'+oid }).then(function (res){
+							if(!res.data.success) return errorService.show(res.data.message);
+
 							setBranch(res.data.result);
 							vm.availablePlans = vm.plans.filter(isPlanAvailable);
 						}, function (err){
@@ -234,7 +247,8 @@
 				api.request({
 					url: 'canCreateTrialSub'
 				}).then(function(res){
-					console.log('canCreateTrialSub: ', res.data);
+					if(!res.data.success) return errorService.show(res.data.message);
+					
 					if(res.data.result) vm.trial = true;
 					else vm.trial = false;
 					spinner.hide('plans-spinner');
@@ -247,7 +261,7 @@
 		function proceed(action){
 
 			var branchSetts = getBranchSetts();
-			console.log('proceed: ', branchSetts);
+			console.log('proceed: ', branchSetts, vm.addOns);
 			if(!branchSetts) {
 				return;
 			}
@@ -274,7 +288,7 @@
 			var actionStr = ''; 
 			if(action === 'createSubscription') {
 				actionStr = 'NEW_SUBSCRIPTION';
-			} else if(action === 'updateSubscription') {
+			} else if(action === 'updateSubscription' || action === 'changePlan') {
 				actionStr = 'UPDATE_SUBSCRIPTION';
 			}
 
@@ -296,8 +310,8 @@
 						data: branchSetts
 					});
 				} else {
-					// cart[(vm.customer.role === 'user' ? 'set' : 'add')].add({
-					cart[(vm.customer.role === 'user' ? 'set' : 'add')]({
+					// cart[(vm.customer.role === 'user' ? 'set' : 'add')]({
+					cart.add({
 						action: action,
 						description: description,
 						amount: vm.totalAmount,
@@ -348,7 +362,7 @@
 
 			if(balance < planAmount || (vm.prevPlanId && branchSetts._subscription.planId !== vm.prevPlanId)) {
 
-				proceed('updateSubscription');
+				proceed('changePlan');
 				return;
 
 			}
@@ -356,20 +370,17 @@
 			api.request({
 				url: 'updateSubscription',
 				params: branchSetts
-			}).then(function(result){
-				console.log('updateSubscription result; ', result);
-				console.log('updateSubscription branchSetts; ', branchSetts);
+			}).then(function(res){
+				if(!res.data.success) {
+					if(err.data.message === 'ERRORS.NOT_ENOUGH_CREDITS') proceed('updateSubscription');
+					else errorService.show(res.data.message);
+					return;
+				}
+
 				branchesService.update(branchSetts.oid, branchSetts);
 				notifyService.show('ALL_CHANGES_SAVED');
 			}, function(err){
-				console.log(err);
-				if(err.data.message === 'ERRORS.NOT_ENOUGH_CREDITS') {
-					
-					proceed('updateSubscription');
-
-				} else {
-					errorService.show(err);
-				}
+				errorService.show(err);
 			});
 		}
 		
@@ -411,13 +422,15 @@
 			}
 
 			vm.instance.result.extensions = poolSizeServices.poolStringToObject(vm.numPool);
-			vm.instance.result.maxlines = vm.totalLines;
 			vm.instance.result.adminname = vm.instance.result.prefix;
+			vm.instance.result.maxlines = parseInt(vm.totalLines, 10);
+			vm.instance.result.maxusers = parseInt(vm.instance._subscription.quantity, 10);
 			vm.instance.result.storelimit = convertBytesFilter(vm.totalStorage, 'GB', 'Byte');
 			if(oid) vm.instance.oid = oid;
 
-			angular.forEach(vm.addOns, function(value, key){
-				addOns.push(value);
+			angular.forEach(vm.addOns, function(addOn){
+				if(addOn.quantity) addOn.quantity = parseInt(addOn.quantity);
+				addOns.push(addOn);
 			});
 
 			vm.instance._subscription.addOns = addOns;

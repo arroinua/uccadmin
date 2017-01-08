@@ -1,7 +1,12 @@
 <div class="row">
 	<h4 class="col-xs-12" translate>VIEWS.PAYMENT.CHOOSE_PAYMENT_METHOD</h4>
 	<div class="col-sm-3 col-xs-12" ng-repeat="method in payVm.paymentMethods">
-		<method-item model="payVm.paymentMethod" method="method" unselectable="(!payVm.amount && method.id !== 0) || (!payVm.cart.length && method.id === 0) || (!payVm.isEnough && method.id === 0)" select="payVm.selectMethod(method.id)"></method-item>
+		<method-item 
+			model="payVm.paymentMethod" 
+			method="method" 
+			unselectable="payVm.isUnselectableMethod(method)" 
+			select="payVm.selectMethod(method.id)"
+		></method-item>
 	</div>
 </div>
 <div class="row">
@@ -24,15 +29,17 @@
 							<td>{{ item.description }}</td>
 							<td>{{ item.amount | number: 2 }} {{ item.currency }}</td>
 							<td>
-								<a ng-if="item.data.oid === 'new'" ng-href="#/instance/new?cart_item={{item.data.result.prefix}}">
-									<i class="fa fa-edit"></i>
-								</a>
-								<a ng-if="item.data.oid !== 'new'" ng-href="#/instance/{{item.data.oid}}">
-									<i class="fa fa-edit"></i>
-								</a>
+								<div ng-if="item.data && item.edit">
+									<a ng-if="item.data.oid === 'new'" ng-href="#/instance/new?cart_item={{item.data.result.prefix}}">
+										<i class="fa fa-edit"></i>
+									</a>
+									<a ng-if="item.data.oid !== 'new'" ng-href="#/instance/{{item.data.oid}}">
+										<i class="fa fa-edit"></i>
+									</a>
+								</div>
 							</td>
-							<td>
-								<a href="" ng-click="payVm.removeFromArray(payVm.cart, $index)" class="text-danger">
+							<td ng-if="item.remove">
+								<a href="" ng-click="payVm.removeCartItem($index)" class="text-danger">
 									<i class="fa fa-remove text-danger"></i>
 								</a>
 							</td>
@@ -47,9 +54,9 @@
 		<form id="payment-form">
 			<div class="input-group">
 				<span class="input-group-addon" id="payment-amount">{{payVm.customer.currency}}</span>
-				<input type="number" class="form-control" min="{{::payVm.amount}}" ng-model="payVm.amount" placeholder="Amount" aria-describedby="payment-amount" required>
+				<input type="text" class="form-control" ng-model="payVm.amount" placeholder="Amount" aria-describedby="payment-amount" required>
 				<span class="input-group-btn">
-					<button class="btn btn-primary" type="button" ng-click="payVm.proceedPayment()" ng-disabled="payVm.paymentMethod === 0 && !payVm.isEnough" translate>VIEWS.PAYMENT.PROCEED</button>
+					<button class="btn btn-primary" type="submit" ng-click="payVm.proceedPayment()" ng-disabled="!payVm.isEnough" translate>VIEWS.PAYMENT.PROCEED</button>
 				</span>
 			</div>
 		</form>

@@ -39,28 +39,20 @@
 		function loadBranches() {
 			api.request({
 				url: "getBranches"
-			}).then(function(result){
-				branchesService.set(result.data.result);
+			}).then(function(res){
+				if(!res.data.success) return errorService.show(res.data.message);
+
+				branchesService.set(res.data.result);
 				
-				vm.instances = result.data.result;
+				vm.instances = res.data.result;
 
 				spinner.hide('main-spinner');
-				console.log('loadBranches result: ', vm.instances);
+				console.log('Branches: ', vm.instances);
 				// vm.getInstState();
 			}, function(err){
-				errorService.show(err.data.message);
+				errorService.show(err);
 			});
 		}
-
-		// function getPlans() {
-		// 	api.request({
-		// 		url: 'getPlans'
-		// 	}).then(function(res){
-		// 		vm.plans = res.data.result;
-		// 	}, function(err){
-		// 		errorService.show(err.data.message);
-		// 	});
-		// }
 
 	}
 
