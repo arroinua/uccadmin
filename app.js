@@ -8,23 +8,35 @@ var fs = require('fs');
 var http = require('http');
 var https = require('https');
 var config = require('./env/index');
+var utils = require('./lib/utils');
 var logDir = __dirname + '/log';
 var proxy = require('http-proxy-middleware');
-var proxyOptions = {
-  target: (config.ssl ? 'https://' : 'http://') + config.gateway + '/customer', // target host 
-  logLevel: 'debug',
-  onError: function(err, req, res){
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: {}
-    });
-  }
-};
 var options = {};
 
+// var proxyOptions = {
+//   target: (config.ssl ? 'https://' : 'http://') + config.gateway + '/customer', // target host 
+//   logLevel: 'debug',
+//   onError: function(err, req, res){
+//     res.status(err.status || 500);
+//     res.render('error', {
+//       message: err.message,
+//       error: {}
+//     });
+//   }
+// };
+
 // create the proxy 
-var apiProxy = proxy('/api', proxyOptions);
+var subsProxy = proxy('/subscribers', utils.getProxyProps({
+  ssl: config.ssl,
+  gateway: config.gateway,
+  path: 'subscribers'
+}));
+var apiProxy = proxy('/api', utils.getProxyProps({
+  ssl: config.ssl,
+  gateway: config.gateway,
+  path: 'customer'
+}));
+
 // create a rotating write stream 
 var accessLogStream = FileStreamRotator.getStream({
   date_format: 'YYYYMMDD',
@@ -55,6 +67,7 @@ app.use(express.static(path.join(__dirname, 'client')));
 // app.use(bodyParser.urlencoded({ extended: true }));
 
 // use Proxy
+app.use(subsProxy);
 app.use(apiProxy);
 // app.use('/api', require('./routes/api'));
 app.use('/', require('./routes/index'));
