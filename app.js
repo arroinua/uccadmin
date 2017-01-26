@@ -29,7 +29,7 @@ var options = {};
 var subsProxy = proxy('/subscribers', utils.getProxyProps({
   ssl: config.ssl,
   gateway: config.gateway,
-  path: 'subscribers'
+  path: ''
 }));
 var apiProxy = proxy('/api', utils.getProxyProps({
   ssl: config.ssl,
