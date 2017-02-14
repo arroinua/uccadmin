@@ -24,18 +24,18 @@
 				icon: 'fa fa-credit-card',
 				name: 'Credit Card'
 			},
-			{
-				id: 2,
-				icon: 'fa fa-paypal',
-				name: 'PayPal',
-				comingSoon: true
-			},
-			{
-				id: 3,
-				icon: 'fa fa-bitcoin',
-				name: 'Bitcoin',
-				comingSoon: true
-			},
+			// {
+			// 	id: 2,
+			// 	icon: 'fa fa-paypal',
+			// 	name: 'PayPal',
+			// 	comingSoon: true
+			// },
+			// {
+			// 	id: 3,
+			// 	icon: 'fa fa-bitcoin',
+			// 	name: 'Bitcoin',
+			// 	comingSoon: true
+			// },
 			{
 				id: 0,
 				name: 'Ringotel Balance'
@@ -92,11 +92,11 @@
 
 			// spinnerService.show('main-spinner');
 
-			var order = vm.cart.length ? vm.cart : {
+			var order = vm.cart.length ? vm.cart : [{
 				action: 'addCredits',
 				description: 'Ringotel Service Payment',
 				amount: vm.amount
-			};
+			}];
 
 			var requestParams = {
 				url: 'checkout',
