@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ringotel | Secured communication center in the cloud</title>
+	<meta name="robots" content="noindex">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<link rel='stylesheet' href='assets/fonts/css/font-awesome.min.css' />
+	<link rel="stylesheet" href="assets/css/main.css">
+	
+</head>
+<body>
+	<div class="content-wrapper">
+		
+	</div>
+
+	<script>
+		(function(window) {
+
+			var query = window.location.search;
+			var tid = query ? query.split('=')[1] : console.error('INVALID_TOKEN');
+
+			console.log('tid:', tid);
+
+			request('/api/setup');
+
+			function request(url, data, callback){
+				var xhr, response, requestTimer;
+
+				xhr = new XMLHttpRequest();
+				xhr.open('POST', url, true);
+
+				requestTimer = setTimeout(function(){
+					xhr.abort();
+				}, 60000);
+				
+				xhr.onload = function() {
+					clearTimeout(requestTimer);
+					if(xhr.response) {
+						response = JSON.parse(xhr.response);
+						if(response.error) {
+							return callback(response.error);
+						}
+
+						callback(null, response);
+					}
+				};
+
+				if(data !== null) {
+					xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+					xhr.send(data);
+				} else {
+					xhr.send();
+				}
+			}
+
+		})(window);
+	</script>
+
+</body>
+</html>

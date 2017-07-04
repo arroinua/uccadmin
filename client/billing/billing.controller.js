@@ -75,7 +75,13 @@
 				vm.charges = res.data.result;
 				vm.startBalance = vm.charges.length ? vm.charges[vm.charges.length-1].startBalance : null;
 				vm.lastBillingDate = vm.charges.length ? vm.charges[0].to : null;
-				vm.totalCharges = vm.charges.length ? (vm.startBalance - vm.customer.balance) : null;
+				vm.totalCharges = vm.charges.length ? getTotalCharges(vm.charges) : 0; 
+
+				// vm.totalCharges = sumUp(vm.totalCharges);
+				
+				console.log('totalCharges: ', vm.totalCharges);
+				
+				// vm.totalCharges = vm.charges.length ? (vm.startBalance - vm.customer.balance) : null;
 				// vm.transactions = transactions;
 
 				spinner.hide('main-spinner');
@@ -106,6 +112,14 @@
 
 		function stringToFixed(string) {
 			return utilsService.stringToFixed(string, 2);
+		}
+
+		function getTotalCharges(chargesArray) {
+			return sumUp(chargesArray.map(function(item) {
+				return item.amount;
+			}).reduce(function(prev, next) {
+				return prev.concat(next);
+			}));
 		}
 
 		function sumUp(array) {

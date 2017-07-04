@@ -78,7 +78,7 @@
 						<tr ng-repeat="rec in billVm.charges">
 							<td>{{ billVm.parseDate(rec.from) }} - {{ billVm.parseDate(rec.to) }}</td>
 							<td>{{ rec.description }}</td>
-							<td>{{ billVm.sumUp(rec.amount) | number:2 }}</td>
+							<td>-{{ billVm.sumUp(rec.amount) | number:2 }}</td>
 						</tr>
 						<tr ng-repeat="rec in billVm.transactions">
 							<td>{{ billVm.parseDate(rec.updatedAt) }}</td>

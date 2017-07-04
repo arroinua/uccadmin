@@ -1,4 +1,4 @@
-var express = require('express');
+  var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var FileStreamRotator = require('file-stream-rotator');
@@ -11,19 +11,25 @@ var config = require('./env/index');
 var utils = require('./lib/utils');
 var logDir = __dirname + '/log';
 var proxy = require('http-proxy-middleware');
+var helmet = require('helmet');
+var cors = require('cors');
 var options = {};
 
-// var proxyOptions = {
-//   target: (config.ssl ? 'https://' : 'http://') + config.gateway + '/customer', // target host 
-//   logLevel: 'debug',
-//   onError: function(err, req, res){
-//     res.status(err.status || 500);
-//     res.render('error', {
-//       message: err.message,
-//       error: {}
-//     });
-//   }
-// };
+app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    styleSrc: ["'self'", "'unsafe-inline'"],
+    imgSrc: ["'self'"]
+  }
+}));
+
+app.use(cors({
+  origin: ['https://ringotel.co', /\.ringotel\.co$/],
+  methods: ['GET', 'POST'],
+  allowHeaders: ['X-Requested-With', 'Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
+}));
 
 // create the proxy 
 var subsProxy = proxy('/subscribers', utils.getProxyProps({
@@ -31,10 +37,25 @@ var subsProxy = proxy('/subscribers', utils.getProxyProps({
   gateway: config.gateway,
   path: ''
 }));
+var resellerProxy = proxy('/reseller', utils.getProxyProps({
+  ssl: config.ssl,
+  gateway: config.gateway,
+  path: ''
+}));
+var userProxy = proxy('/user', utils.getProxyProps({
+  ssl: config.ssl,
+  gateway: config.gateway,
+  path: ''
+}));
+var branchProxy = proxy('/branch', utils.getProxyProps({
+  ssl: config.ssl,
+  gateway: config.gateway,
+  path: ''
+}));
 var apiProxy = proxy('/api', utils.getProxyProps({
   ssl: config.ssl,
   gateway: config.gateway,
-  path: 'customer'
+  path: ''
 }));
 
 // create a rotating write stream 
@@ -55,22 +76,16 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
 
-app.use(function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
-    next();
-});
 app.use(express.static(path.join(__dirname, 'client')));
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use('/', require('./routes/index'));
+app.use('/setup', require('./routes/index'));
 // use Proxy
 app.use(subsProxy);
+app.use(resellerProxy);
+app.use(userProxy);
+app.use(branchProxy);
 app.use(apiProxy);
-// app.use('/api', require('./routes/api'));
-app.use('/', require('./routes/index'));
 
 //===============Error handlers================
 
@@ -110,6 +125,9 @@ http.createServer(app).listen(config.port);
 console.log('App is listening at http port %s', config.port);
 
 if(config.ssl) {
+
+  // console.log(fs.readFileSync(config.ssl.cert, { encoding: 'utf8' }));
+
   options = {
     key: fs.readFileSync(config.ssl.key),
     cert: fs.readFileSync(config.ssl.cert)

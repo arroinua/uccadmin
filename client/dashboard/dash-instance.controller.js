@@ -22,7 +22,7 @@
 		vm.stringToFixed = stringToFixed;
 		vm.getDifference = utils.getDifference;
 		vm.trialExpires = expiresAt(vm.sub.trialExpires);
-		vm.expires = vm.sub.billingCyrcles - vm.sub.currentBillingCyrcle;
+		vm.expires = (vm.sub.billingCycles - vm.sub.currentBillingCycle) + 1;
 		vm.expThreshold = 10;
 
 		function terminateInstance(oid) {
@@ -89,7 +89,7 @@
 			api.request({
 				url: method,
 				params: {
-					oid: oid
+					_id: oid
 				}
 			}).then(function(result){
 				console.log('setState result: ', result);

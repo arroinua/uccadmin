@@ -36,6 +36,7 @@
 		vm.numPool = '200-299';
 		vm.storages = ['0', '30', '100', '250', '500'];
 		vm.lines = ['0', '4', '8', '16', '30', '60', '120', '250', '500'];
+		vm.timezones = moment.tz.names();
 		vm.languages = [
 			{name: 'English', value: 'en'},
 			{name: 'Українська', value: 'uk'},
@@ -60,7 +61,8 @@
 			result: {
 				lang: 'en',
 				maxlines: 8,
-				maxusers: minUsers
+				maxusers: minUsers,
+				timezone: moment.tz.guess()
 			}
 		};
 
@@ -94,7 +96,7 @@
 				vm.instance._subscription.quantity = minUsers;
 			}
 
-			if(vm.selectedPlan.planId === 'trial' || vm.selectedPlan.planId === 'free') {
+			if(vm.selectedPlan.planId === 'trial' || vm.selectedPlan.planId === 'free' || vm.selectedPlan.planId === 'team') {
 				vm.instance._subscription.quantity = minUsers;
 			}
 
@@ -127,7 +129,7 @@
 			vm.plans.forEach(function(item) {
 				if(item.planId === vm.instance._subscription.planId) {
 					vm.selectedPlan = item;
-					if(item.planId === 'trial' || item.planId === 'free') {
+					if(item.planId === 'trial' || item.planId === 'free' || item.planId === 'team') {
 						// vm.trial = true;
 						vm.instance._subscription.quantity = minUsers;
 						vm.instance.maxlines = minLines;
@@ -329,8 +331,9 @@
 				balance,
 				planPrice,
 				planAmount,
-				billingCyrcles;
+				billingCycles;
 
+			console.log('update: ', branchSetts);
 
 			if(!branchSetts) {
 				return;
@@ -358,7 +361,7 @@
 			balance = parseFloat(vm.customer.balance);
 			planPrice = parseFloat(vm.selectedPlan.price);
 			planAmount = parseFloat(vm.totalAmount);
-			billingCyrcles = branchSetts._subscription.billingCyrcles;
+			billingCycles = branchSetts._subscription.billingCycles;
 
 			if(balance < planAmount || (vm.prevPlanId && branchSetts._subscription.planId !== vm.prevPlanId)) {
 
@@ -425,7 +428,8 @@
 			vm.instance.result.adminname = vm.instance.result.prefix;
 			vm.instance.result.maxlines = parseInt(vm.totalLines, 10);
 			vm.instance.result.maxusers = parseInt(vm.instance._subscription.quantity, 10);
-			vm.instance.result.storelimit = convertBytesFilter(vm.totalStorage, 'GB', 'Byte');
+			// vm.instance.result.storelimit = convertBytesFilter(vm.totalStorage, 'GB', 'Byte');
+			vm.instance.result.storelimit = vm.totalStorage;
 			if(oid) vm.instance.oid = oid;
 
 			angular.forEach(vm.addOns, function(addOn){

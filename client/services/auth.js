@@ -24,19 +24,19 @@
 		};
 
 		function signup(data) {
-			return $http.post(baseUrl + '/api/signup', data);
+			return $http.post(baseUrl + '/reseller/api/signup', data);
 		}
 
 		function login(data) {
-			return $http.post(baseUrl + '/api/login', data);
+			return $http.post(baseUrl + '/reseller/api/login', data);
 		}
 
 		function requestPasswordReset(data) {
-			return  $http.post(baseUrl + '/api/requestPasswordReset', data);
+			return  $http.post(baseUrl + '/reseller/api/requestPasswordReset', data);
 		}
 
 		function resetPassword(data) {
-			return $http.post(baseUrl + '/api/resetPassword', data);
+			return $http.post(baseUrl + '/reseller/api/resetPassword', data);
 		}
 
 		function logout() {
@@ -79,7 +79,7 @@
 			if(customerService.getCustomer()) return;
 
 			var deferred = $q.defer(); // Make an AJAX call to check if the user is logged in 
-			$http.get('/api/loggedin').then(function(res){
+			$http.get('/reseller/api/loggedin').then(function(res){
 				loggedIn(res.data);
 				deferred.resolve();
 			}, function (err){

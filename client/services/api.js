@@ -10,7 +10,7 @@
 
 	function apiService($http, appConfig){
 
-		var baseUrl = appConfig.server + '/api';
+		var baseUrl = appConfig.server + '/reseller/api';
 		return {
 			request: function(params){
 				return $http.post(baseUrl+'/'+params.url, (params.params || {}));

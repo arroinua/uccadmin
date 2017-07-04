@@ -4,11 +4,11 @@
 	</div>
 	<div class="panel-body text-center">
 		<ul class="list-unstyled">
-			<li ng-if="plan.planId !== 'trial' && plan.planId !== 'free'">
+			<li ng-if="plan.planId !== 'trial' && plan.planId !== 'free' && plan.planId !== 'team'">
 				<span translate>PARTIALS.PLAN.MAX_USERS</span>
 				<b translate> PARTIALS.PLAN.UNLIMITED</b>
 			</li>
-			<li ng-if="plan.planId === 'trial' || plan.planId === 'free'">
+			<li ng-if="plan.planId === 'trial' || plan.planId === 'free' || plan.planId === 'team'">
 				<span translate>PARTIALS.PLAN.MAX_USERS</span>
 				<b> 4</b>
 			</li>

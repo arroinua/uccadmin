@@ -59,6 +59,7 @@
 			"CHOOSE_PLAN": "Choose plan",
 			"SELECT_PLAN": "Select plan",
 			"CHOOSE_SERVER": "Choose server",
+			"SELECT_TIMEZONE": "Choose timezone",
 			"SELECT_SERVER": "Select server",
 			"NUMBER_OF_USERS": "Number of users",
 			"EXTRA_LINES": "Extra lines",
@@ -67,6 +68,8 @@
 			"MORE_STORAGE": "Need more storage?",
 			"CLOUD_SETTINGS": "Cloud settings",
 			"DOMAIN": "Domain",
+			"ADMIN_NAME": "Admin name",
+			"ADMIN_EMAIL": "Admin email",
 			"ADMIN_LOGIN": "Admin login",
 			"ADMIN_PASSWORD": "Admin password",
 			"CONFIRM_PASSWORD": "Confirm password",
@@ -80,7 +83,7 @@
 			"STARTING_BALANCE": "Starting balance",
 			"AS_OF": "As of",
 			"NO_DATA": "No data",
-			"TOTAL": "Total payments",
+			"TOTAL": "Total charges",
 			"DATE": "Date",
 			"DESCRIPTION": "Description",
 			"PAYMENT": "Payment"
@@ -161,8 +164,9 @@
 	},
 	"PLANS": {
 		"TRIAL": "30 days free",
-		"STANDARD" : "Standard",
-		"PREMIUM" : "Premium",
+		"STANDARD" : "Startup",
+		"PREMIUM" : "Business",
+		"TEAM" : "Team",
 		"FREE" : "Free"
 	},
 	"DESCRIPTIONS": {

@@ -33,14 +33,14 @@
 			if(vm.profile.password) params.password = vm.profile.password;
 
 			api.request({
-				url: "update/"+vm.profile._id,
+				url: "update",
 				params: params
 			}).then(function(res){
 				if(!res.data.success) return errorService.show(res.data.message);
 
 				notifyService.show('ALL_CHANGES_SAVED');
-				customerService.setCustomer(res.data.result);
-				console.log('currentUser: ', res.data.result);
+				customerService.setCustomer(vm.profile);
+				console.log('currentUser: ', vm.profile);
 			}, function(err){
 				errorService.show(err);
 			});

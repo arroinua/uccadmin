@@ -62,6 +62,17 @@
 		</div>
 		<br>
 		<div class="row">
+			<div class="col-xs-12">
+				<h4 translate>VIEWS.INSTANCE.SELECT_TIMEZONE</h4>
+				<div class="input-group">
+					<select name="instance-timezone" class="form-control form-select" ng-model="instVm.instance.result.timezone">
+						<option ng-repeat="value in instVm.timezones" ng-value="value">{{value}}</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
 			<div class="col-sm-4">
 				<h4>
 					<span translate>VIEWS.INSTANCE.NUMBER_OF_USERS</span>
@@ -98,6 +109,26 @@
 		<br>
 		<div class="row">
 			<h4 class="col-xs-12" translate>VIEWS.INSTANCE.CLOUD_SETTINGS</h4>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="numPool">
+						<span translate>VIEWS.INSTANCE.ADMIN_NAME</span>
+					</label>
+					<input class="form-control" type="text" name="adminName" ng-model="instVm.instance.result.admin" placeholder="{{ 'VIEWS.INSTANCE.ADMIN_NAME' | translate }}" required />
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="numPool">
+						<span translate>VIEWS.INSTANCE.ADMIN_EMAIL</span>
+					</label>
+					<input class="form-control" type="email" name="adminEmail" ng-model="instVm.instance.result.email" placeholder="{{ 'VIEWS.INSTANCE.ADMIN_EMAIL' | translate }}" required />
+				</div>
+			</div>
+		</div>
+		<div class="row">
 			<div class="col-sm-6">
 				<div class="form-group">
 					<label for="prefix">

@@ -59,6 +59,7 @@
 			"CHOOSE_PLAN": "Выберите план",
 			"SELECT_PLAN": "Выберите план",
 			"CHOOSE_SERVER": "Выберите сервер",
+			"SELECT_TIMEZONE": "Выберите часовой пояс",
 			"SELECT_SERVER": "Выберите сервер",
 			"NUMBER_OF_USERS": "Кол-во пользователей",
 			"EXTRA_LINES": "Доп. линии",
@@ -67,6 +68,8 @@
 			"MORE_STORAGE": "Нужно больше места?",
 			"CLOUD_SETTINGS": "Настройки облака",
 			"DOMAIN": "Домен",
+			"ADMIN_NAME": "Имя администратора",
+			"ADMIN_EMAIL": "Email администратора",
 			"ADMIN_LOGIN": "Логин администратора",
 			"ADMIN_PASSWORD": "Пароль администратора",
 			"CONFIRM_PASSWORD": "Подтвердите пароль",
@@ -161,8 +164,9 @@
 	},
 	"PLANS": {
 		"TRIAL": "30 дней бесплатно",
-		"STANDARD" : "Стандарт",
-		"PREMIUM" : "Премиум",
+		"STANDARD" : "Стартап",
+		"PREMIUM" : "Бизнес",
+		"TEAM" : "Команда",
 		"FREE" : "Бесплатный"
 	},
 	"DESCRIPTIONS": {

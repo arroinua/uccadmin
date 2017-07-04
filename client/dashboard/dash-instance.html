@@ -40,7 +40,7 @@
 					</a></li>
 					<li role="separator" class="divider"></li>
 					<li>
-						<a href="" ng-click="dashInstVm.terminateInstance(dashInstVm.inst.oid)">
+						<a href="" ng-click="dashInstVm.terminateInstance(dashInstVm.inst._id)">
 							<i class="fa fa-power-off"></i> <span translate>PARTIALS.DASH_INSTANCE.REMOVE</span>
 						</a>
 					</li>
@@ -51,7 +51,7 @@
 	<div class="panel-footer">
 		<uib-progressbar 
 			ng-if="!dashInstVm.sub.trialPeriod" 
-			max="dashInstVm.sub.neverExpires ? 100 : dashInstVm.sub.billingCyrcles" 
+			max="dashInstVm.sub.neverExpires ? 100 : dashInstVm.sub.billingCycles" 
 			value="dashInstVm.sub.neverExpires ? 100 : dashInstVm.expires"
 			type="{{dashInstVm.expires <= dashInstVm.expThreshold ? 'warning' : 'info'}}">
 			<span ng-if="dashInstVm.sub.neverExpires" style="color:white; white-space:nowrap;" translate>
